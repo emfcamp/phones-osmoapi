@@ -78,20 +78,30 @@ async def read_root():
     return RedirectResponse(url="https://gsm.emf.camp/")
 
 
-@app.get("/imsi/{imsi}/get/current", summary="Get Current MSISDN", response_model=MSISDNResponse, tags=["By IMSI"])
+@app.get(
+    "/imsi/{imsi}/get/current", summary="Get Current MSISDN", response_model=MSISDNResponse, tags=["IMSI Driven Operations"]
+)
 async def get_current(imsi: int, verified: bool = Depends(verification)):
     """Grab the Current MSISDN for a given IMSI"""
     return get_msisdn_by_imsi(imsi)
 
 
-@app.post("/imsi/{imsi}/set/new/{new_msisdn}", summary="Set New MSISDN", response_model=MSISDNResponse, tags=["By IMSI"])
+@app.post(
+    "/imsi/{imsi}/set/new/{new_msisdn}",
+    summary="Set New MSISDN",
+    response_model=MSISDNResponse,
+    tags=["IMSI Driven Operations"],
+)
 async def set_new_msisdn(imsi: int, new_msisdn: int, verified: bool = Depends(verification)):
     """Set a new MSISDN for a given IMSI"""
     return set_msisdn_by_imsi(imsi, new_msisdn)
 
 
 @app.post(
-    "/imsi/{imsi}/set/reset/{type}/{prefix}", summary="Set Default MSISDN", response_model=MSISDNResponse, tags=["By IMSI"]
+    "/imsi/{imsi}/set/reset/{type}/{prefix}",
+    summary="Set Default MSISDN",
+    response_model=MSISDNResponse,
+    tags=["IMSI Driven Operations"],
 )
 async def set_default(imsi: int, type: int, prefix: int, verified: bool = Depends(verification)):
     """Set the Default MSISDN for a given IMSI"""
@@ -99,7 +109,10 @@ async def set_default(imsi: int, type: int, prefix: int, verified: bool = Depend
 
 
 @app.get(
-    "/imsi/{imsi}/get/default/{type}/{prefix}", summary="Get Default MSISDN", response_model=MSISDNResponse, tags=["By IMSI"]
+    "/imsi/{imsi}/get/default/{type}/{prefix}",
+    summary="Get Default MSISDN",
+    response_model=MSISDNResponse,
+    tags=["IMSI Driven Operations"],
 )
 async def get_default(imsi: int, type: int, prefix: int, verified: bool = Depends(verification)):
     """Get the Default MSISDN for a given IMSI"""
@@ -113,7 +126,7 @@ class GetLocationResponse(BaseModel):
     dk: str = "C4"
 
 
-@app.get("/imsi/{imsi}/get/location", summary="Get Location Information", tags=["By IMSI"])
+@app.get("/imsi/{imsi}/get/location", summary="Get Location Information", tags=["IMSI Driven Operations"])
 async def get_location(imsi: int, verified: bool = Depends(verification)):
     """Get the Location Information for a given IMSI
 
@@ -165,6 +178,24 @@ async def set_create_sim(imsi: int, type: int, prefix: int, ki: str, opc: str, v
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"An error occurred: {e}",
         )
+
+
+@app.get("/msisdn/{msisdn}/imsi", summary="Get IMSI from HLR by Assigned MSISDN", tags=["MSISDN Driven Operations"])
+async def get_imsi_by_msisdn(msisdn: int, verified: bool = Depends(verification)):
+    """Get the IMSI for a given MSISDN"""
+    try:
+        raw = osmo_hlr_run_single(f"show subscriber msisdn {msisdn}")
+        print(raw)
+        lines = raw.splitlines()
+        for line in lines:
+            if line.strip().startswith("IMSI: "):
+                return {"imsi": int(line.split(":")[1].strip()), "msisdn": msisdn}
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"MSISDN {msisdn} not found in the HLR, please ensure you have entered the correct MSISDN. If this error persists, please contact the EMF POC/GSM team.",
+        )
+    except Exception as e:
+        raise e
 
 
 if __name__ == "__main__":

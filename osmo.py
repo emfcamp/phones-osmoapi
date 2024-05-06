@@ -16,7 +16,7 @@ class OsmocomHLR:
         self.logger.addHandler(handler)
 
     def connect(self):
-        self.session = Telnet(self.host, self.port)
+        self.session = Telnet(str(self.host), self.port)
         self.session.read_until(b"OsmoHLR> ", timeout=5)
         self.logger.info(f"Connected to {self.host}:{self.port}")
 
@@ -104,7 +104,7 @@ class OsmocomMSC:
         self.logger.addHandler(handler)
 
     def connect(self):
-        self.session = Telnet(self.host, self.port)
+        self.session = Telnet(str(self.host), self.port)
         self.session.read_until(b"OsmoMSC> ", timeout=5)
         self.logger.info(f"Connected to {self.host}:{self.port}")
 
