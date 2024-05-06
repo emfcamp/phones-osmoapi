@@ -1,0 +1,30 @@
+# Python
+.Python
+[Bb]in
+[Ii]nclude
+[Ll]ib
+[Ll]ib64
+[Ll]ocal
+[Ss]cripts
+pyvenv.cfg
+.venv
+pip-selfcheck.json
+__pycache__
+
+# VSCode
+.vscode/
+
+## Local History for Visual Studio Code
+.history/
+
+## Built Visual Studio Code Extensions
+*.vsix
+
+## Ignore all local history of files
+.history
+.ionide
+
+# Project specific
+*.log
+hlr.db
+*.json

@@ -1,0 +1,4 @@
+fastapi
+black
+isort
+ipaddress
