@@ -1,11 +1,18 @@
+from re import L
 from osmo import osmo_hlr_run_single_elevated 
+from pprint import pprint
+
 
 def get_msisdn_by_imsi(imsi: int):
     """Get the MSISDN for a given IMSI"""
     try:
         re = osmo_hlr_run_single_elevated(f"subscriber imsi {imsi} show")
-        msisdn = re[0].split("MSISDN: ")[1].split("\n")[0]
-        return {"imsi": imsi, "msisdn": int(msisdn)}
+        lines = re.splitlines()
+        for line in lines:
+            if "% Error " in lines[0]:
+                raise ValueError(lines[0])
+            if "MSISDN: " in line:
+                return {"imsi": imsi, "msisdn": int(line.split(":")[1].strip())}
     except Exception as e:
         raise (e)
 
@@ -13,10 +20,16 @@ def get_msisdn_by_imsi(imsi: int):
 def set_msisdn_by_imsi(imsi: int, new_msisdn: int):
     """Set the MSISDN for a given IMSI"""
     try:
-        osmo_hlr_run_single_elevated(
+        re = osmo_hlr_run_single_elevated(
             f"subscriber imsi {imsi} update msisdn {new_msisdn}"
         )
-        return {"imsi": imsi, "msisdn": int(new_msisdn)}
+        lines = re.splitlines()
+        for line in lines:
+            pprint(line)
+            if "% Error " in line:
+                raise ValueError(line)
+            if "Updated " in line:
+                return {"imsi": imsi, "msisdn": new_msisdn}
     except Exception as e:
         raise (e)
 
@@ -25,10 +38,15 @@ def set_default_msisdn(imsi: int, type: int, prefix: int = 904):
     """Set the default MSISDN for a given IMSI"""
     try:
         default_msisdn = generate_default_msisdn(imsi, type, prefix)
-        osmo_hlr_run_single_elevated(
+        re = osmo_hlr_run_single_elevated(
             f"subscriber imsi {imsi} update msisdn {default_msisdn}"
         )
-        return set_msisdn_by_imsi(imsi, new_msisdn=default_msisdn)
+        lines = re.splitlines()
+        for line in lines:
+            if "% Error " in line:
+                raise ValueError(line)
+            if "Updated " in line:
+                return {"imsi": imsi, "msisdn": default_msisdn}
     except Exception as e:
         raise (e)
 

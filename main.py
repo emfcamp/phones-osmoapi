@@ -160,7 +160,7 @@ async def get_location(imsi: int, verified: bool = Depends(verification)):
         )
 
 
-@app.get("/sim/create/{imsi}/{type}/{prefix}/{ki}/{opc}", summary="Create SIM in HLR", tags=["SIM Operations"])
+@app.post("/sim/create/{imsi}/{type}/{prefix}/{ki}/{opc}", summary="Create SIM in HLR", tags=["SIM Operations"])
 async def set_create_sim(imsi: int, type: int, prefix: int, ki: str, opc: str, verified: bool = Depends(verification)):
     """Creates a New SIM entry in the HLR"""
     try:
