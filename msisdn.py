@@ -1,55 +1,34 @@
-import sqlite3
-
+from osmo import osmo_hlr_run_single_elevated 
 
 def get_msisdn_by_imsi(imsi: int):
+    """Get the MSISDN for a given IMSI"""
     try:
-        # Connect to the database
-        conn = sqlite3.connect("hlr.db")
-        # Create a cursor object to execute SQL queries
-        cursor = conn.cursor()
-
-        # Get the MSISDN from IMSI in the database
-        msisdn = cursor.execute("select msisdn from subscriber where imsi = ?", (imsi,)).fetchall()[0][0]
-
-        # Writing the changes to the database
-        conn.commit()
-        # Close the cursor
-        cursor.close()
-        # Close the connection
-        conn.close()
+        re = osmo_hlr_run_single_elevated(f"subscriber imsi {imsi} show")
+        msisdn = re[0].split("MSISDN: ")[1].split("\n")[0]
         return {"imsi": imsi, "msisdn": int(msisdn)}
     except Exception as e:
         raise (e)
 
 
 def set_msisdn_by_imsi(imsi: int, new_msisdn: int):
+    """Set the MSISDN for a given IMSI"""
     try:
-        # Connect to the database
-        conn = sqlite3.connect("hlr.db")
-        # Create a cursor object to execute SQL queries
-        cursor = conn.cursor()
-
-        # Check if the new MSISDN already exists in the database
-        if cursor.execute("select msisdn from subscriber where msisdn = ?", (new_msisdn,)).fetchall():
-            raise ValueError("MSISDN already exists in the database, please choose another MSISDN.")
-
-        # Set the MSISDN in the database from the specified IMSI
-        cursor.execute("update subscriber set msisdn = ? where imsi = ?", (new_msisdn, imsi)).fetchall()
-
-        # Writing the changes to the database
-        conn.commit()
-        # Close the cursor
-        cursor.close()
-        # Close the connection
-        conn.close()
+        osmo_hlr_run_single_elevated(
+            f"subscriber imsi {imsi} update msisdn {new_msisdn}"
+        )
         return {"imsi": imsi, "msisdn": int(new_msisdn)}
     except Exception as e:
         raise (e)
 
 
 def set_default_msisdn(imsi: int, type: int, prefix: int = 904):
+    """Set the default MSISDN for a given IMSI"""
     try:
-        return set_msisdn_by_imsi(imsi, new_msisdn=(generate_default_msisdn(imsi, type, prefix)))
+        default_msisdn = generate_default_msisdn(imsi, type, prefix)
+        osmo_hlr_run_single_elevated(
+            f"subscriber imsi {imsi} update msisdn {default_msisdn}"
+        )
+        return set_msisdn_by_imsi(imsi, new_msisdn=default_msisdn)
     except Exception as e:
         raise (e)
 
