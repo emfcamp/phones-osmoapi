@@ -9,12 +9,13 @@ def get_msisdn_by_imsi(imsi: int):
         re = osmo_hlr_run_single_elevated(f"subscriber imsi {imsi} show")
         lines = re.splitlines()
         for line in lines:
-            if "% Error " in lines[0]:
-                raise ValueError(lines[0])
+            pprint(line)
+            if "Error" in line:
+                raise ValueError(line)
             if "MSISDN: " in line:
                 return {"imsi": imsi, "msisdn": int(line.split(":")[1].strip())}
     except Exception as e:
-        raise (e)
+        raise e
 
 
 def set_msisdn_by_imsi(imsi: int, new_msisdn: int):
@@ -26,12 +27,12 @@ def set_msisdn_by_imsi(imsi: int, new_msisdn: int):
         lines = re.splitlines()
         for line in lines:
             pprint(line)
-            if "% Error " in line:
+            if "Error" in line:
                 raise ValueError(line)
             if "Updated " in line:
                 return {"imsi": imsi, "msisdn": new_msisdn}
     except Exception as e:
-        raise (e)
+        raise e
 
 
 def set_default_msisdn(imsi: int, type: int, prefix: int = 904):
@@ -43,12 +44,12 @@ def set_default_msisdn(imsi: int, type: int, prefix: int = 904):
         )
         lines = re.splitlines()
         for line in lines:
-            if "% Error " in line:
+            if "Error" in line:
                 raise ValueError(line)
             if "Updated " in line:
                 return {"imsi": imsi, "msisdn": default_msisdn}
     except Exception as e:
-        raise (e)
+        raise e
 
 
 def generate_default_msisdn(imsi: int, type: int, prefix: int) -> int:

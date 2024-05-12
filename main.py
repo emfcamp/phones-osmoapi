@@ -1,4 +1,5 @@
 import json
+from math import e
 import re
 from operator import contains
 from typing import Annotated, Union
@@ -83,8 +84,13 @@ async def read_root():
 )
 async def get_current(imsi: int, verified: bool = Depends(verification)):
     """Grab the Current MSISDN for a given IMSI"""
-    return get_msisdn_by_imsi(imsi)
-
+    try:
+        return get_msisdn_by_imsi(imsi)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
 
 @app.post(
     "/imsi/{imsi}/set/new/{new_msisdn}",
@@ -94,8 +100,18 @@ async def get_current(imsi: int, verified: bool = Depends(verification)):
 )
 async def set_new_msisdn(imsi: int, new_msisdn: int, verified: bool = Depends(verification)):
     """Set a new MSISDN for a given IMSI"""
-    return set_msisdn_by_imsi(imsi, new_msisdn)
-
+    try:
+        return set_msisdn_by_imsi(imsi, new_msisdn)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Number already in use. Please try a different number.",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
 
 @app.post(
     "/imsi/{imsi}/set/reset/{type}/{prefix}",
@@ -105,8 +121,18 @@ async def set_new_msisdn(imsi: int, new_msisdn: int, verified: bool = Depends(ve
 )
 async def set_default(imsi: int, type: int, prefix: int, verified: bool = Depends(verification)):
     """Set the Default MSISDN for a given IMSI"""
-    return set_default_msisdn(imsi, type, prefix)
-
+    try:
+        return set_default_msisdn(imsi, type, prefix)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Number already in use. Please try a different number.",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
 
 @app.get(
     "/imsi/{imsi}/get/default/{type}/{prefix}",
@@ -116,8 +142,13 @@ async def set_default(imsi: int, type: int, prefix: int, verified: bool = Depend
 )
 async def get_default(imsi: int, type: int, prefix: int, verified: bool = Depends(verification)):
     """Get the Default MSISDN for a given IMSI"""
-    return {"imsi": imsi, "msisdn": generate_default_msisdn(imsi, type, prefix)}
-
+    try:
+        return {"imsi": imsi, "msisdn": generate_default_msisdn(imsi, type, prefix)}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
 
 class GetLocationResponse(BaseModel):
     imsi: int = 999430000001234
