@@ -80,7 +80,15 @@ async def read_root():
 
 
 @app.get(
-    "/imsi/{imsi}/get/current", summary="Get Current MSISDN", response_model=MSISDNResponse, tags=["IMSI Driven Operations"]
+    "/imsi/{imsi}/get/current",
+    summary="Get Current MSISDN",
+    responses={
+        200: {"description": "Current MSISDN found successfully."},
+        404: {"description": "Subscriber not found."},
+        500: {"description": "An unhandled error occurred."},
+    },
+    response_model=MSISDNResponse,
+    tags=["IMSI Driven Operations"],
 )
 async def get_current(imsi: int, verified: bool = Depends(verification)):
     """Grab the Current MSISDN for a given IMSI"""
@@ -96,6 +104,11 @@ async def get_current(imsi: int, verified: bool = Depends(verification)):
 @app.post(
     "/imsi/{imsi}/set/new/{new_msisdn}",
     summary="Set New MSISDN",
+    responses={
+        200: {"description": "MSISDN set successfully."},
+        409: {"description": "Number already in use. Please try a different number."},
+        500: {"description": "An unhandled error occurred."},
+    },
     response_model=MSISDNResponse,
     tags=["IMSI Driven Operations"],
 )
@@ -118,6 +131,11 @@ async def set_new_msisdn(imsi: int, new_msisdn: int, verified: bool = Depends(ve
 @app.post(
     "/imsi/{imsi}/set/reset/{type}/{prefix}",
     summary="Set Default MSISDN",
+    responses={
+        200: {"description": "MSISDN set successfully."},
+        409: {"description": "Number already in use."},
+        500: {"description": "An unhandled error occurred."},
+    },
     response_model=MSISDNResponse,
     tags=["IMSI Driven Operations"],
 )
@@ -140,6 +158,10 @@ async def set_default(imsi: int, type: int, prefix: int, verified: bool = Depend
 @app.get(
     "/imsi/{imsi}/get/default/{type}/{prefix}",
     summary="Get Default MSISDN",
+    responses={
+        200: {"description": "Default MSISDN generated successfully."},
+        500: {"description": "An unhandled error occurred."},
+    },
     response_model=MSISDNResponse,
     tags=["IMSI Driven Operations"],
 )
@@ -161,7 +183,16 @@ class GetLocationResponse(BaseModel):
     dk: str = "C4"
 
 
-@app.get("/imsi/{imsi}/get/location", summary="Get Location Information", tags=["IMSI Driven Operations"])
+@app.get(
+    "/imsi/{imsi}/get/location",
+    summary="Get Location Information",
+    tags=["IMSI Driven Operations"],
+    responses={
+        200: {"description": "Location information found successfully."},
+        404: {"description": "Subscriber not found."},
+        500: {"description": "An unhandled error occurred."},
+    },
+)
 async def get_location(imsi: int, verified: bool = Depends(verification)):
     """Get the Location Information for a given IMSI
 
@@ -215,7 +246,16 @@ async def set_create_sim(imsi: int, type: int, prefix: int, ki: str, opc: str, v
         )
 
 
-@app.get("/msisdn/{msisdn}/imsi", summary="Get IMSI from HLR by Assigned MSISDN", tags=["MSISDN Driven Operations"])
+@app.get(
+    "/msisdn/{msisdn}/imsi",
+    summary="Get IMSI from HLR by Assigned MSISDN",
+    tags=["MSISDN Driven Operations"],
+    responses={
+        200: {"description": "IMSI found successfully."},
+        404: {"description": "MSISDN not found."},
+        500: {"description": "An unhandled error occurred."},
+    },
+)
 async def get_imsi_by_msisdn(msisdn: int, verified: bool = Depends(verification)):
     """Get the IMSI for a given MSISDN"""
     try:
@@ -230,7 +270,10 @@ async def get_imsi_by_msisdn(msisdn: int, verified: bool = Depends(verification)
             detail=f"MSISDN {msisdn} not found in the HLR, please ensure you have entered the correct MSISDN. If this error persists, please contact the EMF POC/GSM team.",
         )
     except Exception as e:
-        raise e
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An error occurred: {e}",
+        )
 
 
 if __name__ == "__main__":
