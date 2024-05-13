@@ -1,6 +1,7 @@
-from re import L
-from osmo import osmo_hlr_run_single_elevated 
 from pprint import pprint
+from re import L
+
+from osmo import osmo_hlr_run_single_elevated
 
 
 def get_msisdn_by_imsi(imsi: int):
@@ -21,9 +22,7 @@ def get_msisdn_by_imsi(imsi: int):
 def set_msisdn_by_imsi(imsi: int, new_msisdn: int):
     """Set the MSISDN for a given IMSI"""
     try:
-        re = osmo_hlr_run_single_elevated(
-            f"subscriber imsi {imsi} update msisdn {new_msisdn}"
-        )
+        re = osmo_hlr_run_single_elevated(f"subscriber imsi {imsi} update msisdn {new_msisdn}")
         lines = re.splitlines()
         for line in lines:
             pprint(line)
@@ -39,9 +38,7 @@ def set_default_msisdn(imsi: int, type: int, prefix: int = 904):
     """Set the default MSISDN for a given IMSI"""
     try:
         default_msisdn = generate_default_msisdn(imsi, type, prefix)
-        re = osmo_hlr_run_single_elevated(
-            f"subscriber imsi {imsi} update msisdn {default_msisdn}"
-        )
+        re = osmo_hlr_run_single_elevated(f"subscriber imsi {imsi} update msisdn {default_msisdn}")
         lines = re.splitlines()
         for line in lines:
             if "Error" in line:

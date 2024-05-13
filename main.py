@@ -1,6 +1,6 @@
 import json
-from math import e
 import re
+from math import e
 from operator import contains
 from typing import Annotated, Union
 
@@ -92,6 +92,7 @@ async def get_current(imsi: int, verified: bool = Depends(verification)):
             detail=f"An unhandled error occurred: {e}",
         )
 
+
 @app.post(
     "/imsi/{imsi}/set/new/{new_msisdn}",
     summary="Set New MSISDN",
@@ -112,6 +113,7 @@ async def set_new_msisdn(imsi: int, new_msisdn: int, verified: bool = Depends(ve
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"An unhandled error occurred: {e}",
         )
+
 
 @app.post(
     "/imsi/{imsi}/set/reset/{type}/{prefix}",
@@ -134,6 +136,7 @@ async def set_default(imsi: int, type: int, prefix: int, verified: bool = Depend
             detail=f"An unhandled error occurred: {e}",
         )
 
+
 @app.get(
     "/imsi/{imsi}/get/default/{type}/{prefix}",
     summary="Get Default MSISDN",
@@ -149,6 +152,7 @@ async def get_default(imsi: int, type: int, prefix: int, verified: bool = Depend
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"An unhandled error occurred: {e}",
         )
+
 
 class GetLocationResponse(BaseModel):
     imsi: int = 999430000001234
