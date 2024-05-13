@@ -122,7 +122,12 @@ async def get_current(imsi: int, verified: bool = Depends(verification)):
             "description": "Number already in use. Please try a different number.",
             "content": {"application/json": {"example": {"detail": "Number already in use. Please try a different number."}}},
         },
-        500: {"description": "An unhandled error occurred."},
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
     },
     response_model=MSISDNResponse,
     tags=["IMSI Driven Operations"],
@@ -191,6 +196,9 @@ async def set_default(imsi: int, type: int, prefix: int, verified: bool = Depend
         },
         500: {
             "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
         },
     },
     response_model=MSISDNResponse,
