@@ -83,9 +83,18 @@ async def read_root():
     "/imsi/{imsi}/get/current",
     summary="Get Current MSISDN",
     responses={
-        200: {"description": "Current MSISDN found successfully."},
-        404: {"description": "Subscriber not found."},
-        500: {"description": "An unhandled error occurred."},
+        200: {
+            "description": "Current MSISDN found successfully.",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
+        },
+        404: {
+            "description": "Subscriber not found.",
+            "content": {"application/json": {"example": {"detail": "Subscriber not found."}}},
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {"application/json": {"example": {"detail": "An unhandled error occurred."}}},
+        },
     },
     response_model=MSISDNResponse,
     tags=["IMSI Driven Operations"],
@@ -105,8 +114,14 @@ async def get_current(imsi: int, verified: bool = Depends(verification)):
     "/imsi/{imsi}/set/new/{new_msisdn}",
     summary="Set New MSISDN",
     responses={
-        200: {"description": "MSISDN set successfully."},
-        409: {"description": "Number already in use. Please try a different number."},
+        200: {
+            "description": "Set MSISDN successfully.",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
+        },
+        409: {
+            "description": "Number already in use. Please try a different number.",
+            "content": {"application/json": {"example": {"detail": "Number already in use. Please try a different number."}}},
+        },
         500: {"description": "An unhandled error occurred."},
     },
     response_model=MSISDNResponse,
@@ -132,9 +147,20 @@ async def set_new_msisdn(imsi: int, new_msisdn: int, verified: bool = Depends(ve
     "/imsi/{imsi}/set/reset/{type}/{prefix}",
     summary="Set Default MSISDN",
     responses={
-        200: {"description": "MSISDN set successfully."},
-        409: {"description": "Number already in use."},
-        500: {"description": "An unhandled error occurred."},
+        200: {
+            "description": "Set MSISDN successfully.",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
+        },
+        409: {
+            "description": "Number already in use.",
+            "content": {"application/json": {"example": {"detail": "Number already in use. Please try a different number."}}},
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
     },
     response_model=MSISDNResponse,
     tags=["IMSI Driven Operations"],
@@ -159,8 +185,13 @@ async def set_default(imsi: int, type: int, prefix: int, verified: bool = Depend
     "/imsi/{imsi}/get/default/{type}/{prefix}",
     summary="Get Default MSISDN",
     responses={
-        200: {"description": "Default MSISDN generated successfully."},
-        500: {"description": "An unhandled error occurred."},
+        200: {
+            "description": "Default MSISDN generated successfully.",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+        },
     },
     response_model=MSISDNResponse,
     tags=["IMSI Driven Operations"],
@@ -188,11 +219,28 @@ class GetLocationResponse(BaseModel):
     summary="Get Location Information",
     tags=["IMSI Driven Operations"],
     responses={
-        200: {"description": "Location information found successfully."},
-        404: {"description": "Subscriber not found."},
-        500: {"description": "An unhandled error occurred."},
+        200: {
+            "description": "Location information found successfully.",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "lac": 12345, "cell_id": 1800, "dk": "C4"}}},
+        },
+        404: {
+            "description": "Subscriber not found.",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": "Subscriber 999430000001234 not found on the network, Please ensure the device is turned on, and that you have used the correct IMSI. If this error persists, please contact the EMF POC/GSM team."
+                    }
+                }
+            },
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
     },
-)
+)  # Add closing curly brace here
 async def get_location(imsi: int, verified: bool = Depends(verification)):
     """Get the Location Information for a given IMSI
 
@@ -251,9 +299,26 @@ async def set_create_sim(imsi: int, type: int, prefix: int, ki: str, opc: str, v
     summary="Get IMSI from HLR by Assigned MSISDN",
     tags=["MSISDN Driven Operations"],
     responses={
-        200: {"description": "IMSI found successfully."},
-        404: {"description": "MSISDN not found."},
-        500: {"description": "An unhandled error occurred."},
+        200: {
+            "description": "IMSI found successfully.",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
+        },
+        404: {
+            "description": "MSISDN not found.",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": "MSISDN 4242 not found in the HLR, please ensure you have entered the correct MSISDN. If this error persists, please contact the EMF POC/GSM team."
+                    }
+                },
+            },
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
     },
 )
 async def get_imsi_by_msisdn(msisdn: int, verified: bool = Depends(verification)):
