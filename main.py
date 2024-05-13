@@ -248,6 +248,7 @@ class GetLocationResponse(BaseModel):
             },
         },
     },
+    response_model=GetLocationResponse,
 )  # Add closing curly brace here
 async def get_location(imsi: int, verified: bool = Depends(verification)):
     """Get the Location Information for a given IMSI
@@ -282,7 +283,23 @@ async def get_location(imsi: int, verified: bool = Depends(verification)):
         )
 
 
-@app.post("/sim/create/{imsi}/{type}/{prefix}/{ki}/{opc}", summary="Create SIM in HLR", tags=["SIM Operations"])
+@app.post(
+    "/sim/create/{imsi}/{type}/{prefix}/{ki}/{opc}",
+    summary="Create SIM in HLR",
+    tags=["SIM Operations"],
+    responses={
+        200: {
+            "description": "SIM created successfully.",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
+    },
+)
 async def set_create_sim(imsi: int, type: int, prefix: int, ki: str, opc: str, verified: bool = Depends(verification)):
     """Creates a New SIM entry in the HLR"""
     try:
