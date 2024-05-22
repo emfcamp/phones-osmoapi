@@ -81,23 +81,26 @@ def generate_default_msisdn(imsi: int, prefix: int) -> int:
         If the type is not 1, 2 or 3 or 4
     """
 
-    if str(imsi).startswith("901700500"): # EMF IMSI Range - pSIM
-        type = 1
-        return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
-    elif str(imsi).startswith("901700501"): # EMF IMSI Range - eSIM
-        type = 2
-        return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
-    elif str(imsi).startswith("901700502"): # EMF IMSI Range - custom SIM
-        type = 3
-        return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
-    elif str(imsi).startswith("99942"): # new c3gsm SIM Range
-        type = 4
-        return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
-    elif str(imsi).startswith("26242"): # old c3gsm SIM Range
-        type = 5
-        return int(str(str(prefix) + str(type) + str(imsi)[-6:]))
-    elif str(imsi).startswith("901700000"): # c3gsm existing 90170 IMSI Range
-        type = 6
-        return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
+    if len(str(imsi)) < 15:
+        raise ValueError("Invalid IMSI - IMSI must be 15 digits long")
     else:
-        raise ValueError("Invalid IMSI presented. Please ensure the IMSI is correct and valid within the event network specification.")
+        if str(imsi).startswith("901700500"): # EMF IMSI Range - pSIM
+            type = 1
+            return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
+        elif str(imsi).startswith("901700501"): # EMF IMSI Range - eSIM
+            type = 2
+            return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
+        elif str(imsi).startswith("901700502"): # EMF IMSI Range - custom SIM
+            type = 3
+            return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
+        elif str(imsi).startswith("99942"): # new c3gsm SIM Range
+            type = 4
+            return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
+        elif str(imsi).startswith("26242"): # old c3gsm SIM Range
+            type = 5
+            return int(str(str(prefix) + str(type) + str(imsi)[-6:]))
+        elif str(imsi).startswith("901700000"): # c3gsm existing 90170 IMSI Range
+            type = 6
+            return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
+        else:
+            raise ValueError("Invalid IMSI presented. Please ensure the IMSI is correct and valid within the event network specification.")
