@@ -1,3 +1,4 @@
+from asyncio import start_server
 from pprint import pprint
 from re import L
 
@@ -34,10 +35,19 @@ def set_msisdn_by_imsi(imsi: int, new_msisdn: int):
         raise e
 
 
-def set_default_msisdn(imsi: int, type: int, prefix: int = 904):
-    """Set the default MSISDN for a given IMSI"""
+def set_default_msisdn(imsi: int, prefix: int = 904):
+    """Set the default MSISDN for a given IMSI
+    
+    Parameters
+    ----------
+    imsi : int, required
+        The IMSI of the SIM card
+    prefix : int, optional, default: int(904)
+        Network Defined Prefix for devices
+        e.g. 904 for SIMs
+    """
     try:
-        default_msisdn = generate_default_msisdn(imsi, type, prefix)
+        default_msisdn = generate_default_msisdn(imsi, prefix)
         re = osmo_hlr_run_single_elevated(f"subscriber imsi {imsi} update msisdn {default_msisdn}")
         lines = re.splitlines()
         for line in lines:
@@ -49,19 +59,13 @@ def set_default_msisdn(imsi: int, type: int, prefix: int = 904):
         raise e
 
 
-def generate_default_msisdn(imsi: int, type: int, prefix: int) -> int:
+def generate_default_msisdn(imsi: int, prefix: int) -> int:
     """Generates a default MSISDN based on the IMSI, type and prefix
 
     Parameters
     ----------
     imsi : int, required
         The IMSI of the SIM card
-    type : int, required
-        The type of SIM being added
-        1. Original pSIM
-        2. New pSIM
-        3. c3camp23 eSIM
-        4. EMF2024 eSIM
     prefix : int, required
         Network Defined Prefix for SIM cards
         e.g. 901 for DECT, ..., 904 for SIMs
@@ -76,13 +80,24 @@ def generate_default_msisdn(imsi: int, type: int, prefix: int) -> int:
     ValueError
         If the type is not 1, 2 or 3 or 4
     """
-    if type == 1:
-        return int(str(str(prefix) + str(type) + str(imsi)[-5:]))
-    elif type == 2:
+
+    if str(imsi).startswith("901700500"): # EMF IMSI Range - pSIM
+        type = 1
         return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
-    elif type == 3:
-        return int(str(str(prefix) + str(type) + str(imsi)[-3:]))
-    elif type == 4:
-        return int(str(str(prefix) + str(type) + str(imsi)[-2:]))
+    elif str(imsi).startswith("901700501"): # EMF IMSI Range - eSIM
+        type = 2
+        return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
+    elif str(imsi).startswith("901700502"): # EMF IMSI Range - custom SIM
+        type = 3
+        return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
+    elif str(imsi).startswith("99942"): # new c3gsm SIM Range
+        type = 4
+        return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
+    elif str(imsi).startswith("26242"): # old c3gsm SIM Range
+        type = 5
+        return int(str(str(prefix) + str(type) + str(imsi)[-6:]))
+    elif str(imsi).startswith("901700000"): # c3gsm existing 90170 IMSI Range
+        type = 6
+        return int(str(str(prefix) + str(type) + str(imsi)[-4:]))
     else:
-        raise ValueError("Invalid type")
+        raise ValueError("Invalid IMSI presented. Please ensure the IMSI is correct and valid within the event network specification.")
