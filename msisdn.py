@@ -54,8 +54,8 @@ def get_default_msisdn_by_imsi(imsi: int):
             if "IMSI" not in reader.fieldnames or "DefaultMSISDN" not in reader.fieldnames:
                 raise Exception("Invalid CSV header: missing IMSI or DefaultMSISDN")
             for row in reader:
-                if row["IMSI"] == imsi:
-                    return int(row["DefaultMSISDN"])
+                if row['IMSI'] == str(imsi):
+                    return int(row['DefaultMSISDN'])
             raise ValueError("Unknown IMSI")
     except Exception as e:
         raise e
