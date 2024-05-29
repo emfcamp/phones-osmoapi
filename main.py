@@ -9,7 +9,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel, ValidationError
 
-from msisdn import generate_default_msisdn, get_msisdn_by_imsi, set_default_msisdn, set_msisdn_by_imsi
+from msisdn import generate_default_msisdn, get_msisdn_by_imsi, get_default_msisdn_by_imsi, set_msisdn_by_imsi_to_default, set_msisdn_by_imsi
 from osmo import (
     OsmocomHLR,
     OsmocomMSC,
@@ -186,33 +186,37 @@ async def set_new_msisdn(imsi: int, new_msisdn: int, verified: bool = Depends(ve
 #         )
 
 
-# @app.get(
-#     "/imsi/{imsi}/get/default/{type}/{prefix}",
-#     summary="Get Default MSISDN",
-#     responses={
-#         200: {
-#             "description": "Default MSISDN generated successfully.",
-#             "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
-#         },
-#         500: {
-#             "description": "An unhandled error occurred.",
-#             "content": {
-#                 "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-#             },
-#         },
-#     },
-#     response_model=MSISDNResponse,
-#     tags=["IMSI Driven Operations"],
-# )
-# async def get_default(imsi: int, type: int, prefix: int, verified: bool = Depends(verification)):
-#     """Get the Default MSISDN for a given IMSI"""
-#     try:
-#         return {"imsi": imsi, "msisdn": generate_default_msisdn(imsi, type, prefix)}
-#     except Exception as e:
-#         raise HTTPException(
-#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-#             detail=f"An unhandled error occurred: {e}",
-#         )
+@app.get(
+    "/imsi/{imsi}/get/default",
+    summary="Get Default MSISDN",
+    responses={
+        200: {
+            "description": "Default MSISDN retrieved successfully.",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 9044242}}},
+        },
+#        404: {
+#            "description": "IMSI not known",
+#            "content": {"application/json": {"example": {"detail": "IMSI not found in database."}}
+#        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
+    },
+    response_model=MSISDNResponse,
+    tags=["IMSI Driven Operations"],
+)
+async def get_default(imsi: int, type: int, prefix: int, verified: bool = Depends(verification)):
+    """Get the Default MSISDN for a given IMSI"""
+    try:
+        return {"imsi": imsi, "msisdn": generate_default_msisdn(imsi, type, prefix)}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
 
 
 class GetLocationResponse(BaseModel):
