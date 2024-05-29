@@ -73,6 +73,11 @@ class MSISDNResponse(BaseModel):
     msisdn: int = 4242
 
 
+class DefaultMSISDNResponse(BaseModel):
+    imsi: int = 999430000001234
+    default_msisdn: int = 4242
+
+
 @app.get("/", include_in_schema=False)
 async def read_root():
     """Redirect root to the EMF GSM page."""
@@ -205,13 +210,13 @@ async def reset_msisdn_to_default(imsi: int, verified: bool = Depends(verificati
             },
         },
     },
-    response_model=MSISDNResponse,
+    response_model=DefaultMSISDNResponse,
     tags=["IMSI Driven Operations"],
 )
 async def get_default(imsi: int, verified: bool = Depends(verification)):
     """Get the Default MSISDN for a given IMSI"""
     try:
-        return {"imsi": imsi, "msisdn": get_default_msisdn_by_imsi(imsi)}
+        return {"imsi": imsi, "default_msisdn": get_default_msisdn_by_imsi(imsi)}
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
