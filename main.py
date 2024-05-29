@@ -9,7 +9,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel, ValidationError
 
-from msisdn import get_msisdn_by_imsi, get_default_msisdn_by_imsi, reset_msisdn_by_imsi_to_default, set_msisdn_by_imsi
+from msisdn import get_all_default_msisdn, get_all_msisdn_from_hlr, get_msisdn_by_imsi, get_default_msisdn_by_imsi, reset_msisdn_by_imsi_to_default, set_msisdn_by_imsi
 from osmo import (
     OsmocomHLR,
     OsmocomMSC,
@@ -78,10 +78,78 @@ class DefaultMSISDNResponse(BaseModel):
     default_msisdn: int = 4242
 
 
+class AllMSISDNResponse(BaseModel):
+    msisdns: list[int] = [4242, 4243, 4244]
+
+
+class AllDefaultMSISDNResponse(BaseModel):
+    default_msisdns: list[int] = [4242, 4243, 4244]
+
+
 @app.get("/", include_in_schema=False)
 async def read_root():
     """Redirect root to the EMF GSM page."""
     return RedirectResponse(url="https://gsm.emf.camp/")
+
+
+@app.get(
+    "/get_all_default_msisdns",
+    summary="Get All Default MSISDNs for Known IMSIs",
+    responses={
+        200: {
+            "description": "Default MSISDNs retrieved successfully.",
+            "content": {"application/json": {"example": {"default_msisdns": [4242, 4243, 4244]}}},
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
+    },
+    response_model=AllDefaultMSISDNResponse,
+    tags=["IMSI Driven Operations"],
+)
+async def get_all_default_msisdns(verified: bool = Depends(verification)):
+    """Get all Default MSISDNs"""
+    try:
+        msisdns = get_all_default_msisdn()
+        return {"default_msisdns": [row["default_msisdn"] for row in msisdns]}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@app.get(
+    "/get_all_hlr_msisdns",
+    summary="Get All MSISDNs known to the HLR",
+    responses={
+        200: {
+            "description": "HLR MSISDNs retrieved successfully.",
+            "content": {"application/json": {"example": {"msisdns": [4242, 4243, 4244]}}},
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
+    },
+    response_model=AllMSISDNResponse,
+    tags=["IMSI Driven Operations"],
+)
+async def get_all_hlr_msisdns(verified: bool = Depends(verification)):
+    """Get all MSISDNs known to HLR"""
+    try:
+        msisdns = get_all_msisdn_from_hlr()
+        return {"msisdns": [row["msisdn"] for row in msisdns]}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
 
 
 @app.get(

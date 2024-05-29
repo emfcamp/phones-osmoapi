@@ -85,13 +85,26 @@ def reset_msisdn_by_imsi_to_default(imsi: int):
 
 def get_all_msisdn_from_hlr():
     """Get all MSISDNs"""
+    """
+    OsmoHLR# show subscribers all
+ID     MSISDN        IMSI              IMEI              NAM
+-----  ------------  ----------------  ----------------  -----
+1      90422263      999420000002263    -------------    CSPS
+    """
     try:
-        re = osmo_hlr_run_single_elevated("subscriber list")
+        re = osmo_hlr_run_single_elevated("show subscribers all")
         lines = re.splitlines()
         msisdns = []
         for line in lines:
-            if "MSISDN: " in line:
-                msisdns.append(int(line.split(":")[1].strip()))
+            if "Error" in line:
+                raise ValueError(line)
+            if "ID" in line:
+                continue
+            if len(line) < 1:
+                continue
+            msisdn = line.split()[1]
+            imsi = line.split()[2]
+            msisdns.append({"imsi": int(imsi), "msisdn": int(msisdn)})
         return msisdns
     except Exception as e:
         raise e
