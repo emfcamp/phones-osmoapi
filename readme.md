@@ -2,7 +2,7 @@
 FastAPI based wrapper for various osmocom interfaces
 
 ## Configs
-`dks.json` contains the LAC to DK relationship, this is used as part of the Location Request flow 
+`dks.json` contains the LAC to DK relationship, this is used as part of the Location Request flow
 ```json
 {
     "12345": "A1",
@@ -19,6 +19,13 @@ FastAPI based wrapper for various osmocom interfaces
     },
     ...
 }
+```
+
+## Data files
+`default_msisdn_by_imsi.csv` should contain a mapping from IMSI to DefaultMSISDN; for example:
+```csv
+IMSI,DefaultMSISDN
+999430000001234,90424242
 ```
 
 ## Run

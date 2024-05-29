@@ -1,9 +1,9 @@
 from asyncio import start_server
+from csv import DictReader
 from pprint import pprint
 from re import L
 
 from osmo import osmo_hlr_run_single_elevated
-
 
 def get_msisdn_by_imsi(imsi: int):
     """Get the MSISDN for a given IMSI"""
@@ -37,7 +37,7 @@ def set_msisdn_by_imsi(imsi: int, new_msisdn: int):
 
 def get_default_msisdn_by_imsi(imsi: int):
     """Get the default MSISDN for a given IMSI
-    
+
     Parameters
     ----------
     imsi : int, required
@@ -50,20 +50,20 @@ def get_default_msisdn_by_imsi(imsi: int):
         # Get DefaultMSISDN from row
         # Return DefaultMSISDN or raise exception if none found
         with open("default_msisdn_by_imsi.csv", newline='') as csvfile:
-            reader = csv.DictReader(csvfile)
+            reader = DictReader(csvfile)
             if "IMSI" not in reader.fieldnames or "DefaultMSISDN" not in reader.fieldnames:
                 raise Exception("Invalid CSV header: missing IMSI or DefaultMSISDN")
             for row in reader:
                 if row["IMSI"] == imsi:
-                    return int(row["DefaultMSISDN"])
-            raise Exception("Unknown IMSI")
+                    int(row["DefaultMSISDN"])
+            raise ValueError("Unknown IMSI")
     except Exception as e:
         raise e
 
 
-def set_msisdn_by_imsi_to_default(imsi: int):
-    """Set the MSISDN for a given IMSI to the default MSISDN
-    
+def reset_msisdn_by_imsi_to_default(imsi: int):
+    """Resets the MSISDN for a given IMSI to the default MSISDN
+
     Parameters
     ----------
     imsi : int, required
