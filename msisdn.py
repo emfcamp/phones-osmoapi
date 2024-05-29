@@ -35,6 +35,21 @@ def set_msisdn_by_imsi(imsi: int, new_msisdn: int):
         raise e
 
 
+def get_all_default_msisdn():
+    """Get all default MSISDNs"""
+    try:
+        default_msisdns = []
+        with open("default_msisdn_by_imsi.csv", newline='') as csvfile:
+            reader = DictReader(csvfile)
+            if "IMSI" not in reader.fieldnames or "DefaultMSISDN" not in reader.fieldnames:
+                raise Exception("Invalid CSV header: missing IMSI or DefaultMSISDN")
+            for row in reader:
+                default_msisdns.append({"imsi": int(row['IMSI']), "default_msisdn": int(row['DefaultMSISDN'])})
+        return default_msisdns
+    except Exception as e:
+        raise e
+
+
 def get_default_msisdn_by_imsi(imsi: int):
     """Get the default MSISDN for a given IMSI
 
@@ -44,19 +59,11 @@ def get_default_msisdn_by_imsi(imsi: int):
         The IMSI of the SIM card
     """
     try:
-        # Open default_msisdn_by_imsi.csv (IMSI,DefaultMSISDN)
-        # Ignore headers if appropriate
-        # Find row by IMSI
-        # Get DefaultMSISDN from row
-        # Return DefaultMSISDN or raise exception if none found
-        with open("default_msisdn_by_imsi.csv", newline='') as csvfile:
-            reader = DictReader(csvfile)
-            if "IMSI" not in reader.fieldnames or "DefaultMSISDN" not in reader.fieldnames:
-                raise Exception("Invalid CSV header: missing IMSI or DefaultMSISDN")
-            for row in reader:
-                if row['IMSI'] == str(imsi):
-                    return int(row['DefaultMSISDN'])
-            raise ValueError("Unknown IMSI")
+        default_msisdns = get_all_default_msisdn()
+        for row in default_msisdns:
+            if row['imsi'] == str(imsi):
+                return int(row['default_msisdn'])
+        raise ValueError("Unknown IMSI")
     except Exception as e:
         raise e
 
@@ -72,6 +79,20 @@ def reset_msisdn_by_imsi_to_default(imsi: int):
     try:
         default_msisdn = get_default_msisdn_by_imsi(imsi)
         return set_msisdn_by_imsi(imsi, default_msisdn)
+    except Exception as e:
+        raise e
+
+
+def get_all_msisdn_from_hlr():
+    """Get all MSISDNs"""
+    try:
+        re = osmo_hlr_run_single_elevated("subscriber list")
+        lines = re.splitlines()
+        msisdns = []
+        for line in lines:
+            if "MSISDN: " in line:
+                msisdns.append(int(line.split(":")[1].strip()))
+        return msisdns
     except Exception as e:
         raise e
 
