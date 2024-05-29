@@ -208,7 +208,7 @@ async def reset_msisdn_to_default(imsi: int, verified: bool = Depends(verificati
     response_model=MSISDNResponse,
     tags=["IMSI Driven Operations"],
 )
-async def get_default(imsi: int, type: int, prefix: int, verified: bool = Depends(verification)):
+async def get_default(imsi: int, verified: bool = Depends(verification)):
     """Get the Default MSISDN for a given IMSI"""
     try:
         return {"imsi": imsi, "msisdn": get_default_msisdn_by_imsi(imsi)}
@@ -293,7 +293,7 @@ async def get_location(imsi: int, verified: bool = Depends(verification)):
 
 
 @app.post(
-    "/sim/create/{imsi}/{type}/{prefix}/{ki}/{opc}",
+    "/sim/create/{imsi}/{ki}/{opc}",
     summary="Create SIM in HLR",
     tags=["SIM Operations"],
     responses={
@@ -309,7 +309,7 @@ async def get_location(imsi: int, verified: bool = Depends(verification)):
         },
     },
 )
-async def set_create_sim(imsi: int, type: int, ki: str, opc: str, verified: bool = Depends(verification)):
+async def set_create_sim(imsi: int, ki: str, opc: str, verified: bool = Depends(verification)):
     """Creates a New SIM entry in the HLR"""
     try:
         osmo_hlr_run_multiple_elevated(
