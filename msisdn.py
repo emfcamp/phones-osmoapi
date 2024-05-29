@@ -61,7 +61,7 @@ def get_default_msisdn_by_imsi(imsi: int):
     try:
         default_msisdns = get_all_default_msisdn()
         for row in default_msisdns:
-            if row['imsi'] == str(imsi):
+            if row['imsi'] == imsi:
                 return int(row['default_msisdn'])
         raise ValueError("Unknown IMSI")
     except Exception as e:
