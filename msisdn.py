@@ -100,6 +100,8 @@ ID     MSISDN        IMSI              IMEI              NAM
                 raise ValueError(line)
             if "ID" in line:
                 continue
+            if line.startswith("-----"):
+                continue
             if len(line) < 1:
                 continue
             msisdn = line.split()[1]
