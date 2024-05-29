@@ -9,7 +9,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel, ValidationError
 
-from msisdn import generate_default_msisdn, get_msisdn_by_imsi, get_default_msisdn_by_imsi, reset_msisdn_by_imsi_to_default, set_msisdn_by_imsi
+from msisdn import get_msisdn_by_imsi, get_default_msisdn_by_imsi, reset_msisdn_by_imsi_to_default, set_msisdn_by_imsi
 from osmo import (
     OsmocomHLR,
     OsmocomMSC,
@@ -320,7 +320,7 @@ async def set_create_sim(imsi: int, type: int, ki: str, opc: str, verified: bool
                 f"subscriber imsi {imsi} update aud3g milenage k {ki} opc {opc}",
             ]
         )
-        return {"imsi": imsi, "msisdn": generate_default_msisdn(imsi, type)}
+        return {"imsi": imsi, "msisdn": get_default_msisdn_by_imsi(imsi)}
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
