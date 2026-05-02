@@ -1,6 +1,6 @@
 import logging
 from ipaddress import IPv4Address, IPv6Address
-from telnetlib import Telnet
+from telnetlib3 import Telnet
 from typing import Union
 
 
