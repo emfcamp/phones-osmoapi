@@ -1,6 +1,10 @@
 # OSMOAPI
 FastAPI based wrapper for various osmocom interfaces
 
+## Installation
+
+Install uv: https://docs.astral.sh/uv/getting-started/installation/
+
 ## Configs
 `dks.json` contains the LAC to DK relationship, this is used as part of the Location Request flow
 ```json
