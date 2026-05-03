@@ -9,7 +9,14 @@ from fastapi.responses import RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel, ValidationError
 
-from msisdn import get_all_default_msisdn, get_all_msisdn_from_hlr, get_msisdn_by_imsi, get_default_msisdn_by_imsi, reset_msisdn_by_imsi_to_default, set_msisdn_by_imsi
+from msisdn import (
+    get_all_default_msisdn,
+    get_all_msisdn_from_hlr,
+    get_msisdn_by_imsi,
+    get_default_msisdn_by_imsi,
+    reset_msisdn_by_imsi_to_default,
+    set_msisdn_by_imsi,
+)
 from osmo import (
     OsmocomHLR,
     OsmocomMSC,
@@ -29,7 +36,11 @@ app = FastAPI(
     dependencies=[Depends(security)],
     title="EMF GSM API",
     description="A simple API for managing GSM services at EMF Camp.",
-    contact={"name": "EMF GSM Team", "url": "https://gsm.emf.camp/", "email": "poc+gsmapi@emfcamp.org"},
+    contact={
+        "name": "EMF GSM Team",
+        "url": "https://gsm.emf.camp/",
+        "email": "poc+gsmapi@emfcamp.org",
+    },
     version="0.0.1",
     terms_of_service="https://gsm.emf.camp/api/tos",
     license_info={"name": "Beerware", "url": "https://spdx.org/licenses/Beerware.html"},
@@ -102,9 +113,7 @@ async def read_root():
         },
         500: {
             "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
+            "content": {"application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}},
         },
     },
     response_model=AllDefaultMSISDNResponse,
@@ -132,9 +141,7 @@ async def get_all_default_msisdns(verified: bool = Depends(verification)):
         },
         500: {
             "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
+            "content": {"application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}},
         },
     },
     response_model=AllMSISDNResponse,
@@ -197,9 +204,7 @@ async def get_current(imsi: int, verified: bool = Depends(verification)):
         },
         500: {
             "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
+            "content": {"application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}},
         },
     },
     response_model=MSISDNResponse,
@@ -235,9 +240,7 @@ async def set_new_msisdn(imsi: int, new_msisdn: int, verified: bool = Depends(ve
         },
         500: {
             "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
+            "content": {"application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}},
         },
     },
     response_model=MSISDNResponse,
@@ -273,9 +276,7 @@ async def reset_msisdn_to_default(imsi: int, verified: bool = Depends(verificati
         },
         500: {
             "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
+            "content": {"application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}},
         },
     },
     response_model=DefaultMSISDNResponse,
@@ -311,7 +312,16 @@ class GetLocationResponse(BaseModel):
     responses={
         200: {
             "description": "Location information found successfully.",
-            "content": {"application/json": {"example": {"imsi": 999430000001234, "lac": 12345, "cell_id": 1800, "dk": "C4"}}},
+            "content": {
+                "application/json": {
+                    "example": {
+                        "imsi": 999430000001234,
+                        "lac": 12345,
+                        "cell_id": 1800,
+                        "dk": "C4",
+                    }
+                }
+            },
         },
         404: {
             "description": "Subscriber not found.",
@@ -325,9 +335,7 @@ class GetLocationResponse(BaseModel):
         },
         500: {
             "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
+            "content": {"application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}},
         },
     },
     response_model=GetLocationResponse,
@@ -376,9 +384,7 @@ async def get_location(imsi: int, verified: bool = Depends(verification)):
         },
         500: {
             "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
+            "content": {"application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}},
         },
     },
 )
@@ -422,9 +428,7 @@ async def set_create_sim(imsi: int, ki: str, opc: str, verified: bool = Depends(
         },
         500: {
             "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
+            "content": {"application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}},
         },
     },
 )
