@@ -5,6 +5,8 @@ FastAPI based wrapper for various osmocom interfaces
 
 Install uv: https://docs.astral.sh/uv/getting-started/installation/
 
+Makes use of osmoapi from here: https://github.com/emfcamp/phones-osmoapi-py/releases/
+
 ## Configs
 `dks.json` contains the LAC to DK relationship, this is used as part of the Location Request flow
 ```json
