@@ -108,6 +108,9 @@ ID     MSISDN        IMSI              IMEI              NAM
                 continue
             msisdn = line.split()[1]
             imsi = line.split()[2]
+            ## If msisdn hasn't been set, set it to -1
+            if msisdn == "none":
+                msisdn = -1
             msisdns.append({"imsi": int(imsi), "msisdn": int(msisdn)})
         return msisdns
     except Exception as e:
