@@ -16,21 +16,28 @@ class OsmoControlInterface(IntEnum):
 OSMO_HOST = "127.0.0.1"
 
 
-class OsmoHLR:
-
-    def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.HLR):
+class OsmoComponent:
+    """Base class handling shared Osmocom controller initialization and logging."""
+    
+    def __init__(self, host: Union[IPv4Address, IPv6Address, str], port: int, log_filename: str):
         self.addr = f"{host}:{port}"
-
         self.controller = OsmocomController(self.addr)
         self.logger = None
-        self._setup_logging()
+        self._setup_logging(log_filename)
     
-    def _setup_logging(self):
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
-        handler = logging.FileHandler("logs/osmohlr.log")
+    def _setup_logging(self, log_filename: str):
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.logger.setLevel(logging.INFO)#
+
+        handler = logging.FileHandler(f"logs/{log_filename}")
         handler.setLevel(logging.INFO)
         self.logger.addHandler(handler)
+
+
+class OsmoHLR(OsmoComponent):
+
+    def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.HLR):
+        super().__init__(host, port, "osmohlr.log")
     
     def get_subscriber_by_imsi(self, imsi: int):
         self.logger.info(f"OsmoHLR> subscriber.by-imsi-{imsi}.info")
@@ -40,27 +47,18 @@ class OsmoHLR:
         lines = resp.splitlines()
         info = {}
         for line in lines:
-            if line.strip() == "": continue
+            if not line.strip(): 
+                continue
             ld = line.split("\t")
-            info[ld[0]] = ld[1]
+            if len(ld) >= 2:
+                info[ld[0]] = ld[1]
         return info
 
 
-class OsmoMSC:
+class OsmoMSC(OsmoComponent):
 
     def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.MSC):
-        self.addr = f"{host}:{port}"
-
-        self.controller = OsmocomController(self.addr)
-        self.logger = None
-        self._setup_logging()
-    
-    def _setup_logging(self):
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
-        handler = logging.FileHandler("logs/osmomsc.log")
-        handler.setLevel(logging.INFO)
-        self.logger.addHandler(handler)
+        super().__init__(host, port, "osmomsc.log")
 
     def list_active_subscribers(self):
         self.logger.info("OsmoMSC> subscriber-list-active-v1")
