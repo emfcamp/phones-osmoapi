@@ -10,7 +10,14 @@ from fastapi.responses import RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel, ValidationError
 
-from msisdn import get_all_default_msisdn, get_all_msisdn_from_hlr, get_msisdn_by_imsi, get_default_msisdn_by_imsi, reset_msisdn_by_imsi_to_default, set_msisdn_by_imsi
+from msisdn import (
+    get_all_default_msisdn,
+    get_all_msisdn_from_hlr,
+    get_msisdn_by_imsi,
+    get_default_msisdn_by_imsi,
+    reset_msisdn_by_imsi_to_default,
+    set_msisdn_by_imsi,
+)
 from osmoctrl import OsmoHLR, OsmoMSC
 from osmo import (
     OsmocomHLR,
@@ -38,7 +45,20 @@ app = FastAPI(
 )
 
 
+DEFAULT_500 = {
+    "description": "An unhandled error occurred.",
+    "content": {
+        "application/json": {
+            "example": {
+                "detail": "An unhandled error occurred. Error: Something went wrong.",
+            }
+        }
+    },
+}
+
+
 DATA_DIR = Path(__file__).resolve().parent / "data"
+
 
 def _load_json_file(filename: str) -> dict | list:
     file_path = DATA_DIR / filename
@@ -96,10 +116,10 @@ class AllDefaultMSISDNResponse(BaseModel):
     default_msisdns: list[int] = [4242, 4243, 4244]
 
 
-#@app.get("/", include_in_schema=False)
-#async def read_root():
-#    """Redirect root to the EMF GSM page."""
-#    return RedirectResponse(url="https://gsm.emf.camp/")
+@app.get("/", include_in_schema=False)
+async def read_root():
+   """Redirect root to the EMF GSM page."""
+   return RedirectResponse(url="https://gsm.emf.camp/")
 
 
 @app.get(
@@ -110,12 +130,7 @@ class AllDefaultMSISDNResponse(BaseModel):
             "description": "Default MSISDNs retrieved successfully.",
             "content": {"application/json": {"example": {"default_msisdns": [4242, 4243, 4244]}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
     response_model=AllDefaultMSISDNResponse,
     tags=["IMSI Driven Operations"],
@@ -140,12 +155,7 @@ async def get_all_default_msisdns(verified: bool = Depends(verification)):
             "description": "HLR MSISDNs retrieved successfully.",
             "content": {"application/json": {"example": {"msisdns": [4242, 4243, 4244]}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
     response_model=AllMSISDNResponse,
     tags=["IMSI Driven Operations"],
@@ -174,10 +184,7 @@ async def get_all_hlr_msisdns(verified: bool = Depends(verification)):
             "description": "Subscriber not found.",
             "content": {"application/json": {"example": {"detail": "Subscriber not found."}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {"application/json": {"example": {"detail": "An unhandled error occurred."}}},
-        },
+        500: DEFAULT_500,
     },
     response_model=MSISDNResponse,
     tags=["IMSI Driven Operations"],
@@ -205,12 +212,7 @@ async def get_current(imsi: int, verified: bool = Depends(verification)):
             "description": "Number already in use. Please try a different number.",
             "content": {"application/json": {"example": {"detail": "Number already in use. Please try a different number."}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
     response_model=MSISDNResponse,
     tags=["IMSI Driven Operations"],
@@ -243,12 +245,7 @@ async def set_new_msisdn(imsi: int, new_msisdn: int, verified: bool = Depends(ve
             "description": "Default MSISDN not found for this IMSI.",
             "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
     response_model=MSISDNResponse,
     tags=["IMSI Driven Operations"],
@@ -281,12 +278,7 @@ async def reset_msisdn_to_default(imsi: int, verified: bool = Depends(verificati
             "description": "Default MSISDN not found for this IMSI.",
             "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
     response_model=DefaultMSISDNResponse,
     tags=["IMSI Driven Operations"],
@@ -320,16 +312,11 @@ async def get_default(imsi: int, verified: bool = Depends(verification)):
             "description": "imsi not found",
             "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
     tags=["HLR Control Interface"],
 )
-async def get_imsi_sub(imsi: int, verified: bool = Depends(verification)):
+async def hlr_get_imsi_sub(imsi: int, verified: bool = Depends(verification)):
     """Get the subscriber info for a given IMSI"""
     try:
         return {"data": hlr_instance.get_subscriber_by_imsi(imsi)}
@@ -357,16 +344,11 @@ async def get_imsi_sub(imsi: int, verified: bool = Depends(verification)):
             "description": "ID not found",
             "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
     tags=["HLR Control Interface"],
 )
-async def get_id_sub(id: int, verified: bool = Depends(verification)):
+async def hlr_get_id_sub(id: int, verified: bool = Depends(verification)):
     """Get the subscriber info for a given ID"""
     try:
         return {"data": hlr_instance.get_subscriber_by_id(id)}
@@ -394,16 +376,11 @@ async def get_id_sub(id: int, verified: bool = Depends(verification)):
             "description": "ID not found",
             "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
     tags=["HLR Control Interface"],
 )
-async def get_msisdn_sub(msisdn: int, verified: bool = Depends(verification)):
+async def hlr_get_msisdn_sub(msisdn: int, verified: bool = Depends(verification)):
     """Get the subscriber info for a given MSISDN"""
     try:
         return {"data": hlr_instance.get_subscriber_by_msisdn(msisdn)}
@@ -431,16 +408,11 @@ async def get_msisdn_sub(msisdn: int, verified: bool = Depends(verification)):
             "description": "Number already in use. Please try a different number.",
             "content": {"application/json": {"example": {"detail": "Number already in use. Please try a different number."}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
     tags=["HLR Control Interface"],
 )
-async def set_hlr_new_msisdn(imsi: int, msisdn: int, verified: bool = Depends(verification)):
+async def hlr_update_msisdn(imsi: int, msisdn: int, verified: bool = Depends(verification)):
     """Set a new MSISDN for a given IMSI"""
     try:
         return hlr_instance.set_msisdn_by_imsi(imsi, msisdn)
@@ -468,16 +440,11 @@ async def set_hlr_new_msisdn(imsi: int, msisdn: int, verified: bool = Depends(ve
             "description": "...",
             "content": {"application/json": {"example": {"detail": "Number already in use. Please try a different number."}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
     tags=["HLR Control Interface"],
 )
-async def set_hlr_new_msisdn(imsi: int, msisdn: int, cs: bool, ps: bool, verified: bool = Depends(verification)):
+async def hlr_create_new_sub(imsi: int, msisdn: int, cs: bool, ps: bool, verified: bool = Depends(verification)):
     """Set a new MSISDN for a given IMSI"""
     try:
         return hlr_instance.easy_create(imsi, msisdn, cs, ps)
@@ -492,6 +459,7 @@ async def set_hlr_new_msisdn(imsi: int, msisdn: int, cs: bool, ps: bool, verifie
             detail=f"An unhandled error occurred: {e}",
         )
 
+
 @app.get(
     "/msc/active",
     summary="Get Active Subscribers",
@@ -500,10 +468,11 @@ async def set_hlr_new_msisdn(imsi: int, msisdn: int, cs: bool, ps: bool, verifie
             "description": "success",
             "content": {"application/json": {}},
         },
+        500: DEFAULT_500,
     },
     tags=["MSC Control Interface"],
 )
-async def get_active_subs(verified: bool = Depends(verification)):
+async def msc_get_active_subs(verified: bool = Depends(verification)):
     try:
         return {"data": msc_instance.list_active_subscribers()}
     except Exception as e:
@@ -511,6 +480,7 @@ async def get_active_subs(verified: bool = Depends(verification)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"An unhandled error occurred: {e}",
         )
+
 
 class GetLocationResponse(BaseModel):
     imsi: int = 999430000001234
@@ -538,12 +508,7 @@ class GetLocationResponse(BaseModel):
                 }
             },
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
     response_model=GetLocationResponse,
 )  # Add closing curly brace here
@@ -589,12 +554,7 @@ async def get_location(imsi: int, verified: bool = Depends(verification)):
             "description": "SIM created successfully.",
             "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
 )
 async def set_create_sim(imsi: int, ki: str, opc: str, verified: bool = Depends(verification)):
@@ -635,12 +595,7 @@ async def set_create_sim(imsi: int, ki: str, opc: str, verified: bool = Depends(
                 },
             },
         },
-        500: {
-            "description": "An unhandled error occurred.",
-            "content": {
-                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
-            },
-        },
+        500: DEFAULT_500,
     },
 )
 async def get_imsi_by_msisdn(msisdn: int, verified: bool = Depends(verification)):

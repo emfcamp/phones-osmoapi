@@ -20,7 +20,7 @@ def jsonify_response(resp: str):
     lines = resp.splitlines()
     data = {}
     for line in lines:
-        if not line.strip(): 
+        if not line.strip():
             continue
         ld = line.split("\t")
         if len(ld) >= 2:
@@ -30,13 +30,13 @@ def jsonify_response(resp: str):
 
 class OsmoComponent:
     """Base class handling shared Osmocom controller initialization and logging."""
-    
+
     def __init__(self, host: Union[IPv4Address, IPv6Address, str], port: int, log_filename: str):
         self.addr = f"{host}:{port}"
         self.controller = OsmocomController(self.addr)
         self.logger = None
         self._setup_logging(log_filename)
-    
+
     def _setup_logging(self, log_filename: str):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.logger.setLevel(logging.INFO)
@@ -45,10 +45,10 @@ class OsmoComponent:
         handler = logging.FileHandler(f"logs/{log_filename}")
         handler.setFormatter(formatter)
         handler.setLevel(logging.INFO)
-        
+
         self.logger.addHandler(handler)
         self.logger = logging.LoggerAdapter(self.logger, {"classname": self.__class__.__name__})
-    
+
     def _get_kv(self, cmd: str):
         self.logger.info(cmd)
 
@@ -58,9 +58,9 @@ class OsmoComponent:
             return jsonify_response(resp)
         except Exception as e:
             self.logger.error(f"[Exception]-> {e}")
-        
+
         return {}
-    
+
     def _set(self, cmd: str, val: int):
         self.logger.info(cmd)
 
@@ -70,31 +70,30 @@ class OsmoComponent:
             return resp
         except Exception as e:
             self.logger.error(f"[Exception]-> {e}")
-        
+
         return ""
 
 
 class OsmoHLR(OsmoComponent):
-
     def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.HLR):
         super().__init__(host, port, "osmohlr.log")
 
     def get_subscriber_by_id(self, id: int):
         return self._get_kv(f"subscriber.by-id-{id}.info")
-        
+
     def get_subscriber_by_imsi(self, imsi: int):
         return self._get_kv(f"subscriber.by-imsi-{imsi}.info")
 
     def get_subscriber_by_msisdn(self, msisdn: int):
         return self._get_kv(f"subscriber.by-msisdn-{msisdn}.info")
-    
+
     ## IMSI operations
     def create_subscriber(self, imsi: int) -> int:
-        """ Create a subscriber in the HLR with the IMSI specified, returns the ID of the deleted subscriber """
+        """Create a subscriber in the HLR with the IMSI specified, returns the ID of the created subscriber"""
         return self._set("subscriber.create", imsi)
 
     def delete_subscriber(self, imsi: int) -> int:
-        """ Deletes a subscriber with the imsi specified from the HLR, returns the ID of the deleted subscriber """
+        """Deletes a subscriber with the imsi specified from the HLR, returns the ID of the deleted subscriber"""
         return self._set("subscriber.delete", imsi)
 
     ## MSISDN
@@ -112,7 +111,7 @@ class OsmoHLR(OsmoComponent):
     def set_cs_by_imsi(self, imsi: int, enabled: bool = True):
         value = 1 if enabled else 0
         return self._set(f"subscriber.by-imsi-{imsi}.cs-enabled", value)
-    
+
     ## PS
     def set_ps_by_id(self, id: int, enabled: bool = True):
         value = 1 if enabled else 0
@@ -121,18 +120,17 @@ class OsmoHLR(OsmoComponent):
     def set_ps_by_imsi(self, imsi: int, enabled: bool = True):
         value = 1 if enabled else 0
         return self._set(f"subscriber.by-imsi-{imsi}.ps-enabled", value)
-    
+
     ## Easy operations
     def easy_create(self, imsi: int, msisdn: int, cs: bool, ps: bool) -> dict:
-        """ Single function to create subscriber with all params """
+        """Single function to create subscriber with all params"""
         ## TODO: Check if msisdn already exists and throw a different error
-
 
         id = self.create_subscriber(imsi)
         if self.set_msisdn_by_id(id, msisdn) != "OK":
             logging.error(f"Failed to set msisdn for newly created subscriber ID {id}")
             return f"Failed to set msisdn for newly created subscriber ID {id}"
-        
+
         self.set_cs_by_id(id, cs)
         self.set_ps_by_id(id, ps)
 
@@ -140,7 +138,6 @@ class OsmoHLR(OsmoComponent):
 
 
 class OsmoMSC(OsmoComponent):
-
     def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.MSC):
         super().__init__(host, port, "osmomsc.log")
 
