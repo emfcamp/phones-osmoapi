@@ -98,7 +98,7 @@ class OsmoBSC(OsmoComponent):
         return self._set(param, val)
 
     def easy_get_status(self):
-        status_keys = ["msc_connection_status", "bts_connection_status", "timezone", "location", "rf_locked", "mcc", "mnc"]
+        status_keys = ["msc_connection_status", "bts_connection_status", "timezone", "location", "rf_locked", "mcc", "mnc", "number-of-bts"]
         return {key: self.get_param(key) for key in status_keys}
 
 
