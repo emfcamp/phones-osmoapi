@@ -558,6 +558,28 @@ async def bsc_get_params(verified: bool = Depends(verification)):
         )
 
 
+@app.get(
+    "/bsc/restart-all",
+    summary="Restart all BTSes",
+    responses={
+        200: {
+            "description": "success",
+            "content": {"application/json": {}},
+        },
+        500: DEFAULT_500,
+    },
+    tags=["BSC Control Interface"],
+)
+async def bsc_restart_bts(verified: bool = Depends(verification)):
+    try:
+        return {"data": bsc_instance.restart_bts()}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
 class GetLocationResponse(BaseModel):
     imsi: int = 999430000001234
     lac: int = 12345

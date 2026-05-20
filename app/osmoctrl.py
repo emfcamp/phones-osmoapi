@@ -100,6 +100,11 @@ class OsmoBSC(OsmoComponent):
     def easy_get_status(self):
         status_keys = ["msc_connection_status", "bts_connection_status", "timezone", "location", "rf_locked", "mcc", "mnc", "number-of-bts"]
         return {key: self.get_param(key) for key in status_keys}
+    
+    ### Doesn't work at the moment, get error: SET_REPLY response had 7 fields
+    def restart_bts(self):
+        """Restart all BTSes"""
+        return self.set_param("apply-configuration", "restart")
 
 
 class OsmoSubscriberParam(StrEnum):
