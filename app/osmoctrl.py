@@ -27,11 +27,15 @@ class OsmoComponent:
     
     def _setup_logging(self, log_filename: str):
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.logger.setLevel(logging.INFO)#
+        self.logger.setLevel(logging.INFO)
 
+        formatter = logging.Formatter(fmt="%(asctime)s [%(classname)s] %(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
         handler = logging.FileHandler(f"logs/{log_filename}")
+        handler.setFormatter(formatter)
         handler.setLevel(logging.INFO)
+        
         self.logger.addHandler(handler)
+        self.logger = logging.LoggerAdapter(self.logger, {"classname": self.__class__.__name__})
 
 
 class OsmoHLR(OsmoComponent):
@@ -40,7 +44,7 @@ class OsmoHLR(OsmoComponent):
         super().__init__(host, port, "osmohlr.log")
     
     def get_subscriber_by_imsi(self, imsi: int):
-        self.logger.info(f"OsmoHLR> subscriber.by-imsi-{imsi}.info")
+        self.logger.info(f"subscriber.by-imsi-{imsi}.info")
         resp = self.controller.get(f"subscriber.by-imsi-{imsi}.info")
         self.logger.debug(resp)
         
@@ -61,7 +65,7 @@ class OsmoMSC(OsmoComponent):
         super().__init__(host, port, "osmomsc.log")
 
     def list_active_subscribers(self):
-        self.logger.info("OsmoMSC> subscriber-list-active-v1")
+        self.logger.info("subscriber-list-active-v1")
         resp = self.controller.get("subscriber-list-active-v1")
         print(resp)
         return resp
