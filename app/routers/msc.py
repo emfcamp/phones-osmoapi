@@ -25,7 +25,7 @@ router = APIRouter(
 
 
 @router.get(
-    "/msc/active",
+    "/active",
     summary="Get Active Subscribers",
     responses={
         200: {

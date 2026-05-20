@@ -34,7 +34,7 @@ router = APIRouter(
         },
         404: {
             "description": "imsi not found",
-            "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
+            "content": {"application/json": {"example": {"detail": "Subscriber information not found for imsi."}}},
         },
     },
     tags=["HLR Control Interface"],
@@ -65,7 +65,7 @@ async def hlr_get_imsi_sub(imsi: int, verified: bool = Depends(verification)):
         },
         404: {
             "description": "ID not found",
-            "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
+            "content": {"application/json": {"example": {"detail": "Subscriber info not found for ID"}}},
         },
     },
     tags=["HLR Control Interface"],
@@ -96,7 +96,7 @@ async def hlr_get_id_sub(id: int, verified: bool = Depends(verification)):
         },
         404: {
             "description": "ID not found",
-            "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
+            "content": {"application/json": {"example": {"detail": "Subscriber information not found for MSISDN"}}},
         },
     },
     tags=["HLR Control Interface"],
@@ -127,7 +127,7 @@ async def hlr_get_msisdn_sub(msisdn: int, verified: bool = Depends(verification)
         },
         404: {
             "description": "IMSI not found",
-            "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
+            "content": {"application/json": {"example": {"detail": "MSISDN not found for imsi"}}},
         },
     },
     tags=["HLR Control Interface"],

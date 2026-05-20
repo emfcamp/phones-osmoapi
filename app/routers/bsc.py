@@ -26,7 +26,7 @@ router = APIRouter(
 
 @router.get(
     "/param/{param}",
-    summary="Get Param",
+    summary="Get BSC Parameter",
     responses={
         200: {
             "description": "success",
@@ -46,7 +46,7 @@ async def bsc_get_params(param: str, verified: bool = Depends(verification)):
 
 @router.get(
     "/",
-    summary="Get BSC status",
+    summary="Get BSC status information",
     responses={
         200: {
             "description": "success",
