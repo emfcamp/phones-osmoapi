@@ -22,7 +22,10 @@ class OsmoHLR:
         self.addr = f"{host}:{port}"
 
         self.controller = OsmocomController(self.addr)
-
+        self.logger = None
+        self._setup_logging()
+    
+    def _setup_logging(self):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
         handler = logging.FileHandler("logs/osmohlr.log")
@@ -36,17 +39,30 @@ class OsmoMSC:
         self.addr = f"{host}:{port}"
 
         self.controller = OsmocomController(self.addr)
-
+        self.logger = None
+        self._setup_logging()
+    
+    def _setup_logging(self):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
         handler = logging.FileHandler("logs/osmomsc.log")
         handler.setLevel(logging.INFO)
         self.logger.addHandler(handler)
 
-        return self.controller
+    def list_active_subscribers(self):
+        print(self.controller.get("subscriber-list-active-v1"))
 
 
 def get_subscriber_by_imsi(imsi: int):
     hlr = OsmoHLR()
     print(f"subscriber.by-imsi-{imsi}.*")
-    print(hlr.controller.get(f"subscriber.by-imsi-{imsi}.info"))
+    data = hlr.controller.get(f"subscriber.by-imsi-{imsi}.info")
+    print(data)
+    
+    lines = data.splitlines()
+    info = {}
+    for line in lines:
+        if line.strip() == "": continue
+        ld = line.split("\t")
+        info[ld[0]] = ld[1]
+    return info

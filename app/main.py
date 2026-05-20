@@ -309,11 +309,11 @@ async def get_default(imsi: int, verified: bool = Depends(verification)):
     summary="Get Subscriber Info by IMSI",
     responses={
         200: {
-            "description": "success",
-            "content": {"application/json": {"example": {"imsi": 999430000001234, "default_msisdn": 9044242}}},
+            "description": "Default MSISDN retrieved successfully.",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 9044242}}},
         },
         404: {
-            "description": "imsi not found",
+            "description": "Default MSISDN not found for this IMSI.",
             "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
         },
         500: {
@@ -323,7 +323,6 @@ async def get_default(imsi: int, verified: bool = Depends(verification)):
             },
         },
     },
-    response_model=DefaultMSISDNResponse,
     tags=["IMSI Driven Operations"],
 )
 async def get_default(imsi: int, verified: bool = Depends(verification)):
@@ -333,7 +332,7 @@ async def get_default(imsi: int, verified: bool = Depends(verification)):
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="IMSI Not found",
+            detail="Default MSISDN not found for this IMSI.",
         )
     except Exception as e:
         raise HTTPException(
