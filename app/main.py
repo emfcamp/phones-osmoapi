@@ -11,7 +11,7 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel, ValidationError
 
 from msisdn import get_all_default_msisdn, get_all_msisdn_from_hlr, get_msisdn_by_imsi, get_default_msisdn_by_imsi, reset_msisdn_by_imsi_to_default, set_msisdn_by_imsi
-from osmoctrl import get_subscriber_by_imsi
+from osmoctrl import OsmoHLR, OsmoMSC
 from osmo import (
     OsmocomHLR,
     OsmocomMSC,
@@ -59,6 +59,9 @@ def load_users() -> dict | list:
 # Initial data load
 dks = load_dks()
 users = load_users()
+
+hlr_instance = OsmoHLR()
+msc_instance = OsmoMSC()
 
 
 def verification(creds: Annotated[HTTPBasicCredentials, Depends(security)]):
@@ -309,11 +312,11 @@ async def get_default(imsi: int, verified: bool = Depends(verification)):
     summary="Get Subscriber Info by IMSI",
     responses={
         200: {
-            "description": "Default MSISDN retrieved successfully.",
-            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 9044242}}},
+            "description": "success",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "default_msisdn": 9044242}}},
         },
         404: {
-            "description": "Default MSISDN not found for this IMSI.",
+            "description": "imsi not found",
             "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
         },
         500: {
@@ -325,15 +328,36 @@ async def get_default(imsi: int, verified: bool = Depends(verification)):
     },
     tags=["IMSI Driven Operations"],
 )
-async def get_default(imsi: int, verified: bool = Depends(verification)):
-    """Get the Default MSISDN for a given IMSI"""
+async def get_imsi_sub(imsi: int, verified: bool = Depends(verification)):
+    """Get the subscriber info for a given IMSI"""
     try:
-        return {"data": get_subscriber_by_imsi(imsi)}
+        return {"data": hlr_instance.get_subscriber_by_imsi(imsi)}
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Default MSISDN not found for this IMSI.",
+            detail="Info not found for IMSI.",
         )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@app.get(
+    "/msc/active",
+    summary="Get Active Subscribers",
+    responses={
+        200: {
+            "description": "success",
+            "content": {"application/json": {}},
+        },
+    },
+    tags=["MSC"],
+)
+async def get_active_subs(verified: bool = Depends(verification)):
+    try:
+        return {"data": msc_instance.list_active_subscribers()}
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

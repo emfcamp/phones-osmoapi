@@ -31,6 +31,19 @@ class OsmoHLR:
         handler = logging.FileHandler("logs/osmohlr.log")
         handler.setLevel(logging.INFO)
         self.logger.addHandler(handler)
+    
+    def get_subscriber_by_imsi(self, imsi: int):
+        self.logger.info(f"OsmoHLR> subscriber.by-imsi-{imsi}.info")
+        resp = self.controller.get(f"subscriber.by-imsi-{imsi}.info")
+        self.logger.debug(resp)
+        
+        lines = resp.splitlines()
+        info = {}
+        for line in lines:
+            if line.strip() == "": continue
+            ld = line.split("\t")
+            info[ld[0]] = ld[1]
+        return info
 
 
 class OsmoMSC:
@@ -50,19 +63,7 @@ class OsmoMSC:
         self.logger.addHandler(handler)
 
     def list_active_subscribers(self):
-        print(self.controller.get("subscriber-list-active-v1"))
-
-
-def get_subscriber_by_imsi(imsi: int):
-    hlr = OsmoHLR()
-    print(f"subscriber.by-imsi-{imsi}.*")
-    data = hlr.controller.get(f"subscriber.by-imsi-{imsi}.info")
-    print(data)
-    
-    lines = data.splitlines()
-    info = {}
-    for line in lines:
-        if line.strip() == "": continue
-        ld = line.split("\t")
-        info[ld[0]] = ld[1]
-    return info
+        self.logger.info("OsmoMSC> subscriber-list-active-v1")
+        resp = self.controller.get("subscriber-list-active-v1")
+        print(resp)
+        return resp
