@@ -1,6 +1,5 @@
 import json
 import re
-from math import e
 from operator import contains
 from pathlib import Path
 from typing import Annotated, Union
@@ -18,7 +17,7 @@ from msisdn import (
     reset_msisdn_by_imsi_to_default,
     set_msisdn_by_imsi,
 )
-from osmoctrl import OsmoHLR, OsmoMSC, OsmoSubscriberParam
+from osmoctrl import OsmoBSC, OsmoHLR, OsmoMSC, OsmoSubscriberParam
 from osmo import (
     OsmocomHLR,
     OsmocomMSC,
@@ -82,6 +81,7 @@ users = load_users()
 
 hlr_instance = OsmoHLR()
 msc_instance = OsmoMSC()
+bsc_instance = OsmoBSC()
 
 
 def verification(creds: Annotated[HTTPBasicCredentials, Depends(security)]):
@@ -507,6 +507,50 @@ async def hlr_create_new_sub(imsi: int, msisdn: int, cs: bool, ps: bool, verifie
 async def msc_get_active_subs(verified: bool = Depends(verification)):
     try:
         return {"data": msc_instance.list_active_subscribers()}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@app.get(
+    "/bsc/param/{param}",
+    summary="Get Param",
+    responses={
+        200: {
+            "description": "success",
+            "content": {"application/json": {}},
+        },
+        500: DEFAULT_500,
+    },
+    tags=["BSC Control Interface"],
+)
+async def bsc_get_params(param: str, verified: bool = Depends(verification)):
+    try:
+        return {"data": bsc_instance.get_param(param)}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@app.get(
+    "/bsc",
+    summary="Get BSC status",
+    responses={
+        200: {
+            "description": "success",
+            "content": {"application/json": {}},
+        },
+        500: DEFAULT_500,
+    },
+    tags=["BSC Control Interface"],
+)
+async def bsc_get_params(verified: bool = Depends(verification)):
+    try:
+        return {"data": bsc_instance.easy_get_status()}
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

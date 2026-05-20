@@ -86,6 +86,22 @@ class OsmoComponent:
         return ""
 
 
+# https://downloads.osmocom.org/docs/osmo-bsc/master/osmobsc-usermanual.pdf
+class OsmoBSC(OsmoComponent):
+    def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.BSC):
+        super().__init__(host, port, "osmobsc.log")
+
+    def get_param(self, param):
+        return self._get(param)
+
+    def set_param(self, param, val):
+        return self._set(param, val)
+
+    def easy_get_status(self):
+        status_keys = ["msc_connection_status", "bts_connection_status", "timezone", "location", "rf_locked", "mcc", "mnc"]
+        return {key: self.get_param(key) for key in status_keys}
+
+
 class OsmoSubscriberParam(StrEnum):
     AUD2G = "aud2g"
     AUD3G = "aud3g"
