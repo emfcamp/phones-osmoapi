@@ -18,7 +18,7 @@ from msisdn import (
     reset_msisdn_by_imsi_to_default,
     set_msisdn_by_imsi,
 )
-from osmoctrl import OsmoHLR, OsmoMSC
+from osmoctrl import OsmoHLR, OsmoMSC, OsmoSubscriberParam
 from osmo import (
     OsmocomHLR,
     OsmocomMSC,
@@ -118,8 +118,8 @@ class AllDefaultMSISDNResponse(BaseModel):
 
 @app.get("/", include_in_schema=False)
 async def read_root():
-   """Redirect root to the EMF GSM page."""
-   return RedirectResponse(url="https://gsm.emf.camp/")
+    """Redirect root to the EMF GSM page."""
+    return RedirectResponse(url="https://gsm.emf.camp/")
 
 
 @app.get(
@@ -384,6 +384,38 @@ async def hlr_get_msisdn_sub(msisdn: int, verified: bool = Depends(verification)
     """Get the subscriber info for a given MSISDN"""
     try:
         return {"data": hlr_instance.get_subscriber_by_msisdn(msisdn)}
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Info not found for MSISDN.",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@app.get(
+    "/hlr/subscriber/imsi/{imsi}/msisdn",
+    summary="Get Subscriber MSISDN by IMSI",
+    responses={
+        200: {
+            "description": "success",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "default_msisdn": 9044242}}},
+        },
+        404: {
+            "description": "IMSI not found",
+            "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
+        },
+        500: DEFAULT_500,
+    },
+    tags=["HLR Control Interface"],
+)
+async def hlr_get_imsi_msisdn(msisdn: int, verified: bool = Depends(verification)):
+    """Get the subscriber MSISDN for a given IMSI"""
+    try:
+        return {"data": hlr_instance.get_subscriber_param_by_imsi(msisdn, OsmoSubscriberParam.MSISDN)}
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

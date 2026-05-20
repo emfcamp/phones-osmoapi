@@ -1,5 +1,5 @@
 import logging
-from enum import IntEnum
+from enum import IntEnum, StrEnum
 from ipaddress import IPv4Address, IPv6Address
 from osmoapi import OsmocomController
 from typing import Union
@@ -49,6 +49,18 @@ class OsmoComponent:
         self.logger.addHandler(handler)
         self.logger = logging.LoggerAdapter(self.logger, {"classname": self.__class__.__name__})
 
+    def _get(self, cmd: str):
+        self.logger.info(cmd)
+
+        try:
+            resp = self.controller.get(cmd)
+            self.logger.debug(resp)
+            return resp
+        except Exception as e:
+            self.logger.error(f"[Exception]-> {e}")
+
+        return {}
+
     def _get_kv(self, cmd: str):
         self.logger.info(cmd)
 
@@ -74,6 +86,14 @@ class OsmoComponent:
         return ""
 
 
+class OsmoSubscriberParam(StrEnum):
+    AUD2G = "aud2g"
+    AUD3G = "aud3g"
+    MSISDN = "msisdn"
+    CS = "cs-enabled"
+    PS = "ps-enabled"
+
+
 class OsmoHLR(OsmoComponent):
     def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.HLR):
         super().__init__(host, port, "osmohlr.log")
@@ -86,6 +106,13 @@ class OsmoHLR(OsmoComponent):
 
     def get_subscriber_by_msisdn(self, msisdn: int):
         return self._get_kv(f"subscriber.by-msisdn-{msisdn}.info")
+    
+    ## Get parameter value
+    def get_subscriber_param_by_id(self, id: int, param: OsmoSubscriberParam):
+        return self._get(f"subscriber.by-id-{id}.{param.value}")
+
+    def get_subscriber_param_by_imsi(self, imsi: int, param: OsmoSubscriberParam):
+        return self._get(f"subscriber.by-imsi-{imsi}.{param.value}")
 
     ## IMSI operations
     def create_subscriber(self, imsi: int) -> int:
