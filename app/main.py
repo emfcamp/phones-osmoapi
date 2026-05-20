@@ -307,8 +307,9 @@ async def get_default(imsi: int, verified: bool = Depends(verification)):
         )
 
 
+""" New HLR functions """
 @app.get(
-    "/imsi/{imsi}/get",
+    "/hlr/subscriber/imsi/{imsi}",
     summary="Get Subscriber Info by IMSI",
     responses={
         200: {
@@ -326,7 +327,7 @@ async def get_default(imsi: int, verified: bool = Depends(verification)):
             },
         },
     },
-    tags=["IMSI Driven Operations"],
+    tags=["HLR Control Interface"],
 )
 async def get_imsi_sub(imsi: int, verified: bool = Depends(verification)):
     """Get the subscriber info for a given IMSI"""
@@ -345,6 +346,153 @@ async def get_imsi_sub(imsi: int, verified: bool = Depends(verification)):
 
 
 @app.get(
+    "/hlr/subscriber/id/{id}",
+    summary="Get Subscriber Info by ID",
+    responses={
+        200: {
+            "description": "success",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "default_msisdn": 9044242}}},
+        },
+        404: {
+            "description": "ID not found",
+            "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
+    },
+    tags=["HLR Control Interface"],
+)
+async def get_id_sub(id: int, verified: bool = Depends(verification)):
+    """Get the subscriber info for a given ID"""
+    try:
+        return {"data": hlr_instance.get_subscriber_by_id(id)}
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Info not found for ID.",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@app.get(
+    "/hlr/subscriber/msisdn/{msisdn}",
+    summary="Get Subscriber Info by MSISDN",
+    responses={
+        200: {
+            "description": "success",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "default_msisdn": 9044242}}},
+        },
+        404: {
+            "description": "ID not found",
+            "content": {"application/json": {"example": {"detail": "Default MSISDN not found for this IMSI."}}},
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
+    },
+    tags=["HLR Control Interface"],
+)
+async def get_msisdn_sub(msisdn: int, verified: bool = Depends(verification)):
+    """Get the subscriber info for a given MSISDN"""
+    try:
+        return {"data": hlr_instance.get_subscriber_by_msisdn(msisdn)}
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Info not found for MSISDN.",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@app.post(
+    "/hlr/subscriber/imsi/{imsi}/update-msisdn/{msisdn}",
+    summary="Set New MSISDN",
+    responses={
+        200: {
+            "description": "Set MSISDN successfully.",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
+        },
+        409: {
+            "description": "Number already in use. Please try a different number.",
+            "content": {"application/json": {"example": {"detail": "Number already in use. Please try a different number."}}},
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
+    },
+    tags=["HLR Control Interface"],
+)
+async def set_hlr_new_msisdn(imsi: int, msisdn: int, verified: bool = Depends(verification)):
+    """Set a new MSISDN for a given IMSI"""
+    try:
+        return hlr_instance.set_msisdn_by_imsi(imsi, msisdn)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Number already in use. Please try a different number.",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@app.post(
+    "/hlr/subscriber/create",
+    summary="Create new subscriber",
+    responses={
+        200: {
+            "description": "...",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
+        },
+        409: {
+            "description": "...",
+            "content": {"application/json": {"example": {"detail": "Number already in use. Please try a different number."}}},
+        },
+        500: {
+            "description": "An unhandled error occurred.",
+            "content": {
+                "application/json": {"example": {"detail": "An unhandled error occurred. Error: Something went wrong."}}
+            },
+        },
+    },
+    tags=["HLR Control Interface"],
+)
+async def set_hlr_new_msisdn(imsi: int, msisdn: int, cs: bool, ps: bool, verified: bool = Depends(verification)):
+    """Set a new MSISDN for a given IMSI"""
+    try:
+        return hlr_instance.easy_create(imsi, msisdn, cs, ps)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Number already in use. Please try a different number.",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+@app.get(
     "/msc/active",
     summary="Get Active Subscribers",
     responses={
@@ -353,7 +501,7 @@ async def get_imsi_sub(imsi: int, verified: bool = Depends(verification)):
             "content": {"application/json": {}},
         },
     },
-    tags=["MSC"],
+    tags=["MSC Control Interface"],
 )
 async def get_active_subs(verified: bool = Depends(verification)):
     try:
