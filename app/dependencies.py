@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from pydantic import BaseModel
 from typing import Annotated
 from fastapi import Depends, HTTPException, status
 
