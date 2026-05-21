@@ -1,7 +1,6 @@
 from fastapi import Depends, FastAPI
 from fastapi.responses import RedirectResponse
 
-from .dependencies import security
 from .routers import bsc, hlr, msc, telnet
 
 

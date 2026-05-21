@@ -28,7 +28,7 @@ Makes use of osmoapi from here: https://github.com/emfcamp/phones-osmoapi-py/rel
 ```
 
 ## Data files
-`data/default_msisdn_by_imsi.csv` should contain a mapping from IMSI to DefaultMSISDN; for example:
+`app/data/default_msisdn_by_imsi.csv` should contain a mapping from IMSI to DefaultMSISDN; for example:
 ```csv
 IMSI,DefaultMSISDN
 999430000001234,90424242

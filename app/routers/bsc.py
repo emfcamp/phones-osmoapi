@@ -54,7 +54,7 @@ async def bsc_get_params(param: str, verified: bool = Depends(verification)):
         },
     },
 )
-async def bsc_get_params(verified: bool = Depends(verification)):
+async def bsc_get_status(verified: bool = Depends(verification)):
     try:
         return {"data": bsc_instance.easy_get_status()}
     except Exception as e:

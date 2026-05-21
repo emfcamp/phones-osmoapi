@@ -1,9 +1,9 @@
 import json
 from pathlib import Path
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from pydantic import BaseModel, ValidationError
-from typing import Annotated, Union
-from fastapi import Depends, FastAPI, HTTPException, status
+from pydantic import BaseModel
+from typing import Annotated
+from fastapi import Depends, HTTPException, status
 
 
 DATA_DIR = Path(__file__).resolve().parent / "data"
