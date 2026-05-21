@@ -64,7 +64,7 @@ async def bsc_get_status(verified: bool = Depends(verification)):
         )
 
 
-@router.get(
+@router.post(
     "/restart-all",
     summary="Restart all BTSes",
     responses={
