@@ -7,7 +7,7 @@ RUN wget https://obs.osmocom.org/projects/osmocom/public_key && \
     echo "deb [signed-by=/usr/share/osmocom-keyring/osmocom.asc] https://downloads.osmocom.org/packages/osmocom:/latest/xUbuntu_24.04/ ./" > /etc/apt/sources.list.d/osmocom.list && \
     apt-get update
 
-RUN apt-get install -y osmo-msc osmo-bsc osmo-hlr
+RUN apt-get install -y osmo-msc osmo-bsc osmo-hlr osmo-mgw osmo-stp
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
@@ -28,3 +28,5 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 RUN echo "{\"testsuite\":{\"password\": \"testsuite\"}}" > /app/app/data/users.json
 RUN echo "{}" > /app/app/data/dks.json
+
+ENTRYPOINT ["/app/entrypoint-tests.sh"]
