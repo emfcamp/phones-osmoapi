@@ -1,9 +1,8 @@
-from asyncio import start_server
 from csv import DictReader
 from pprint import pprint
-from re import L
 
-from osmo import osmo_hlr_run_single_elevated
+from .osmo import osmo_hlr_run_single_elevated
+
 
 def get_msisdn_by_imsi(imsi: int):
     """Get the MSISDN for a given IMSI"""
@@ -39,12 +38,12 @@ def get_all_default_msisdn():
     """Get all default MSISDNs"""
     try:
         default_msisdns = []
-        with open("default_msisdn_by_imsi.csv", newline='') as csvfile:
+        with open("data/default_msisdn_by_imsi.csv", newline="") as csvfile:
             reader = DictReader(csvfile)
             if "IMSI" not in reader.fieldnames or "DefaultMSISDN" not in reader.fieldnames:
                 raise Exception("Invalid CSV header: missing IMSI or DefaultMSISDN")
             for row in reader:
-                default_msisdns.append({"imsi": int(row['IMSI']), "default_msisdn": int(row['DefaultMSISDN'])})
+                default_msisdns.append({"imsi": int(row["IMSI"]), "default_msisdn": int(row["DefaultMSISDN"])})
         return default_msisdns
     except Exception as e:
         raise e
@@ -61,8 +60,8 @@ def get_default_msisdn_by_imsi(imsi: int):
     try:
         default_msisdns = get_all_default_msisdn()
         for row in default_msisdns:
-            if row['imsi'] == imsi:
-                return int(row['default_msisdn'])
+            if row["imsi"] == imsi:
+                return int(row["default_msisdn"])
         raise ValueError("Unknown IMSI")
     except Exception as e:
         raise e
@@ -108,13 +107,16 @@ ID     MSISDN        IMSI              IMEI              NAM
                 continue
             msisdn = line.split()[1]
             imsi = line.split()[2]
+            ## If msisdn hasn't been set, set it to -1
+            if msisdn == "none":
+                msisdn = -1
             msisdns.append({"imsi": int(imsi), "msisdn": int(msisdn)})
         return msisdns
     except Exception as e:
         raise e
 
 
-#def generate_default_msisdn(imsi: int, prefix: int) -> int:
+# def generate_default_msisdn(imsi: int, prefix: int) -> int:
 #    """Generates a default MSISDN based on the IMSI, type and prefix
 #
 #    Parameters
