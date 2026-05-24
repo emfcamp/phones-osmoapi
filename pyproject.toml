@@ -3,7 +3,7 @@ name = "phones-osmoapi"
 version = "0.1.0"
 description = "HTTP API for osmocom"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13.0, <3.14"
 dependencies = [
     "fastapi[standard]>=0.136.1",
     "osmoapi",
@@ -13,6 +13,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.0.3",
     "ruff>=0.15.12",
 ]
 
