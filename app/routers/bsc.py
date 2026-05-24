@@ -64,6 +64,26 @@ async def bsc_get_status(verified: bool = Depends(verification)):
         )
 
 
+@router.get(
+    "/bts/{bts_n}",
+    summary="Get BTS information",
+    responses={
+        200: {
+            "description": "success",
+            "content": {"application/json": {}},
+        },
+    },
+)
+async def bts_get_info(bts_n: int, verified: bool = Depends(verification)):
+    try:
+        return {"data": bsc_instance.easy_get_bts_info(bts_n)}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
 @router.post(
     "/restart-all",
     summary="Restart all BTSes",
