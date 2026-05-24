@@ -19,7 +19,7 @@ dev = [
 ]
 
 [tool.uv.sources]
-osmoapi = { url = "https://github.com/emfcamp/phones-osmoapi-py/releases/download/v0.1.1/osmoapi-0.1.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl" }
+osmoapi = { url = "https://github.com/emfcamp/phones-osmoapi-py/releases/download/v0.2.0/osmoapi-0.2.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl" }
 
 [tool.ruff]
 line-length = 150
