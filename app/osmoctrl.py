@@ -101,7 +101,6 @@ class OsmoBSC(OsmoComponent):
         status_keys = ["msc_connection_status", "bts_connection_status", "timezone", "location", "rf_locked", "mcc", "mnc", "number-of-bts"]
         return {key: self.get_param(key) for key in status_keys}
 
-    ### Channel-load doesn't work yet - need osmoapi rust library update
     def easy_get_bts_info(self, bts_n: int):
         status_keys = [
             "channel-load",
@@ -111,9 +110,16 @@ class OsmoBSC(OsmoComponent):
             "cell-identity",
             "bsic",
         ]
-        return {key: self.get_param(f"bts.{bts_n}.{key}") for key in status_keys}
+        data = {key: self.get_param(f"bts.{bts_n}.{key}") for key in status_keys}
 
-    ### Doesn't work at the moment, get error: SET_REPLY response had 7 fields
+        channel_loads = data["channel-load"].split()
+        data["channel-load"] = {}
+        for channel_load in channel_loads:
+            key, used, total = channel_load.split(",")
+            data["channel-load"][key] = f"{used}/{total}"
+
+        return data
+
     def restart_bts(self):
         """Restart all BTSes"""
         return self.set_param("apply-configuration", "restart")
