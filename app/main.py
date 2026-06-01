@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
+from .config import settings
 from .routers import bsc, hlr, msc, telnet
 
 
 app = FastAPI(
     title="EMF GSM API",
     description="A simple API for managing GSM services at EMF Camp.",
-    contact={"name": "EMF GSM Team", "url": "https://gsm.emf.camp/", "email": "poc+gsmapi@emfcamp.org"},
+    contact={"name": "EMF GSM Team", "url": "https://gsm.emf.camp/", "email": settings.contact_email},
     version="0.1.0",
     terms_of_service="https://gsm.emf.camp/api/tos",
     license_info={"name": "Beerware", "url": "https://spdx.org/licenses/Beerware.html"},

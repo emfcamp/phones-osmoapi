@@ -377,6 +377,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
     { name = "osmoapi" },
+    { name = "pydantic-settings" },
     { name = "telnetlib3" },
     { name = "uvicorn" },
 ]
@@ -392,6 +393,7 @@ dev = [
 requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.136.1" },
     { name = "osmoapi", url = "https://github.com/emfcamp/phones-osmoapi-py/releases/download/v0.2.0/osmoapi-0.2.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl" },
+    { name = "pydantic-settings", specifier = ">=2.14.1" },
     { name = "telnetlib3", specifier = ">=4.0.2" },
     { name = "uvicorn", specifier = ">=0.46.0" },
 ]
