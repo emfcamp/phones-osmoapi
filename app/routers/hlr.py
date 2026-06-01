@@ -1,4 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException, status, Query
+from ..config import settings
 from ..dependencies import security, verification
 from ..osmoctrl import OsmoHLR, OsmoSubscriberParam
 
@@ -180,6 +183,29 @@ async def hlr_update_msisdn(imsi: int, msisdn: int, verified: bool = Depends(ver
 
 
 @router.post(
+    "/subscriber/imsi/{imsi}/update-aud2g/{msisdn}",
+    summary="Set New aud2g information",
+    responses={
+        200: {
+            "description": "Set aud2g successfully.",
+            "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
+        },
+    },
+    tags=["HLR Control Interface"],
+)
+async def hlr_update_aud2g(imsi: int, aud2g: Annotated[str | None, Query(min_length=32, max_length=32)], verified: bool = Depends(verification)):
+    """Set a new aud2g for a given IMSI"""
+    try:
+        aud2g_param = f"{settings.aud2g_algo},{aud2g}"
+        return hlr_instance.set_aud2g_by_imsi(imsi, aud2g_param)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@router.post(
     "/subscriber/create",
     summary="Create new subscriber",
     responses={
@@ -194,10 +220,18 @@ async def hlr_update_msisdn(imsi: int, msisdn: int, verified: bool = Depends(ver
     },
     tags=["HLR Control Interface"],
 )
-async def hlr_create_new_sub(imsi: int, msisdn: int, cs: bool, ps: bool, verified: bool = Depends(verification)):
+async def hlr_create_new_sub(
+    imsi: int,
+    msisdn: int,
+    aud2g: Annotated[str | None, Query(min_length=32, max_length=32)],
+    cs: bool,
+    ps: bool,
+    verified: bool = Depends(verification),
+):
     """Set a new MSISDN for a given IMSI"""
     try:
-        return hlr_instance.easy_create(imsi, msisdn, cs, ps)
+        aud2g_param = f"{settings.aud2g_algo},{aud2g}"
+        return hlr_instance.easy_create(imsi, msisdn, aud2g_param, cs, ps)
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,

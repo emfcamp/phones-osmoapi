@@ -169,6 +169,20 @@ class OsmoHLR(OsmoComponent):
     def set_msisdn_by_imsi(self, imsi: int, msisdn: int):
         return self._set(f"subscriber.by-imsi-{imsi}.msisdn", msisdn)
 
+    ## aud2g: algo[,KI]
+    def set_aud2g_by_id(self, id: int, aud2g: str):
+        return self._set(f"subscriber.by-id-{id}.aud2g", aud2g)
+
+    def set_aud2g_by_imsi(self, imsi: int, aud2g: str):
+        return self._set(f"subscriber.by-imsi-{imsi}.aud2g", aud2g)
+
+    ## aud3g: algo[,KI,("op"|"opc"),OP_C[,ind_bitlen]]
+    def set_aud3g_by_id(self, id: int, aud3g: str):
+        return self._set(f"subscriber.by-id-{id}.aud3g", aud3g)
+
+    def set_aud3g_by_imsi(self, imsi: int, aud3g: str):
+        return self._set(f"subscriber.by-imsi-{imsi}.aud3g", aud3g)
+
     ## CS
     def set_cs_by_id(self, id: int, enabled: bool = True):
         value = 1 if enabled else 0
