@@ -1,0 +1,9 @@
+services:
+  osmoapi:
+    container_name: webapp-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - "8000:8000"

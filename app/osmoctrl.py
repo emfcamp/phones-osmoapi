@@ -1,4 +1,5 @@
 import logging
+from os import makedirs
 from enum import IntEnum, StrEnum
 from ipaddress import IPv4Address, IPv6Address
 from osmoapi import OsmocomController
@@ -38,6 +39,7 @@ class OsmoComponent:
         self._setup_logging(log_filename)
 
     def _setup_logging(self, log_filename: str):
+        makedirs("logs/", exist_ok=True)
         self.logger = logging.getLogger(self.__class__.__name__)
         self.logger.setLevel(logging.INFO)
 

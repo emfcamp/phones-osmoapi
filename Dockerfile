@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:24.04 AS base
 
 RUN apt-get update && apt-get install -y wget
 
@@ -25,6 +25,25 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 COPY . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --dev
+
+
+#### Development target
+FROM base AS dev
+
+WORKDIR /app
+
+EXPOSE 8000
+
+ENV PATH="/app/.venv/bin:$PATH"
+
+ENTRYPOINT []
+CMD ["/app/entrypoint.sh"]
+
+
+### Testing target
+FROM base AS tests
+
+WORKDIR /app
 
 RUN echo "{\"testsuite\":{\"password\": \"testsuite\"}}" > /app/app/data/users.json
 RUN echo "{}" > /app/app/data/dks.json
