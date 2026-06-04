@@ -12,6 +12,7 @@ class OsmoControlInterface(IntEnum):
     MSC = 4255
     HLR = 4259
     CBC = 4265
+    MGW = 4267
 
 
 OSMO_HOST = "127.0.0.1"
@@ -225,3 +226,9 @@ class OsmoMSC(OsmoComponent):
 
     def list_active_subscribers(self):
         return self._get_kv("subscriber-list-active-v1")
+
+
+## TODO: use to get rate-counters
+class OsmoMGW(OsmoComponent):
+    def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.MGW):
+        super().__init__(host, port, "osmomgw.log")

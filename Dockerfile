@@ -30,6 +30,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 #### Development target
 FROM base AS dev
 
+RUN apt-get -y install telnet
+
 WORKDIR /app
 
 EXPOSE 8000
