@@ -10,6 +10,10 @@ DATA_DIR = Path(__file__).resolve().parent / "data"
 
 def _load_json_file(filename: str) -> dict | list:
     file_path = DATA_DIR / filename
+    if not file_path.exists():
+        print(f"File {filename} does not exist! Returning empty dict")
+        return {}
+    
     with open(file_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
