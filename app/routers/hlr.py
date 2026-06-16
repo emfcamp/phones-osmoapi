@@ -29,7 +29,7 @@ router = APIRouter(
 
 @router.get(
     "/subscriber/imsi/{imsi}",
-    summary="Get Subscriber Info by IMSI",
+    summary="Get Subscriber Information by IMSI",
     responses={
         200: {
             "description": "success",
@@ -135,10 +135,10 @@ async def hlr_get_msisdn_sub(msisdn: int, verified: bool = Depends(verification)
     },
     tags=["HLR Control Interface"],
 )
-async def hlr_get_imsi_msisdn(msisdn: int, verified: bool = Depends(verification)):
+async def hlr_get_imsi_msisdn(imsi: int, verified: bool = Depends(verification)):
     """Get the subscriber MSISDN for a given IMSI"""
     try:
-        return {"data": hlr_instance.get_subscriber_param_by_imsi(msisdn, OsmoSubscriberParam.MSISDN)}
+        return {"data": hlr_instance.get_subscriber_param_by_imsi(imsi, OsmoSubscriberParam.MSISDN)}
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -153,7 +153,7 @@ async def hlr_get_imsi_msisdn(msisdn: int, verified: bool = Depends(verification
 
 @router.post(
     "/subscriber/imsi/{imsi}/update-msisdn/{msisdn}",
-    summary="Set New MSISDN",
+    summary="Set New MSISDN for a given IMSI",
     responses={
         200: {
             "description": "Set MSISDN successfully.",
@@ -184,7 +184,7 @@ async def hlr_update_msisdn(imsi: int, msisdn: int, verified: bool = Depends(ver
 
 @router.post(
     "/subscriber/imsi/{imsi}/update-aud2g/{msisdn}",
-    summary="Set New aud2g information",
+    summary="Set New aud2g information for a given IMSI",
     responses={
         200: {
             "description": "Set aud2g successfully.",
@@ -207,7 +207,7 @@ async def hlr_update_aud2g(imsi: int, aud2g: Annotated[str | None, Query(min_len
 
 @router.post(
     "/subscriber/create",
-    summary="Create new subscriber",
+    summary="Create new subscriber in the HLR",
     responses={
         200: {
             "description": "...",
@@ -228,7 +228,6 @@ async def hlr_create_new_sub(
     ps: bool,
     verified: bool = Depends(verification),
 ):
-    """Set a new MSISDN for a given IMSI"""
     try:
         aud2g_param = f"{settings.aud2g_algo},{aud2g}"
         return hlr_instance.easy_create(imsi, msisdn, aud2g_param, cs, ps)
