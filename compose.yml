@@ -1,6 +1,16 @@
 services:
-  osmoapi:
-    container_name: webapp-backend
+  osmoapi-prod:
+    container_name: osmoapi
+    image: ghcr.io/emfcamp/phones-osmoapi
+    profiles: [ prod ]
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    network_mode: "host"
+  osmoapi-dev:
+    container_name: osmoapi-dev
+    profiles: [ dev ]
     build:
       context: .
       dockerfile: Dockerfile

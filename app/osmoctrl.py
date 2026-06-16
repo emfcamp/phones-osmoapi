@@ -1,5 +1,5 @@
 import logging
-from os import makedirs
+from os import makedirs, environ
 from enum import IntEnum, StrEnum
 from ipaddress import IPv4Address, IPv6Address
 from osmoapi import OsmocomController
@@ -15,7 +15,7 @@ class OsmoControlInterface(IntEnum):
     MGW = 4267
 
 
-OSMO_HOST = "127.0.0.1"
+OSMO_HOST = environ.get("OSMOCOM_HOST", "127.0.0.1")
 
 
 def jsonify_response(resp: str):
