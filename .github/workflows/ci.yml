@@ -43,7 +43,6 @@ jobs:
           DOCKER_BUILD_RECORD_UPLOAD: false
           SOURCE_DATE_EPOCH: 0
         with:
-          context: web
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
