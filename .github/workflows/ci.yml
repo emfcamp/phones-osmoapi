@@ -53,6 +53,7 @@ jobs:
   deploy:
     name: "Deploy API"
     runs-on: [ self-hosted ]
+    needs: [ build ]
     timeout-minutes: 10
 
     steps:
