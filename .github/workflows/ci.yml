@@ -59,7 +59,7 @@ jobs:
       - name: Checkout compose.yml
         uses: actions/checkout@v6
         with:
-          sparse-checkout: compose.yml
+          sparse-checkout: .
       
       - name: Re-deploy API
         shell: bash
