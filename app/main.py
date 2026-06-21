@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from .config import settings
 from .routers import bsc, hlr, msc, telnet
@@ -13,6 +14,9 @@ app = FastAPI(
     terms_of_service="https://gsm.emf.camp/api/tos",
     license_info={"name": "Beerware", "url": "https://spdx.org/licenses/Beerware.html"},
 )
+
+Instrumentator().instrument(app).expose(app)
+
 app.include_router(bsc.router)
 app.include_router(hlr.router)
 app.include_router(msc.router)
