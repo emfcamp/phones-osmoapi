@@ -1,6 +1,8 @@
 from typing import Annotated
+from functools import wraps
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
+from pydantic import BaseModel, Field
 from ..config import settings
 from ..dependencies import bearer_scheme, verify_bearer_token
 from ..osmoctrl import OsmoHLR, OsmoSubscriberParam
@@ -122,88 +124,67 @@ async def core_webhook(body: dict, verified: bool = Depends(verify_bearer_token)
         )
 
 
-@router.post(
-    "/sim",
-    summary="",
-    tags=["Core"],
-)
-async def create_sim(
-    imsi: int,
-    msisdn: int,
-    aud2g: Annotated[str | None, Query(min_length=32, max_length=32)],
-    verified: bool = Depends(verify_bearer_token),
-):
-    try:
-        aud2g_param = f"{settings.aud2g_algo},{aud2g}"
-        return hlr_instance.easy_create(imsi, msisdn, aud2g_param, True, False)
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Number already in use. Please try a different number.",
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
-        )
+def build_aud2g_param(aud2g: str) -> str:
+    return f"{settings.aud2g_algo},{aud2g}"
 
 
-@router.get(
-    "/sim/{imsi}",
-    summary="",
-    tags=["Core"],
-)
-async def fetch_sim(
-    imsi: int,
-    verified: bool = Depends(verify_bearer_token),
-):
-    try:
-        return hlr_instance.get_subscriber_by_imsi(imsi)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
-        )
+def handle_hlr_errors(fn):
+    """Wraps HLR calls so all endpoints get consistent error handling."""
+
+    @wraps(fn)
+    async def wrapper(*args, **kwargs):
+        try:
+            return await fn(*args, **kwargs)
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Number already in use. Please try a different number.",
+            )
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"An unhandled error occurred: {e}",
+            )
+
+    return wrapper
 
 
-@router.patch(
-    "/sim/{imsi}",
-    summary="",
-    tags=["Core"],
-)
-async def update_sim(
-    imsi: int,
-    msisdn: int,
-    aud2g: Annotated[str | None, Query(min_length=32, max_length=32)],
-    verified: bool = Depends(verify_bearer_token),
-):
-    try:
-        aud2g_param = f"{settings.aud2g_algo},{aud2g}"
-        hlr_instance.set_aud2g_by_imsi(imsi, aud2g_param)
-
-        hlr_instance.set_msisdn_by_imsi(imsi, msisdn)
-
-        return self.get_subscriber_by_id(id)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
-        )
+class SimCreate(BaseModel):
+    imsi: int
+    msisdn: int
+    aud2g: str = Field(min_length=32, max_length=32)
 
 
-@router.delete(
-    "/sim/{imsi}",
-    summary="",
-    tags=["Core"],
-)
-async def delete_sim(
-    imsi: int,
-    verified: bool = Depends(verify_bearer_token),
-):
-    try:
-        return hlr_instance.delete_subscriber(imsi)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
-        )
+class SimUpdate(BaseModel):
+    msisdn: int
+    aud2g: str = Field(min_length=32, max_length=32)
+
+
+@router.post("/sim", summary="")
+@handle_hlr_errors
+async def create_sim(body: SimCreate):
+    aud2g_param = build_aud2g_param(body.aud2g)
+    return hlr_instance.easy_create(body.imsi, body.msisdn, aud2g_param, True, False)
+
+
+@router.get("/sim/{imsi}", summary="")
+@handle_hlr_errors
+async def fetch_sim(imsi: int):
+    return hlr_instance.get_subscriber_by_imsi(imsi)
+
+
+@router.patch("/sim/{imsi}", summary="")
+@handle_hlr_errors
+async def update_sim(imsi: int, body: SimUpdate):
+    aud2g_param = build_aud2g_param(body.aud2g)
+    hlr_instance.set_aud2g_by_imsi(imsi, aud2g_param)
+    hlr_instance.set_msisdn_by_imsi(imsi, body.msisdn)
+    return hlr_instance.get_subscriber_by_imsi(imsi)  # fixed: was self.get_subscriber_by_id(id)
+
+
+@router.delete("/sim/{imsi}", summary="")
+@handle_hlr_errors
+async def delete_sim(imsi: int):
+    return hlr_instance.delete_subscriber(imsi)
