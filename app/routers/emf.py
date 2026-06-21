@@ -120,3 +120,72 @@ async def core_webhook(body: dict, verified: bool = Depends(verify_bearer_token)
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"An unhandled error occurred: {e}",
         )
+
+
+@router.post(
+    "/create-sim",
+    summary="",
+    tags=["Core"],
+)
+async def create_sim(
+    imsi: int,
+    msisdn: int,
+    aud2g: Annotated[str | None, Query(min_length=32, max_length=32)],
+    verified: bool = Depends(verify_bearer_token),
+):
+    try:
+        aud2g_param = f"{settings.aud2g_algo},{aud2g}"
+        return hlr_instance.easy_create(imsi, msisdn, aud2g_param, True, False)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Number already in use. Please try a different number.",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@router.post(
+    "/update-sim",
+    summary="",
+    tags=["Core"],
+)
+async def update_sim(
+    imsi: int,
+    msisdn: int,
+    aud2g: Annotated[str | None, Query(min_length=32, max_length=32)],
+    verified: bool = Depends(verify_bearer_token),
+):
+    try:
+        aud2g_param = f"{settings.aud2g_algo},{aud2g}"
+        hlr_instance.set_aud2g_by_imsi(imsi, aud2g_param)
+
+        hlr_instance.set_msisdn_by_imsi(imsi, msisdn)
+
+        return self.get_subscriber_by_id(id)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@router.post(
+    "/delete-sim",
+    summary="",
+    tags=["Core"],
+)
+async def delete_sim(
+    imsi: int,
+    verified: bool = Depends(verify_bearer_token),
+):
+    try:
+        return hlr_instance.delete_subscriber(imsi)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
