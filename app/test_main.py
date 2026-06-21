@@ -17,7 +17,7 @@ def test_read_main():
     assert response.status_code == 307
 
 
-#def test_hlr_get_id_sub():
+# def test_hlr_get_id_sub():
 #    # TODO: This
 #    response = client.get("/hlr/subscriber/id/1")
 
@@ -25,25 +25,25 @@ def test_read_main():
 def test_auth():
     """Test basic auth works for endpoint in each router"""
     response = client.get("/bsc/param/some_config_key", auth=httpx.BasicAuth(username="WRONG", password="WRONG"))
-    assert response.status_code == status. HTTP_401_UNAUTHORIZED
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
     response = client.get("/msc/active", auth=httpx.BasicAuth(username="WRONG", password="WRONG"))
-    assert response.status_code == status. HTTP_401_UNAUTHORIZED
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
     response = client.post("/hlr/subscriber/create", auth=httpx.BasicAuth(username="WRONG", password="WRONG"))
-    assert response.status_code == status. HTTP_401_UNAUTHORIZED
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 def test_bsc_get_params_fail():
     # TODO: This
     """Test that a valid parameter returns 200 and the expected data structure."""
     response = client.get("/bsc/param/some_config_key", auth=auth)
-    
+
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {"data": {}}
 
 
 def test_msc_get_params_success():
     response = client.get("/msc/active", auth=auth)
-    
+
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {"data": {}}
 
@@ -56,6 +56,6 @@ def test_msc_get_params_success():
 #         "cs": True,
 #         "ps": True,
 #     }, auth=auth)
-    
+
 #     assert response.status_code == status.HTTP_200_OK
 #     assert response.json() == {"data": {}}
