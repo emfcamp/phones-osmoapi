@@ -123,7 +123,7 @@ async def core_webhook(body: dict, verified: bool = Depends(verify_bearer_token)
 
 
 @router.post(
-    "/create-sim",
+    "/sim",
     summary="",
     tags=["Core"],
 )
@@ -148,8 +148,26 @@ async def create_sim(
         )
 
 
-@router.post(
-    "/update-sim",
+@router.get(
+    "/sim/{imsi}",
+    summary="",
+    tags=["Core"],
+)
+async def fetch_sim(
+    imsi: int,
+    verified: bool = Depends(verify_bearer_token),
+):
+    try:
+        return hlr_instance.get_subscriber_by_imsi(imsi)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+@router.patch(
+    "/sim/{imsi}",
     summary="",
     tags=["Core"],
 )
@@ -173,8 +191,8 @@ async def update_sim(
         )
 
 
-@router.post(
-    "/delete-sim",
+@router.delete(
+    "/sim/{imsi}",
     summary="",
     tags=["Core"],
 )
