@@ -2,7 +2,7 @@ from .config import settings
 
 import json
 from pathlib import Path
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.security import HTTPBasic, HTTPBasicCredentials, HTTPBearer, HTTPAuthorizationCredentials
 from typing import Annotated
 from fastapi import Depends, HTTPException, status
 
@@ -27,11 +27,17 @@ def load_users() -> dict | list:
     return _load_json_file("users.json")
 
 
-# Initial data load
-dks = load_dks()
+def load_tokens() -> dict | list:
+    return _load_json_file("tokens.json")
+
 
 security = HTTPBasic()
+bearer_scheme = HTTPBearer()
+
+# App data
+tokens = load_tokens()
 users = load_users()
+dks = load_dks()
 
 
 def verification(creds: Annotated[HTTPBasicCredentials, Depends(security)]):
@@ -45,4 +51,13 @@ def verification(creds: Annotated[HTTPBasicCredentials, Depends(security)]):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password. Please speak to the EMF POC/GSM team if you need access to this service.",
             headers={"WWW-Authenticate": "Basic"},
+        )
+
+
+async def verify_bearer_token(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)) -> None:
+    if credentials.scheme != "Bearer" or credentials.credentials != tokens.get("core"):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or missing bearer token",
+            headers={"WWW-Authenticate": "Bearer"},
         )

@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from .config import settings
-from .routers import bsc, hlr, msc, telnet
+from .routers import bsc, emf, hlr, msc, telnet
 
 
 app = FastAPI(
@@ -17,6 +17,7 @@ app = FastAPI(
 
 Instrumentator().instrument(app).expose(app)
 
+app.include_router(emf.router)
 app.include_router(bsc.router)
 app.include_router(hlr.router)
 app.include_router(msc.router)
