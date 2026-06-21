@@ -7,7 +7,14 @@ services:
       context: .
       dockerfile: Dockerfile
       target: prod
+    environment:
+      - DATA_DIR=/data
+      - LOGS_DIR=/logs
     network_mode: "host"
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/opt/osmoapi/data:/data:rw"
+      - "/opt/osmoapi/logs:/logs:rw"
   osmoapi-dev:
     container_name: osmoapi-dev
     profiles: [ dev ]

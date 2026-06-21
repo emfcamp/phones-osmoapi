@@ -1,3 +1,5 @@
+from .config import settings
+
 import logging
 from os import makedirs, environ
 from enum import IntEnum, StrEnum
@@ -40,12 +42,12 @@ class OsmoComponent:
         self._setup_logging(log_filename)
 
     def _setup_logging(self, log_filename: str):
-        makedirs("logs/", exist_ok=True)
+        makedirs(f"{settings.logs_dir}/", exist_ok=True)
         self.logger = logging.getLogger(self.__class__.__name__)
         self.logger.setLevel(logging.INFO)
 
         formatter = logging.Formatter(fmt="%(asctime)s [%(classname)s] %(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-        handler = logging.FileHandler(f"logs/{log_filename}")
+        handler = logging.FileHandler(f"{settings.logs_dir}/{log_filename}")
         handler.setFormatter(formatter)
         handler.setLevel(logging.INFO)
 

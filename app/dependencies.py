@@ -1,3 +1,5 @@
+from .config import settings
+
 import json
 from pathlib import Path
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -5,26 +7,23 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, status
 
 
-DATA_DIR = Path(__file__).resolve().parent / "data"
+DATA_DIR = Path(settings.data_dir).resolve().parent / "data"
 
 
 def _load_json_file(filename: str) -> dict | list:
     file_path = DATA_DIR / filename
     if not file_path.exists():
-        print(f"File {filename} does not exist! Returning empty dict")
+        print(f"File {file_path} does not exist! Returning empty dict")
         return {}
-    
     with open(file_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
 def load_dks() -> dict | list:
-    """Load the datenklos.json file into memory."""
     return _load_json_file("dks.json")
 
 
 def load_users() -> dict | list:
-    """Load the users.json file into memory."""
     return _load_json_file("users.json")
 
 

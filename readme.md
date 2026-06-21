@@ -11,8 +11,12 @@ Makes use of osmoapi from here: https://github.com/emfcamp/phones-osmoapi-py/rel
 `app/data/dks.json` contains the LAC to DK relationship, this is used as part of the Location Request flow
 ```json
 {
-    "12345": "A1",
-    "54321": "B2",
+    "1": {
+        "name": "Stage E",
+        "type": "gsm",
+        "lat": 52.1392069,
+        "lon": -2.1793473
+    },
     ...
 }
 ```
@@ -38,3 +42,10 @@ IMSI,DefaultMSISDN
 
 `uv run fastapi dev --host 0.0.0.0` for development - this enables Live Updating
 `uv run fastapi run` to run in "Production"
+
+
+## Run (Docker)
+
+`docker compose --profile prod up --force-recreate` - for prod profile
+
+`docker compose --profile dev up --force-recreate` - for dev profile
