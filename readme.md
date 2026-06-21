@@ -31,6 +31,14 @@ Makes use of osmoapi from here: https://github.com/emfcamp/phones-osmoapi-py/rel
 }
 ```
 
+`app/data/tokens.json` contains HTTP bearer tokens for interactions with core and other services.
+```json
+{
+    "core": "I0qvYe73uLtqwCQqXgBqqJpQobGEq988"
+    ...
+}
+```
+
 ## Data files
 `app/data/default_msisdn_by_imsi.csv` should contain a mapping from IMSI to DefaultMSISDN; for example:
 ```csv
