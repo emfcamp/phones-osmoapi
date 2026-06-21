@@ -1,0 +1,3 @@
+vm-phones03.emf.camp {
+    reverse_proxy localhost:8000
+}

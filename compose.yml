@@ -15,6 +15,19 @@ services:
       - "/etc/timezone:/etc/timezone:ro"
       - "/opt/osmoapi/data:/data:rw"
       - "/opt/osmoapi/logs:/logs:rw"
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    profiles: [ prod ]
+    network_mode: "host"
+    restart: unless-stopped
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "./Caddyfile:/etc/caddy/Caddyfile:ro"
+      - "caddy_data:/data"
+      - "caddy_config:/config"
+    depends_on:
+      - osmoapi-prod
   osmoapi-dev:
     container_name: osmoapi-dev
     profiles: [ dev ]
