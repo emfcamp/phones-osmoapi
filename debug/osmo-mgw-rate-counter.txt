@@ -1,0 +1,65 @@
+OsmoMGW> show rate-counters
+mgcp general statistics 0 (mgw:general):
+             mgcp:rx_msgs:          0 (0/s 0/m 0/h 0/d) total number of MGCP messages received.
+mgcp:rx_msgs_retransmitted:          0 (0/s 0/m 0/h 0/d) number of received retransmissions.
+     mgcp:rx_msgs_handled:          0 (0/s 0/m 0/h 0/d) number of handled MGCP messages.
+   mgcp:rx_msgs_unhandled:          0 (0/s 0/m 0/h 0/d) number of unhandled MGCP messages.
+    mgcp:err_rx_msg_parse:          0 (0/s 0/m 0/h 0/d) error parsing MGCP message.
+  mgcp:err_rx_no_endpoint:          0 (0/s 0/m 0/h 0/d) can't find MGCP endpoint, probably we've used all allocated endpoints.
+aggregated statistics for all osmux connections 0 (virtual-0:osmux_conn):
+      all_osmux:chunks_rx:          0 (0/s 0/m 0/h 0/d) Inbound Osmux chunks.
+      all_osmux:octets_rx:          0 (0/s 0/m 0/h 0/d) Inbound Osmux octets.
+ all_osmux:rtp_packets_tx:          0 (0/s 0/m 0/h 0/d) Tx outbound RTP packets to encode as Osmux.
+all_osmux:rtp_packets_tx_dropped:          0 (0/s 0/m 0/h 0/d) Dropped Tx outbound RTP packets to encode as Osmux.
+  all_osmux:amr_octets_tx:          0 (0/s 0/m 0/h 0/d) Tx outbound AMD payload octets.
+all_osmux:num_closed_conns:          0 (0/s 0/m 0/h 0/d) Total number of osmux connections closed.
+     all_osmux:packets_rx:          0 (0/s 0/m 0/h 0/d) Total inbound UDP/Osmux packets.
+     all_osmux:packets_tx:          0 (0/s 0/m 0/h 0/d) Total outbound UDP/Osmux packets.
+all_osmux:dropped_packets:          0 (0/s 0/m 0/h 0/d) Dropped outbound UDP/Osmux packets.
+aggregated statistics for all rtp connections 0 (virtual-0:rtp_conn):
+     all_rtp:err_tstmp_in:          0 (0/s 0/m 0/h 0/d) Total inbound rtp-stream timestamp errors.
+    all_rtp:err_tstmp_out:          0 (0/s 0/m 0/h 0/d) Total outbound rtp-stream timestamp errors.
+       all_rtp:packets_rx:          0 (0/s 0/m 0/h 0/d) Total inbound rtp packets.
+        all_rtp:octets_rx:          0 (0/s 0/m 0/h 0/d) Total inbound rtp octets.
+       all_rtp:packets_tx:          0 (0/s 0/m 0/h 0/d) Total outbound rtp packets.
+        all_rtp:octets_tx:          0 (0/s 0/m 0/h 0/d) Total outbound rtp octets.
+          all_rtp:dropped:          0 (0/s 0/m 0/h 0/d) Total dropped rtp packets.
+ all_rtp:num_closed_conns:          0 (0/s 0/m 0/h 0/d) Total number of rtp connections closed.
+dlcx statistics 0 (virtual-0:dlcx):
+             dlcx:success:          0 (0/s 0/m 0/h 0/d) DLCX command processed successfully.
+             dlcx:no_conn:          0 (0/s 0/m 0/h 0/d) endpoint specified in DLCX command has no active connections.
+              dlcx:callid:          0 (0/s 0/m 0/h 0/d) CallId specified in DLCX command mismatches endpoint's CallId .
+              dlcx:connid:          0 (0/s 0/m 0/h 0/d) connection ID specified in DLCX command does not exist on endpoint.
+     dlcx:unhandled_param:          0 (0/s 0/m 0/h 0/d) unhandled parameter in DLCX command.
+         dlcx:unavailable:          0 (0/s 0/m 0/h 0/d) endpoint unavailable.
+mdcx statistics 0 (virtual-0:mdcx):
+             mdcx:success:          0 (0/s 0/m 0/h 0/d) MDCX command processed successfully.
+            mdcx:wildcard:          0 (0/s 0/m 0/h 0/d) wildcard endpoint names in MDCX commands are unsupported.
+             mdcx:no_conn:          0 (0/s 0/m 0/h 0/d) endpoint specified in MDCX command has no active connections.
+              mdcx:callid:          0 (0/s 0/m 0/h 0/d) invalid CallId specified in MDCX command.
+              mdcx:connid:          0 (0/s 0/m 0/h 0/d) invalid connection ID specified in MDCX command.
+     crcx:unhandled_param:          0 (0/s 0/m 0/h 0/d) unhandled parameter in MDCX command.
+           mdcx:no_connid:          0 (0/s 0/m 0/h 0/d) no connection ID specified in MDCX command.
+      mdcx:conn_not_found:          0 (0/s 0/m 0/h 0/d) connection specified in MDCX command does not exist.
+        mdcx:invalid_mode:          0 (0/s 0/m 0/h 0/d) invalid connection mode in MDCX command.
+            mdcx:conn_opt:          0 (0/s 0/m 0/h 0/d) connection options invalid.
+ mdcx:no_remote_conn_desc:          0 (0/s 0/m 0/h 0/d) no opposite end specified for connection.
+           mdcx:bind_port:          0 (0/s 0/m 0/h 0/d) port bind failure.
+         mdcx:unavailable:          0 (0/s 0/m 0/h 0/d) endpoint unavailable.
+crxc statistics 0 (virtual-0:crcx):
+             crcx:success:          0 (0/s 0/m 0/h 0/d) CRCX command processed successfully.
+          crcx:bad_action:          0 (0/s 0/m 0/h 0/d) bad action in CRCX command.
+     crcx:unhandled_param:          0 (0/s 0/m 0/h 0/d) unhandled parameter in CRCX command.
+      crcx:missing_callid:          0 (0/s 0/m 0/h 0/d) missing CallId in CRCX command.
+        crcx:invalid_mode:          0 (0/s 0/m 0/h 0/d) invalid connection mode in CRCX command.
+      crcx:limit_exceeded:          0 (0/s 0/m 0/h 0/d) limit of concurrent connections was reached.
+       crcx:unkown_callid:          0 (0/s 0/m 0/h 0/d) unknown CallId in CRCX command.
+     crcx:alloc_conn_fail:          0 (0/s 0/m 0/h 0/d) connection allocation failure.
+ crcx:no_remote_conn_desc:          0 (0/s 0/m 0/h 0/d) no opposite end specified for connection.
+   crcx:start_rtp_failure:          0 (0/s 0/m 0/h 0/d) failure to start RTP processing.
+            crcx:no_osmux:          0 (0/s 0/m 0/h 0/d) no osmux offered by peer.
+            crcx:conn_opt:          0 (0/s 0/m 0/h 0/d) connection options invalid.
+          crcx:codec_nego:          0 (0/s 0/m 0/h 0/d) codec negotiation failure.
+           crcx:bind_port:          0 (0/s 0/m 0/h 0/d) port bind failure.
+         crcx:unavailable:          0 (0/s 0/m 0/h 0/d) endpoint unavailable.
+               crcx:claim:          0 (0/s 0/m 0/h 0/d) endpoint can not be claimed

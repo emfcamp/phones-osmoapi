@@ -66,5 +66,5 @@ jobs:
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker pull ghcr.io/emfcamp/phones-osmoapi:latest
-          docker compose --profile prod up --force-recreate
+          docker compose --profile prod up --force-recreate -d
           docker logout

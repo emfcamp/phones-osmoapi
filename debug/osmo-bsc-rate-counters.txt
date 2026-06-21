@@ -1,0 +1,564 @@
+OsmoBSC> show rate-counters
+SIGTRAN Application Server Process 0 (asp-clnt-A-0-m3ua):
+         rx:packets:total:         18 (0/s 4/m 0/h 0/d) Total number of packets received
+       rx:packets:unknown:          0 (0/s 0/m 0/h 0/d) Number of packets received for unknown PPID
+   rx:packets:ni_mismatch:          0 (0/s 0/m 0/h 0/d) Number of packets received and dropped due to Network Indicator mismatch
+         tx:packets:total:         15 (0/s 4/m 0/h 0/d) Total number of packets transmitted
+SIGTRAN Application Server 0 (as-clnt-A-0-m3ua):
+           rx:msu:discard:          0 (0/s 0/m 0/h 0/d) Total number of incoming MSU discarded
+             rx:msu:total:          1 (0/s 0/m 0/h 0/d) Total number of MSU received
+             rx:msu:sls:0:          1 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 0
+             rx:msu:sls:1:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 1
+             rx:msu:sls:2:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 2
+             rx:msu:sls:3:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 3
+             rx:msu:sls:4:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 4
+             rx:msu:sls:5:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 5
+             rx:msu:sls:6:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 6
+             rx:msu:sls:7:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 7
+             rx:msu:sls:8:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 8
+             rx:msu:sls:9:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 9
+            rx:msu:sls:10:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 10
+            rx:msu:sls:11:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 11
+            rx:msu:sls:12:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 12
+            rx:msu:sls:13:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 13
+            rx:msu:sls:14:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 14
+            rx:msu:sls:15:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 15
+             tx:msu:total:          2 (0/s 0/m 0/h 0/d) Total number of MSU transmitted
+             tx:msu:sls:0:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 0
+             tx:msu:sls:1:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 1
+             tx:msu:sls:2:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 2
+             tx:msu:sls:3:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 3
+             tx:msu:sls:4:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 4
+             tx:msu:sls:5:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 5
+             tx:msu:sls:6:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 6
+             tx:msu:sls:7:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 7
+             tx:msu:sls:8:          1 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 8
+             tx:msu:sls:9:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 9
+            tx:msu:sls:10:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 10
+            tx:msu:sls:11:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 11
+            tx:msu:sls:12:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 12
+            tx:msu:sls:13:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 13
+            tx:msu:sls:14:          1 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 14
+            tx:msu:sls:15:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 15
+             tcap:decoded:          0 (0/s 0/m 0/h 0/d) Number of TCAP-messages decoded successfully (loadshare-tcap)
+              tcap:failed:          0 (0/s 0/m 0/h 0/d) Number of TCAP-messages that failed decoding (loadshare-tcap)
+        tcap:asp:selected:          0 (0/s 0/m 0/h 0/d) ASP selection successful for a TCAP-message (loadshare-tcap)
+        tcap:asp:fallback:          0 (0/s 0/m 0/h 0/d) Fallback ASP selected for a TCAP-message (loadshare-tcap)
+          tcap:asp:failed:          0 (0/s 0/m 0/h 0/d) ASP selection failed for a TCAP-message (loadshare-tcap)
+SS7 Instance 0:
+         rx:packets:total:         18 (0/s 4/m 0/h 0/d) Total number of packets received
+       rx:packets:unknown:          0 (0/s 0/m 0/h 0/d) Number of packets received for unknown PPID
+   rx:packets:ni_mismatch:          0 (0/s 0/m 0/h 0/d) Number of packets received and dropped due to Network Indicator mismatch
+         tx:packets:total:         15 (0/s 4/m 0/h 0/d) Total number of packets transmitted
+mobile switching center 0:
+  bssmap:rx:udt:reset:ack:          1 (0/s 0/m 0/h 0/d) Number of received BSSMAP UDT RESET ACKNOWLEDGE messages
+bssmap:rx:udt:reset:request:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP UDT RESET messages
+     bssmap:rx:udt:paging:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP UDT PAGING messages
+bssmap:rx:udt:err_unknown:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP unknown UDT messages
+  bssmap:rx:dt1:clear:cmd:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 CLEAR CMD messages
+bssmap:rx:dt1:cipher_mode:cmd:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 CIPHER MODE CMD messages
+bssmap:rx:dt1:assignment:rqst:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 ASSIGNMENT RQST messages
+bssmap:rx:dt1:lcls_connect_ctrl:cmd:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 LCLS CONNECT CTRL messages
+bssmap:rx:dt1:handover:rqst:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 HANDOVER RQST messages
+bssmap:rx:dt1:handover:cmd:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 HANDOVER CMD messages
+bssmap:rx:dt1:classmark:rqst:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 CLASSMARK RQST messages
+  bssmap:rx:dt1:confusion:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 CONFUSION messages
+  bssmap:rx:dt1:common_id:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 COMMON ID messages
+bssmap:rx:dt1:err_unknown:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP unknown DT1 messages
+  bssmap:rx:dt1:dtap:good:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DTAP messages
+ bssmap:rx:dt1:dtap:error:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DTAP messages with errors
+bssmap:rx:dt1:location:request:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP Perform Location Request messages
+bssmap:tx:dt1:location:abort:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP Perform Location Abort messages
+bssmap:rx:dt1:vgcs_vbs_setup:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 VGCS/VBS SETUP messages
+bssmap:rx:dt1:vgcs_vbs_assignment:req:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 VGCS/VBS ASSIGNMENT messages
+bssmap:rx:dt1:uplink_rqst:ack:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 UPLINK REQUEST ACKNOWLEDGE messages
+bssmap:rx:dt1:uplink_reject:cmd:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 UPLINK REJECT COMMAND messages
+bssmap:rx:dt1:uplink_release:cmd:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 UPLINK RELEASE COMMAND messages
+bssmap:rx:dt1:uplink_seized:cmd:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 UPLINK SEIZED COMMAND messages
+bssmap:rx:dt1:vgcs_addl_info:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 VGCS/VBS ASSITIONAL INFORMATION messages
+   bssmap:rx:dt1:vgcs_sms:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 VGCS SMS messages
+bssmap:rx:dt1:notification_data:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP DT1 NOTIFICATION DATA messages
+bssmap:tx:type:bss_management:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSS MANAGEMENT messages
+      bssmap:tx:type:dtap:          0 (0/s 0/m 0/h 0/d) Number of transmitted DTAP messages
+bssmap:tx:type:err_unknown:          0 (0/s 0/m 0/h 0/d) Number of transmitted messages with unknown type (an error in our code?)
+ bssmap:tx:type:err_short:          0 (0/s 0/m 0/h 0/d) Number of transmitted messages which are too short (an error in our code?)
+bssmap:tx:result:err_conn_not_ready:          0 (0/s 0/m 0/h 0/d) Number of BSSMAP messages we tried to send when the connection was not ready yet
+bssmap:tx:result:err_send:          0 (0/s 0/m 0/h 0/d) Number of socket errors while sending BSSMAP messages
+ bssmap:tx:result:success:          0 (0/s 0/m 0/h 0/d) Number of successfully sent BSSMAP messages
+bssmap:tx:udt:reset:request:          4 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP UDT RESET messages
+  bssmap:tx:udt:reset:ack:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP UDT RESET ACK messages
+ bssmap:tx:dt1:clear:rqst:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 CLEAR RQSTtx  messages
+bssmap:tx:dt1:clear:complete:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 CLEAR COMPLETE messages
+bssmap:tx:dt1:assignment:failure:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 ASSIGNMENT FAILURE messages
+bssmap:tx:dt1:assignment:complete:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 ASSIGNMENT COMPLETE messages
+bssmap:tx:dt1:sapi_n:reject:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 SAPI N REJECT messages
+bssmap:tx:dt1:cipher_mode:complete:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 CIPHER COMPLETE messages
+bssmap:tx:dt1:cipher_mode:reject:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 CIPHER REJECT messages
+bssmap:tx:dt1:classmark:update:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 CLASSMARK UPDATE messages
+bssmap:tx:dt1:lcls_connect_ctrl:ack:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 LCLS CONNECT CTRL ACK messages
+bssmap:tx:dt1:handover:required:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 HANDOVER REQUIRED messages
+bssmap:tx:dt1:handover:performed:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 HANDOVER PERFORMED messages
+bssmap:tx:dt1:handover:rqst_acknowledge:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 HANDOVER RQST ACKNOWLEDGE messages
+bssmap:tx:dt1:handover:detect:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 HANDOVER DETECT messages
+bssmap:tx:dt1:handover:complete:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 HANDOVER COMPLETE messages
+bssmap:tx:dt1:handover:failure:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 HANDOVER FAILURE messages
+       bssmap:tx:dt1:dtap:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 DTAP messages
+bssmap:tx:dt1:location:response_success:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP Perform Location Response messages containing a location estimate
+bssmap:tx:dt1:location:response_failure:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP Perform Location Response messages containing a failure cause
+bssmap:tx:dt1:vgcs_vbs_setup:ack:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 VGCS/VBS SETUP ACK messages
+bssmap:tx:dt1:vgcs_vbs_setup:refuse:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 VGCS/VBS SETUP REFUSE messages
+bssmap:tx:dt1:vgcs_vbs_assignment:res:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 VGCS/VBS ASSIGNMENT RESULT messages
+bssmap:tx:dt1:vgcs_vbs_assignment:fail:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 VGCS/VBS ASSIGNMENT FAILURE messages
+bssmap:tx:dt1:vgcs_vbs_queuing:ind:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 VGCS/VBS QUEUING INDICATION messages
+bssmap:tx:dt1:uplink_rqst:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 UPLINK REQUEST messages
+bssmap:tx:dt1:vgcs_vbs_assignment:status:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 VGCS/VBS ASSIGNMENT STATUS messages
+bssmap:tx:dt1:vgcs_vbs_area_cell:info:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 VGCS/VBS AREA CELL INFO messages
+bssmap:tx:dt1:uplink_rqst:cnf:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 UPLINK REQUEST CONFIRMATION  messages
+bssmap:tx:dt1:uplink_release:ind:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 UPLINK RELEASE INDICATION messages
+bssmap:tx:dt1:uplink_app_data:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP DT1 UPLINK APPLICATION DATA  messages
+       mscpool:subscr:new:          0 (0/s 0/m 0/h 0/d) Complete Layer 3 requests assigned to this MSC by round-robin (no NRI was assigned yet).
+  mscpool:subscr:reattach:          0 (0/s 0/m 0/h 0/d) Complete Layer 3 requests assigned to this MSC by round-robin because the subscriber indicates a NULL-NRI (previously assigned by another MSC).
+     mscpool:subscr:known:          0 (0/s 0/m 0/h 0/d) Complete Layer 3 requests directed to this MSC because the subscriber indicates an NRI of this MSC.
+     mscpool:subscr:paged:          0 (0/s 0/m 0/h 0/d) Paging Response directed to this MSC because the subscriber was recently paged by this MSC.
+mscpool:subscr:attach_lost:          0 (0/s 0/m 0/h 0/d) A subscriber indicates an NRI value matching this MSC, but the MSC is not connected: a re-attach to another MSC (if available) was forced, with possible service failure.
+  mscpool:emerg:forwarded:          0 (0/s 0/m 0/h 0/d) Emergency call requests forwarded to this MSC.
+base transceiver station 0:
+              chreq:total:          0 (0/s 0/m 0/h 0/d) Received channel requests
+    chreq:attempted_emerg:          0 (0/s 0/m 0/h 0/d) Received channel requests EMERG
+     chreq:attempted_call:          0 (0/s 0/m 0/h 0/d) Received channel requests CALL
+chreq:attempted_location_upd:          0 (0/s 0/m 0/h 0/d) Received channel requests LOCATION_UPD
+      chreq:attempted_pag:          0 (0/s 0/m 0/h 0/d) Received channel requests PAG
+     chreq:attempted_pdch:          0 (0/s 0/m 0/h 0/d) Received channel requests PDCH
+    chreq:attempted_other:          0 (0/s 0/m 0/h 0/d) Received channel requests OTHER
+  chreq:attempted_unknown:          0 (0/s 0/m 0/h 0/d) Received channel requests UNKNOWN
+         chreq:successful:          0 (0/s 0/m 0/h 0/d) Successful channel requests (immediate assign sent)
+   chreq:successful_emerg:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for EMERG
+    chreq:successful_call:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for CALL
+chreq:successful_location_upd:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for LOCATION_UPD
+     chreq:successful_pag:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for PAG
+    chreq:successful_pdch:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for PDCH
+   chreq:successful_other:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for OTHER
+ chreq:successful_unknown:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for UNKNOWN
+         chreq:no_channel:          0 (0/s 0/m 0/h 0/d) Sent to MS no channel available
+ chreq:max_delay_exceeded:          0 (0/s 0/m 0/h 0/d) Received channel requests with greater than permitted access delay
+             chan:rf_fail:          0 (0/s 0/m 0/h 0/d) Received a RF failure indication from BTS
+         chan:rf_fail_tch:          0 (0/s 0/m 0/h 0/d) Received a RF failure indication from BTS on a TCH channel
+       chan:rf_fail_sdcch:          0 (0/s 0/m 0/h 0/d) Received a RF failure indication from BTS on an SDCCH channel
+             chan:rll_err:          0 (0/s 0/m 0/h 0/d) Received a RLL failure with T200 cause from BTS
+                 oml_fail:          0 (0/s 0/m 0/h 0/d) Received a TEI down on a OML link
+                 rsl_fail:          0 (0/s 0/m 0/h 0/d) Received a TEI down on a RSL link
+              codec:amr_f:          0 (0/s 0/m 0/h 0/d) Count the usage of AMR/F codec by channel mode requested
+              codec:amr_h:          0 (0/s 0/m 0/h 0/d) Count the usage of AMR/H codec by channel mode requested
+                codec:efr:          0 (0/s 0/m 0/h 0/d) Count the usage of EFR codec by channel mode requested
+                 codec:fr:          0 (0/s 0/m 0/h 0/d) Count the usage of FR codec by channel mode requested
+                 codec:hr:          0 (0/s 0/m 0/h 0/d) Count the usage of HR codec by channel mode requested
+         paging:attempted:          0 (0/s 0/m 0/h 0/d) Paging attempts for a subscriber
+           paging:already:          0 (0/s 0/m 0/h 0/d) Paging attempts ignored as subscriber was already being paged
+         paging:responded:          0 (0/s 0/m 0/h 0/d) Paging attempts with successful paging response
+           paging:expired:          0 (0/s 0/m 0/h 0/d) Paging Request expired because of timeout T3113
+  paging:no_active_paging:          0 (0/s 0/m 0/h 0/d) Paging response without an active paging request (arrived after paging expiration?)
+         paging:msc_flush:          0 (0/s 0/m 0/h 0/d) Paging flushed due to MSC Reset BSSMAP message
+          paging:overload:          0 (0/s 0/m 0/h 0/d) Paging dropped due to BSC Paging queue overload
+           chan_act:total:          0 (0/s 0/m 0/h 0/d) Total number of Channel Activations
+           chan_act:sdcch:          0 (0/s 0/m 0/h 0/d) Number of SDCCH Channel Activations
+             chan_act:tch:          0 (0/s 0/m 0/h 0/d) Number of TCH Channel Activations
+            chan_act:nack:          0 (0/s 0/m 0/h 0/d) Number of Channel Activations that the BTS NACKed
+chan_tch:active_milliseconds:total:          0 (0/s 0/m 0/h 0/d) Cumulative number of milliseconds of TCH channel activity
+chan_sdcch:active_milliseconds:total:          0 (0/s 0/m 0/h 0/d) Cumulative number of milliseconds of SDCCH channel activity
+chan_tch:fully_established:          0 (0/s 0/m 0/h 0/d) Number of TCH channels which have reached the fully established state
+chan_sdcch:fully_established:          0 (0/s 0/m 0/h 0/d) Number of SDCCH channels which have reached the fully established state
+              rsl:unknown:          0 (0/s 0/m 0/h 0/d) Number of unknown/unsupported RSL messages received from BTS
+             rsl:ipa_nack:          0 (0/s 0/m 0/h 0/d) Number of IPA (RTP/dyn-PDCH) related NACKs received from BTS
+           rsl:delete_ind:          0 (0/s 0/m 0/h 0/d) Number of RSL DELETE INDICATION (DL CCCH overload)
+    chan:mode_modify_nack:          0 (0/s 0/m 0/h 0/d) Number of Channel Mode Modify NACKs received from BTS
+lchan_borken:from_state:unused:          0 (0/s 0/m 0/h 0/d) Transitions from lchan UNUSED state to BORKEN state
+lchan_borken:from_state:wait_activ_ack:          0 (0/s 0/m 0/h 0/d) Transitions from lchan WAIT_ACTIV_ACK state to BORKEN state
+lchan_borken:from_state:wait_rf_release_ack:          0 (0/s 0/m 0/h 0/d) Transitions from lchan WAIT_RF_RELEASE_ACK state to BORKEN state
+lchan_borken:from_state:borken:          0 (0/s 0/m 0/h 0/d) Transitions from lchan BORKEN state to BORKEN state
+lchan_borken:from_state:unknown:          0 (0/s 0/m 0/h 0/d) Transitions from an unknown lchan state to BORKEN state
+lchan_borken:event:chan_activ_ack:          0 (0/s 0/m 0/h 0/d) CHAN_ACTIV_ACK received in the lchan BORKEN state
+lchan_borken:event:chan_activ_nack:          0 (0/s 0/m 0/h 0/d) CHAN_ACTIV_NACK received in the lchan BORKEN state
+lchan_borken:event:rf_chan_rel_ack:          0 (0/s 0/m 0/h 0/d) RF_CHAN_REL_ACK received in the lchan BORKEN state
+   lchan_borken:event:vty:          0 (0/s 0/m 0/h 0/d) VTY commands received in the lchan BORKEN state
+lchan_borken:event:teardown:          0 (0/s 0/m 0/h 0/d) lchan in a BORKEN state is shutting down (BTS disconnected?)
+lchan_borken:event:ts_error:          0 (0/s 0/m 0/h 0/d) LCHAN_EV_TS_ERROR received in a BORKEN state
+lchan_borken:from_state:wait_rr_chan_mode_modify_ack:          0 (0/s 0/m 0/h 0/d) Transitions from lchan WAIT_RR_CHAN_MODE_MODIFY_ACK state to BORKEN state
+lchan_borken:from_state:wait_rsl_chan_mode_modify_ack:          0 (0/s 0/m 0/h 0/d) Transitions from lchan RSL_CHAN_MODE_MODIFY_ACK state to BORKEN state
+ts_borken:from_state:not_initialized:          0 (0/s 0/m 0/h 0/d) Transitions from TS NOT_INITIALIZED state to BORKEN state
+ts_borken:from_state:unused:          0 (0/s 0/m 0/h 0/d) Transitions from TS UNUSED state to BORKEN state
+ts_borken:from_state:wait_pdch_act:          0 (0/s 0/m 0/h 0/d) Transitions from TS WAIT_PDCH_ACT state to BORKEN state
+ts_borken:from_state:pdch:          0 (0/s 0/m 0/h 0/d) Transitions from TS PDCH state to BORKEN state
+ts_borken:from_state:wait_pdch_deact:          0 (0/s 0/m 0/h 0/d) Transitions from TS WAIT_PDCH_DEACT state to BORKEN state
+ts_borken:from_state:in_use:          0 (0/s 0/m 0/h 0/d) Transitions from TS IN_USE state to BORKEN state
+ts_borken:from_state:borken:          0 (0/s 0/m 0/h 0/d) Transitions from TS BORKEN state to BORKEN state
+ts_borken:from_state:unknown:          0 (0/s 0/m 0/h 0/d) Transitions from an unknown TS state to BORKEN state
+ts_borken:event:pdch_act_ack_nack:          0 (0/s 0/m 0/h 0/d) PDCH_ACT_ACK/NACK received in the TS BORKEN state
+ts_borken:event:pdch_deact_ack_nack:          0 (0/s 0/m 0/h 0/d) PDCH_DEACT_ACK/NACK received in the TS BORKEN state
+ ts_borken:event:teardown:          0 (0/s 0/m 0/h 0/d) TS in a BORKEN state is shutting down (BTS disconnected?)
+     assignment:attempted:          0 (0/s 0/m 0/h 0/d) Assignment attempts
+assignment:attempted_sign:          0 (0/s 0/m 0/h 0/d) Assignment of signaling lchan attempts
+assignment:attempted_speech:          0 (0/s 0/m 0/h 0/d) Assignment of speech lchan attempts
+     assignment:completed:          0 (0/s 0/m 0/h 0/d) Assignment completed
+assignment:completed_sign:          0 (0/s 0/m 0/h 0/d) Assignment of signaling lchan completed
+assignment:completed_speech:          0 (0/s 0/m 0/h 0/d) Assignment if speech lchan completed
+       assignment:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during Assignment
+  assignment:stopped_sign:          0 (0/s 0/m 0/h 0/d) Connection ended during signaling lchan Assignment
+assignment:stopped_speech:          0 (0/s 0/m 0/h 0/d) Connection ended during speech lchan Assignment
+    assignment:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for Assignment
+assignment:no_channel_sign:          0 (0/s 0/m 0/h 0/d) Failure to allocate signaling lchan for Assignment
+assignment:no_channel_speech:          0 (0/s 0/m 0/h 0/d) Failure to allocate speech lchan for Assignment
+       assignment:timeout:          0 (0/s 0/m 0/h 0/d) Assignment timed out
+  assignment:timeout_sign:          0 (0/s 0/m 0/h 0/d) Assignment of signaling lchan timed out
+assignment:timeout_speech:          0 (0/s 0/m 0/h 0/d) Assignment of speech lchan timed out
+        assignment:failed:          0 (0/s 0/m 0/h 0/d) Received Assignment Failure message
+   assignment:failed_sign:          0 (0/s 0/m 0/h 0/d) Received Assignment Failure message on signaling lchan
+ assignment:failed_speech:          0 (0/s 0/m 0/h 0/d) Received Assignment Failure message on speech lchan
+         assignment:error:          0 (0/s 0/m 0/h 0/d) Assignment failed for other reason
+    assignment:error_sign:          0 (0/s 0/m 0/h 0/d) Assignment of signaling lchan failed for other reason
+  assignment:error_speech:          0 (0/s 0/m 0/h 0/d) Assignment of speech lchan failed for other reason
+   location_update:accept:          0 (0/s 0/m 0/h 0/d) Location Update Accept
+   location_update:reject:          0 (0/s 0/m 0/h 0/d) Location Update Reject
+   location_update:detach:          0 (0/s 0/m 0/h 0/d) Location Update Detach
+  location_update:unknown:          0 (0/s 0/m 0/h 0/d) Location Update UNKNOWN
+       handover:attempted:          0 (0/s 0/m 0/h 0/d) Intra-BSC handover attempts
+       handover:completed:          0 (0/s 0/m 0/h 0/d) Intra-BSC handover completed
+         handover:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+      handover:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+         handover:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+          handover:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+           handover:error:          0 (0/s 0/m 0/h 0/d) Re-assignment failed for other reason
+  intra_cell_ho:attempted:          0 (0/s 0/m 0/h 0/d) Intra-Cell handover attempts
+  intra_cell_ho:completed:          0 (0/s 0/m 0/h 0/d) Intra-Cell handover completed
+    intra_cell_ho:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+ intra_cell_ho:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+    intra_cell_ho:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+     intra_cell_ho:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+      intra_cell_ho:error:          0 (0/s 0/m 0/h 0/d) Re-assignment failed for other reason
+   intra_bsc_ho:attempted:          0 (0/s 0/m 0/h 0/d) Intra-BSC inter-cell handover attempts
+   intra_bsc_ho:completed:          0 (0/s 0/m 0/h 0/d) Intra-BSC inter-cell handover completed
+     intra_bsc_ho:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+  intra_bsc_ho:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+     intra_bsc_ho:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+      intra_bsc_ho:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+       intra_bsc_ho:error:          0 (0/s 0/m 0/h 0/d) Intra-BSC inter-cell HO failed for other reason
+incoming_intra_bsc_ho:attempted:          0 (0/s 0/m 0/h 0/d) Incoming intra-BSC inter-cell handover attempts
+incoming_intra_bsc_ho:completed:          0 (0/s 0/m 0/h 0/d) Incoming intra-BSC inter-cell handover completed
+incoming_intra_bsc_ho:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+incoming_intra_bsc_ho:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+incoming_intra_bsc_ho:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+incoming_intra_bsc_ho:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+incoming_intra_bsc_ho:error:          0 (0/s 0/m 0/h 0/d) Incoming intra-BSC inter-cell HO failed for other reason
+interbsc_ho_out:attempted:          0 (0/s 0/m 0/h 0/d) Attempts to handover to remote BSS
+interbsc_ho_out:completed:          0 (0/s 0/m 0/h 0/d) Handover to remote BSS completed
+  interbsc_ho_out:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+  interbsc_ho_out:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+   interbsc_ho_out:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail message
+    interbsc_ho_out:error:          0 (0/s 0/m 0/h 0/d) Handover to remote BSS failed for other reason
+ interbsc_ho_in:attempted:          0 (0/s 0/m 0/h 0/d) Attempts to handover from remote BSS
+ interbsc_ho_in:completed:          0 (0/s 0/m 0/h 0/d) Handover from remote BSS completed
+   interbsc_ho_in:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+interbsc_ho_in:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+    interbsc_ho_in:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail message
+   interbsc_ho_in:timeout:          0 (0/s 0/m 0/h 0/d) Handover from remote BSS timed out
+     interbsc_ho_in:error:          0 (0/s 0/m 0/h 0/d) Handover from remote BSS failed for other reason
+          srvcc:attempted:          0 (0/s 0/m 0/h 0/d) Intra-BSC handover attempts
+          srvcc:completed:          0 (0/s 0/m 0/h 0/d) Intra-BSC handover completed
+            srvcc:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+         srvcc:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+            srvcc:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+             srvcc:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+              srvcc:error:          0 (0/s 0/m 0/h 0/d) Re-assignment failed for other reason
+      all_allocated:sdcch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all SDCCH channels were allocated
+all_allocated:static_sdcch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all non-dynamic SDCCH channels were allocated
+        all_allocated:tch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all TCH channels were allocated
+ all_allocated:static_tch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all non-dynamic TCH channels were allocated
+              cm_serv_rej:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject
+cm_serv_rej:imsi_unknown_in_hlr:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause IMSI_UNKNOWN_IN_HLR
+   cm_serv_rej:illegal_ms:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause ILLEGAL_MS
+cm_serv_rej:imsi_unknown_in_vlr:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause IMSI_UNKNOWN_IN_VLR
+cm_serv_rej:imei_not_accepted:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause IMEI_NOT_ACCEPTED
+   cm_serv_rej:illegal_me:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause ILLEGAL_ME
+cm_serv_rej:plmn_not_allowed:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause PLMN_NOT_ALLOWED
+cm_serv_rej:loc_not_allowed:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause LOC_NOT_ALLOWED
+cm_serv_rej:roaming_not_allowed:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause ROAMING_NOT_ALLOWED
+cm_serv_rej:network_failure:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause NETWORK_FAILURE
+cm_serv_rej:synch_failure:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause SYNCH_FAILURE
+   cm_serv_rej:congestion:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause CONGESTION
+cm_serv_rej:srv_opt_not_supported:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause SRV_OPT_NOT_SUPPORTED
+cm_serv_rej:rqd_srv_opt_not_supported:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause RQD_SRV_OPT_NOT_SUPPORTED
+cm_serv_rej:srv_opt_tmp_out_of_order:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause SRV_OPT_TMP_OUT_OF_ORDER
+cm_serv_rej:call_can_not_be_identified:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause CALL_CAN_NOT_BE_IDENTIFIED
+cm_serv_rej:incorrect_message:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause INCORRECT_MESSAGE
+cm_serv_rej:invalid_mandantory_inf:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause INVALID_MANDANTORY_INF
+cm_serv_rej:msg_type_not_implemented:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause MSG_TYPE_NOT_IMPLEMENTED
+cm_serv_rej:msg_type_not_compatible:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause MSG_TYPE_NOT_COMPATIBLE
+cm_serv_rej:inf_eleme_not_implemented:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause INF_ELEME_NOT_IMPLEMENTED
+cm_serv_rej:condtional_ie_error:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause CONDTIONAL_IE_ERROR
+cm_serv_rej:msg_not_compatible:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause MSG_NOT_COMPATIBLE
+cm_serv_rej:protocol_error:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause PROTOCOL_ERROR
+cm_serv_rej:retry_in_new_cell:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause 00110000..00111111, Retry upon entry in a new cell
+E1 Input subsystem 0:
+               hdlc:abort:          0 (0/s 0/m 0/h 0/d) HDLC abort
+             hdlc:bad_fcs:          0 (0/s 0/m 0/h 0/d) HLDC Bad FCS
+             hdlc:overrun:          0 (0/s 0/m 0/h 0/d) HDLC Overrun
+                    alarm:          0 (0/s 0/m 0/h 0/d) Alarm
+                  removed:          0 (0/s 0/m 0/h 0/d) Line removed
+serving mobile location centre 0:
+bssmap_le:rx:unknown_peer:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP-LE messages from an unknown Calling SCCP address
+bssmap_le:rx:udt:reset:request:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP-LE UDT RESET messages
+bssmap_le:rx:udt:reset:ack:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP-LE UDT RESET ACKNOWLEDGE messages
+bssmap_le:rx:udt:err:inval:          0 (0/s 0/m 0/h 0/d) Number of received invalid BSSMAP-LE UDT messages
+bssmap_le:rx:dt1:err:inval:          0 (0/s 0/m 0/h 0/d) Number of received invalid BSSMAP-LE
+bssmap_le:rx:dt1:location:response_success:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP-LE Perform Location Response messages containing a location estimate
+bssmap_le:rx:dt1:location:response_failure:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP-LE Perform Location Response messages containing a failure cause
+bssmap_le:rx:dt1:bsslap:ta_request:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP-LE Connection Oriented Information messages with BSSLAP APDU containing TA Request
+   bssmap_le:tx:err:inval:          0 (0/s 0/m 0/h 0/d) Number of outgoing BSSMAP-LE messages that are invalid (a bug?)
+bssmap_le:tx:err:conn_not_ready:          0 (0/s 0/m 0/h 0/d) Number of BSSMAP-LE messages we tried to send when the connection was not ready yet
+    bssmap_le:tx:err:send:          0 (0/s 0/m 0/h 0/d) Number of socket errors while sending BSSMAP-LE messages
+     bssmap_le:tx:success:          0 (0/s 0/m 0/h 0/d) Number of successfully sent BSSMAP-LE messages
+bssmap_le:tx:udt:reset:request:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP-LE UDT RESET messages
+bssmap_le:tx:udt:reset:ack:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP-LE UDT RESET ACK messages
+bssmap_le:tx:dt1:location:response:          0 (0/s 0/m 0/h 0/d) Number of transmitted BSSMAP-LE DT1 Perform Location Request messages
+bssmap_le:rx:dt1:location:abort:          0 (0/s 0/m 0/h 0/d) Number of received BSSMAP-LE Perform Location Abort messages
+bssmap_le:tx:dt1:bsslap:ta_response:          0 (0/s 0/m 0/h 0/d) Number of sent BSSMAP-LE Connection Oriented Information messages with BSSLAP APDU containing TA Response
+bssmap_le:tx:dt1:bsslap:reject:          0 (0/s 0/m 0/h 0/d) Number of sent BSSMAP-LE Connection Oriented Information messages with BSSLAP APDU containing Reject
+bssmap_le:tx:dt1:bsslap:reset:          0 (0/s 0/m 0/h 0/d) Number of sent BSSMAP-LE Connection Oriented Information messages with BSSLAP APDU containing Reset
+bssmap_le:tx:dt1:bsslap:abort:          0 (0/s 0/m 0/h 0/d) Number of sent BSSMAP-LE Connection Oriented Information messages with BSSLAP APDU containing Abort
+base transceiver station 65536:
+              chreq:total:          0 (0/s 0/m 0/h 0/d) Received channel requests
+    chreq:attempted_emerg:          0 (0/s 0/m 0/h 0/d) Received channel requests EMERG
+     chreq:attempted_call:          0 (0/s 0/m 0/h 0/d) Received channel requests CALL
+chreq:attempted_location_upd:          0 (0/s 0/m 0/h 0/d) Received channel requests LOCATION_UPD
+      chreq:attempted_pag:          0 (0/s 0/m 0/h 0/d) Received channel requests PAG
+     chreq:attempted_pdch:          0 (0/s 0/m 0/h 0/d) Received channel requests PDCH
+    chreq:attempted_other:          0 (0/s 0/m 0/h 0/d) Received channel requests OTHER
+  chreq:attempted_unknown:          0 (0/s 0/m 0/h 0/d) Received channel requests UNKNOWN
+         chreq:successful:          0 (0/s 0/m 0/h 0/d) Successful channel requests (immediate assign sent)
+   chreq:successful_emerg:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for EMERG
+    chreq:successful_call:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for CALL
+chreq:successful_location_upd:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for LOCATION_UPD
+     chreq:successful_pag:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for PAG
+    chreq:successful_pdch:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for PDCH
+   chreq:successful_other:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for OTHER
+ chreq:successful_unknown:          0 (0/s 0/m 0/h 0/d) Sent Immediate Assignment for UNKNOWN
+         chreq:no_channel:          0 (0/s 0/m 0/h 0/d) Sent to MS no channel available
+ chreq:max_delay_exceeded:          0 (0/s 0/m 0/h 0/d) Received channel requests with greater than permitted access delay
+             chan:rf_fail:          0 (0/s 0/m 0/h 0/d) Received a RF failure indication from BTS
+         chan:rf_fail_tch:          0 (0/s 0/m 0/h 0/d) Received a RF failure indication from BTS on a TCH channel
+       chan:rf_fail_sdcch:          0 (0/s 0/m 0/h 0/d) Received a RF failure indication from BTS on an SDCCH channel
+             chan:rll_err:          0 (0/s 0/m 0/h 0/d) Received a RLL failure with T200 cause from BTS
+                 oml_fail:          0 (0/s 0/m 0/h 0/d) Received a TEI down on a OML link
+                 rsl_fail:          0 (0/s 0/m 0/h 0/d) Received a TEI down on a RSL link
+              codec:amr_f:          0 (0/s 0/m 0/h 0/d) Count the usage of AMR/F codec by channel mode requested
+              codec:amr_h:          0 (0/s 0/m 0/h 0/d) Count the usage of AMR/H codec by channel mode requested
+                codec:efr:          0 (0/s 0/m 0/h 0/d) Count the usage of EFR codec by channel mode requested
+                 codec:fr:          0 (0/s 0/m 0/h 0/d) Count the usage of FR codec by channel mode requested
+                 codec:hr:          0 (0/s 0/m 0/h 0/d) Count the usage of HR codec by channel mode requested
+         paging:attempted:          0 (0/s 0/m 0/h 0/d) Paging attempts for a subscriber
+           paging:already:          0 (0/s 0/m 0/h 0/d) Paging attempts ignored as subscriber was already being paged
+         paging:responded:          0 (0/s 0/m 0/h 0/d) Paging attempts with successful paging response
+           paging:expired:          0 (0/s 0/m 0/h 0/d) Paging Request expired because of timeout T3113
+  paging:no_active_paging:          0 (0/s 0/m 0/h 0/d) Paging response without an active paging request (arrived after paging expiration?)
+         paging:msc_flush:          0 (0/s 0/m 0/h 0/d) Paging flushed due to MSC Reset BSSMAP message
+          paging:overload:          0 (0/s 0/m 0/h 0/d) Paging dropped due to BSC Paging queue overload
+           chan_act:total:          0 (0/s 0/m 0/h 0/d) Total number of Channel Activations
+           chan_act:sdcch:          0 (0/s 0/m 0/h 0/d) Number of SDCCH Channel Activations
+             chan_act:tch:          0 (0/s 0/m 0/h 0/d) Number of TCH Channel Activations
+            chan_act:nack:          0 (0/s 0/m 0/h 0/d) Number of Channel Activations that the BTS NACKed
+chan_tch:active_milliseconds:total:          0 (0/s 0/m 0/h 0/d) Cumulative number of milliseconds of TCH channel activity
+chan_sdcch:active_milliseconds:total:          0 (0/s 0/m 0/h 0/d) Cumulative number of milliseconds of SDCCH channel activity
+chan_tch:fully_established:          0 (0/s 0/m 0/h 0/d) Number of TCH channels which have reached the fully established state
+chan_sdcch:fully_established:          0 (0/s 0/m 0/h 0/d) Number of SDCCH channels which have reached the fully established state
+              rsl:unknown:          0 (0/s 0/m 0/h 0/d) Number of unknown/unsupported RSL messages received from BTS
+             rsl:ipa_nack:          0 (0/s 0/m 0/h 0/d) Number of IPA (RTP/dyn-PDCH) related NACKs received from BTS
+           rsl:delete_ind:          0 (0/s 0/m 0/h 0/d) Number of RSL DELETE INDICATION (DL CCCH overload)
+    chan:mode_modify_nack:          0 (0/s 0/m 0/h 0/d) Number of Channel Mode Modify NACKs received from BTS
+lchan_borken:from_state:unused:          0 (0/s 0/m 0/h 0/d) Transitions from lchan UNUSED state to BORKEN state
+lchan_borken:from_state:wait_activ_ack:          0 (0/s 0/m 0/h 0/d) Transitions from lchan WAIT_ACTIV_ACK state to BORKEN state
+lchan_borken:from_state:wait_rf_release_ack:          0 (0/s 0/m 0/h 0/d) Transitions from lchan WAIT_RF_RELEASE_ACK state to BORKEN state
+lchan_borken:from_state:borken:          0 (0/s 0/m 0/h 0/d) Transitions from lchan BORKEN state to BORKEN state
+lchan_borken:from_state:unknown:          0 (0/s 0/m 0/h 0/d) Transitions from an unknown lchan state to BORKEN state
+lchan_borken:event:chan_activ_ack:          0 (0/s 0/m 0/h 0/d) CHAN_ACTIV_ACK received in the lchan BORKEN state
+lchan_borken:event:chan_activ_nack:          0 (0/s 0/m 0/h 0/d) CHAN_ACTIV_NACK received in the lchan BORKEN state
+lchan_borken:event:rf_chan_rel_ack:          0 (0/s 0/m 0/h 0/d) RF_CHAN_REL_ACK received in the lchan BORKEN state
+   lchan_borken:event:vty:          0 (0/s 0/m 0/h 0/d) VTY commands received in the lchan BORKEN state
+lchan_borken:event:teardown:          0 (0/s 0/m 0/h 0/d) lchan in a BORKEN state is shutting down (BTS disconnected?)
+lchan_borken:event:ts_error:          0 (0/s 0/m 0/h 0/d) LCHAN_EV_TS_ERROR received in a BORKEN state
+lchan_borken:from_state:wait_rr_chan_mode_modify_ack:          0 (0/s 0/m 0/h 0/d) Transitions from lchan WAIT_RR_CHAN_MODE_MODIFY_ACK state to BORKEN state
+lchan_borken:from_state:wait_rsl_chan_mode_modify_ack:          0 (0/s 0/m 0/h 0/d) Transitions from lchan RSL_CHAN_MODE_MODIFY_ACK state to BORKEN state
+ts_borken:from_state:not_initialized:          0 (0/s 0/m 0/h 0/d) Transitions from TS NOT_INITIALIZED state to BORKEN state
+ts_borken:from_state:unused:          0 (0/s 0/m 0/h 0/d) Transitions from TS UNUSED state to BORKEN state
+ts_borken:from_state:wait_pdch_act:          0 (0/s 0/m 0/h 0/d) Transitions from TS WAIT_PDCH_ACT state to BORKEN state
+ts_borken:from_state:pdch:          0 (0/s 0/m 0/h 0/d) Transitions from TS PDCH state to BORKEN state
+ts_borken:from_state:wait_pdch_deact:          0 (0/s 0/m 0/h 0/d) Transitions from TS WAIT_PDCH_DEACT state to BORKEN state
+ts_borken:from_state:in_use:          0 (0/s 0/m 0/h 0/d) Transitions from TS IN_USE state to BORKEN state
+ts_borken:from_state:borken:          0 (0/s 0/m 0/h 0/d) Transitions from TS BORKEN state to BORKEN state
+ts_borken:from_state:unknown:          0 (0/s 0/m 0/h 0/d) Transitions from an unknown TS state to BORKEN state
+ts_borken:event:pdch_act_ack_nack:          0 (0/s 0/m 0/h 0/d) PDCH_ACT_ACK/NACK received in the TS BORKEN state
+ts_borken:event:pdch_deact_ack_nack:          0 (0/s 0/m 0/h 0/d) PDCH_DEACT_ACK/NACK received in the TS BORKEN state
+ ts_borken:event:teardown:          0 (0/s 0/m 0/h 0/d) TS in a BORKEN state is shutting down (BTS disconnected?)
+     assignment:attempted:          0 (0/s 0/m 0/h 0/d) Assignment attempts
+assignment:attempted_sign:          0 (0/s 0/m 0/h 0/d) Assignment of signaling lchan attempts
+assignment:attempted_speech:          0 (0/s 0/m 0/h 0/d) Assignment of speech lchan attempts
+     assignment:completed:          0 (0/s 0/m 0/h 0/d) Assignment completed
+assignment:completed_sign:          0 (0/s 0/m 0/h 0/d) Assignment of signaling lchan completed
+assignment:completed_speech:          0 (0/s 0/m 0/h 0/d) Assignment if speech lchan completed
+       assignment:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during Assignment
+  assignment:stopped_sign:          0 (0/s 0/m 0/h 0/d) Connection ended during signaling lchan Assignment
+assignment:stopped_speech:          0 (0/s 0/m 0/h 0/d) Connection ended during speech lchan Assignment
+    assignment:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for Assignment
+assignment:no_channel_sign:          0 (0/s 0/m 0/h 0/d) Failure to allocate signaling lchan for Assignment
+assignment:no_channel_speech:          0 (0/s 0/m 0/h 0/d) Failure to allocate speech lchan for Assignment
+       assignment:timeout:          0 (0/s 0/m 0/h 0/d) Assignment timed out
+  assignment:timeout_sign:          0 (0/s 0/m 0/h 0/d) Assignment of signaling lchan timed out
+assignment:timeout_speech:          0 (0/s 0/m 0/h 0/d) Assignment of speech lchan timed out
+        assignment:failed:          0 (0/s 0/m 0/h 0/d) Received Assignment Failure message
+   assignment:failed_sign:          0 (0/s 0/m 0/h 0/d) Received Assignment Failure message on signaling lchan
+ assignment:failed_speech:          0 (0/s 0/m 0/h 0/d) Received Assignment Failure message on speech lchan
+         assignment:error:          0 (0/s 0/m 0/h 0/d) Assignment failed for other reason
+    assignment:error_sign:          0 (0/s 0/m 0/h 0/d) Assignment of signaling lchan failed for other reason
+  assignment:error_speech:          0 (0/s 0/m 0/h 0/d) Assignment of speech lchan failed for other reason
+   location_update:accept:          0 (0/s 0/m 0/h 0/d) Location Update Accept
+   location_update:reject:          0 (0/s 0/m 0/h 0/d) Location Update Reject
+   location_update:detach:          0 (0/s 0/m 0/h 0/d) Location Update Detach
+  location_update:unknown:          0 (0/s 0/m 0/h 0/d) Location Update UNKNOWN
+       handover:attempted:          0 (0/s 0/m 0/h 0/d) Intra-BSC handover attempts
+       handover:completed:          0 (0/s 0/m 0/h 0/d) Intra-BSC handover completed
+         handover:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+      handover:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+         handover:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+          handover:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+           handover:error:          0 (0/s 0/m 0/h 0/d) Re-assignment failed for other reason
+  intra_cell_ho:attempted:          0 (0/s 0/m 0/h 0/d) Intra-Cell handover attempts
+  intra_cell_ho:completed:          0 (0/s 0/m 0/h 0/d) Intra-Cell handover completed
+    intra_cell_ho:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+ intra_cell_ho:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+    intra_cell_ho:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+     intra_cell_ho:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+      intra_cell_ho:error:          0 (0/s 0/m 0/h 0/d) Re-assignment failed for other reason
+   intra_bsc_ho:attempted:          0 (0/s 0/m 0/h 0/d) Intra-BSC inter-cell handover attempts
+   intra_bsc_ho:completed:          0 (0/s 0/m 0/h 0/d) Intra-BSC inter-cell handover completed
+     intra_bsc_ho:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+  intra_bsc_ho:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+     intra_bsc_ho:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+      intra_bsc_ho:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+       intra_bsc_ho:error:          0 (0/s 0/m 0/h 0/d) Intra-BSC inter-cell HO failed for other reason
+incoming_intra_bsc_ho:attempted:          0 (0/s 0/m 0/h 0/d) Incoming intra-BSC inter-cell handover attempts
+incoming_intra_bsc_ho:completed:          0 (0/s 0/m 0/h 0/d) Incoming intra-BSC inter-cell handover completed
+incoming_intra_bsc_ho:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+incoming_intra_bsc_ho:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+incoming_intra_bsc_ho:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+incoming_intra_bsc_ho:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+incoming_intra_bsc_ho:error:          0 (0/s 0/m 0/h 0/d) Incoming intra-BSC inter-cell HO failed for other reason
+interbsc_ho_out:attempted:          0 (0/s 0/m 0/h 0/d) Attempts to handover to remote BSS
+interbsc_ho_out:completed:          0 (0/s 0/m 0/h 0/d) Handover to remote BSS completed
+  interbsc_ho_out:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+  interbsc_ho_out:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+   interbsc_ho_out:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail message
+    interbsc_ho_out:error:          0 (0/s 0/m 0/h 0/d) Handover to remote BSS failed for other reason
+ interbsc_ho_in:attempted:          0 (0/s 0/m 0/h 0/d) Attempts to handover from remote BSS
+ interbsc_ho_in:completed:          0 (0/s 0/m 0/h 0/d) Handover from remote BSS completed
+   interbsc_ho_in:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+interbsc_ho_in:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+    interbsc_ho_in:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail message
+   interbsc_ho_in:timeout:          0 (0/s 0/m 0/h 0/d) Handover from remote BSS timed out
+     interbsc_ho_in:error:          0 (0/s 0/m 0/h 0/d) Handover from remote BSS failed for other reason
+          srvcc:attempted:          0 (0/s 0/m 0/h 0/d) Intra-BSC handover attempts
+          srvcc:completed:          0 (0/s 0/m 0/h 0/d) Intra-BSC handover completed
+            srvcc:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+         srvcc:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+            srvcc:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+             srvcc:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+              srvcc:error:          0 (0/s 0/m 0/h 0/d) Re-assignment failed for other reason
+      all_allocated:sdcch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all SDCCH channels were allocated
+all_allocated:static_sdcch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all non-dynamic SDCCH channels were allocated
+        all_allocated:tch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all TCH channels were allocated
+ all_allocated:static_tch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all non-dynamic TCH channels were allocated
+              cm_serv_rej:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject
+cm_serv_rej:imsi_unknown_in_hlr:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause IMSI_UNKNOWN_IN_HLR
+   cm_serv_rej:illegal_ms:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause ILLEGAL_MS
+cm_serv_rej:imsi_unknown_in_vlr:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause IMSI_UNKNOWN_IN_VLR
+cm_serv_rej:imei_not_accepted:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause IMEI_NOT_ACCEPTED
+   cm_serv_rej:illegal_me:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause ILLEGAL_ME
+cm_serv_rej:plmn_not_allowed:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause PLMN_NOT_ALLOWED
+cm_serv_rej:loc_not_allowed:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause LOC_NOT_ALLOWED
+cm_serv_rej:roaming_not_allowed:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause ROAMING_NOT_ALLOWED
+cm_serv_rej:network_failure:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause NETWORK_FAILURE
+cm_serv_rej:synch_failure:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause SYNCH_FAILURE
+   cm_serv_rej:congestion:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause CONGESTION
+cm_serv_rej:srv_opt_not_supported:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause SRV_OPT_NOT_SUPPORTED
+cm_serv_rej:rqd_srv_opt_not_supported:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause RQD_SRV_OPT_NOT_SUPPORTED
+cm_serv_rej:srv_opt_tmp_out_of_order:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause SRV_OPT_TMP_OUT_OF_ORDER
+cm_serv_rej:call_can_not_be_identified:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause CALL_CAN_NOT_BE_IDENTIFIED
+cm_serv_rej:incorrect_message:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause INCORRECT_MESSAGE
+cm_serv_rej:invalid_mandantory_inf:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause INVALID_MANDANTORY_INF
+cm_serv_rej:msg_type_not_implemented:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause MSG_TYPE_NOT_IMPLEMENTED
+cm_serv_rej:msg_type_not_compatible:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause MSG_TYPE_NOT_COMPATIBLE
+cm_serv_rej:inf_eleme_not_implemented:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause INF_ELEME_NOT_IMPLEMENTED
+cm_serv_rej:condtional_ie_error:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause CONDTIONAL_IE_ERROR
+cm_serv_rej:msg_not_compatible:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause MSG_NOT_COMPATIBLE
+cm_serv_rej:protocol_error:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause PROTOCOL_ERROR
+cm_serv_rej:retry_in_new_cell:          0 (0/s 0/m 0/h 0/d) MSC sent CM Service Reject with cause 00110000..00111111, Retry upon entry in a new cell
+base station controller 0:
+     assignment:attempted:          0 (0/s 0/m 0/h 0/d) Assignment attempts
+     assignment:completed:          0 (0/s 0/m 0/h 0/d) Assignment completed
+       assignment:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during Assignment
+    assignment:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for Assignment
+       assignment:timeout:          0 (0/s 0/m 0/h 0/d) Assignment timed out
+        assignment:failed:          0 (0/s 0/m 0/h 0/d) Received Assignment Failure message
+         assignment:error:          0 (0/s 0/m 0/h 0/d) Assignment failed for other reason
+       handover:attempted:          0 (0/s 0/m 0/h 0/d) Handover attempts
+       handover:completed:          0 (0/s 0/m 0/h 0/d) Handover completed
+         handover:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+      handover:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+         handover:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+          handover:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+           handover:error:          0 (0/s 0/m 0/h 0/d) Handover failed for other reason
+  intra_cell_ho:attempted:          0 (0/s 0/m 0/h 0/d) Intra-Cell handover attempts
+  intra_cell_ho:completed:          0 (0/s 0/m 0/h 0/d) Intra-Cell handover completed
+    intra_cell_ho:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+ intra_cell_ho:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+    intra_cell_ho:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+     intra_cell_ho:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+      intra_cell_ho:error:          0 (0/s 0/m 0/h 0/d) Intra-cell handover failed for other reason
+   intra_bsc_ho:attempted:          0 (0/s 0/m 0/h 0/d) Intra-BSC inter-cell handover attempts
+   intra_bsc_ho:completed:          0 (0/s 0/m 0/h 0/d) Intra-BSC inter-cell handover completed
+     intra_bsc_ho:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+  intra_bsc_ho:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+     intra_bsc_ho:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+      intra_bsc_ho:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail messages
+       intra_bsc_ho:error:          0 (0/s 0/m 0/h 0/d) Intra-BSC inter-cell HO failed for other reason
+interbsc_ho_out:attempted:          0 (0/s 0/m 0/h 0/d) Attempts to handover to remote BSS
+interbsc_ho_out:completed:          0 (0/s 0/m 0/h 0/d) Handover to remote BSS completed
+  interbsc_ho_out:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+  interbsc_ho_out:timeout:          0 (0/s 0/m 0/h 0/d) Handover timed out
+   interbsc_ho_out:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail message
+    interbsc_ho_out:error:          0 (0/s 0/m 0/h 0/d) Handover to remote BSS failed for other reason
+ interbsc_ho_in:attempted:          0 (0/s 0/m 0/h 0/d) Attempts to handover from remote BSS
+ interbsc_ho_in:completed:          0 (0/s 0/m 0/h 0/d) Handover from remote BSS completed
+   interbsc_ho_in:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+interbsc_ho_in:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+    interbsc_ho_in:failed:          0 (0/s 0/m 0/h 0/d) Received Handover Fail message
+   interbsc_ho_in:timeout:          0 (0/s 0/m 0/h 0/d) Handover from remote BSS timed out
+     interbsc_ho_in:error:          0 (0/s 0/m 0/h 0/d) Handover from remote BSS failed for other reason
+          srvcc:attempted:          0 (0/s 0/m 0/h 0/d) Intra-BSC SRVCC attempts
+          srvcc:completed:          0 (0/s 0/m 0/h 0/d) Intra-BSC SRVCC completed
+            srvcc:stopped:          0 (0/s 0/m 0/h 0/d) Connection ended during HO
+         srvcc:no_channel:          0 (0/s 0/m 0/h 0/d) Failure to allocate lchan for HO
+            srvcc:timeout:          0 (0/s 0/m 0/h 0/d) SRVCC timed out
+             srvcc:failed:          0 (0/s 0/m 0/h 0/d) Received SRVCC Fail messages
+              srvcc:error:          0 (0/s 0/m 0/h 0/d) Re-assignment failed for other reason
+         paging:attempted:          0 (0/s 0/m 0/h 0/d) Paging attempts for a subscriber
+          paging:detached:          0 (0/s 0/m 0/h 0/d) Paging request send failures because no responsible BTS was found
+         paging:responded:          0 (0/s 0/m 0/h 0/d) Paging attempts with successful response
+           paging:expired:          0 (0/s 0/m 0/h 0/d) Paging Request expired because of timeout T3113
+  paging:no_active_paging:          0 (0/s 0/m 0/h 0/d) Paging response without an active paging request (arrived after paging expiration?)
+     abis:unknown_unit_id:          0 (0/s 0/m 0/h 0/d) Connection attempts from unknown IPA CCM Unit ID
+    mscpool:subscr:no_msc:          0 (0/s 0/m 0/h 0/d) Complete Layer 3 requests lost because no connected MSC is found available
+  mscpool:emerg:forwarded:          0 (0/s 0/m 0/h 0/d) Emergency call requests forwarded to an MSC (see also per-MSC counters
+       mscpool:emerg:lost:          0 (0/s 0/m 0/h 0/d) Emergency call requests lost because no MSC was found available
+      all_allocated:sdcch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all SDCCH channels were allocated
+all_allocated:static_sdcch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all non-dynamic SDCCH channels were allocated
+        all_allocated:tch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all TCH channels were allocated
+ all_allocated:static_tch:          0 (0/s 0/m 0/h 0/d) Cumulative counter of seconds where all non-dynamic TCH channels were allocated
+OsmoBSC> 

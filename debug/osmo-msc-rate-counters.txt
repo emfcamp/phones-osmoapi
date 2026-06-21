@@ -1,0 +1,117 @@
+OsmoMSC> show rate-counters     
+SIGTRAN Application Server Process 0 (asp-clnt-OsmoMSC-A-Iu):
+         rx:packets:total:         30 (0/s 4/m 0/h 0/d) Total number of packets received
+       rx:packets:unknown:          0 (0/s 0/m 0/h 0/d) Number of packets received for unknown PPID
+   rx:packets:ni_mismatch:          0 (0/s 0/m 0/h 0/d) Number of packets received and dropped due to Network Indicator mismatch
+         tx:packets:total:         28 (0/s 4/m 0/h 0/d) Total number of packets transmitted
+SIGTRAN Application Server 0 (as-clnt-OsmoMSC-A-Iu):
+           rx:msu:discard:          0 (0/s 0/m 0/h 0/d) Total number of incoming MSU discarded
+             rx:msu:total:          1 (0/s 0/m 0/h 0/d) Total number of MSU received
+             rx:msu:sls:0:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 0
+             rx:msu:sls:1:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 1
+             rx:msu:sls:2:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 2
+             rx:msu:sls:3:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 3
+             rx:msu:sls:4:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 4
+             rx:msu:sls:5:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 5
+             rx:msu:sls:6:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 6
+             rx:msu:sls:7:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 7
+             rx:msu:sls:8:          1 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 8
+             rx:msu:sls:9:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 9
+            rx:msu:sls:10:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 10
+            rx:msu:sls:11:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 11
+            rx:msu:sls:12:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 12
+            rx:msu:sls:13:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 13
+            rx:msu:sls:14:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 14
+            rx:msu:sls:15:          0 (0/s 0/m 0/h 0/d) Number of MSU received on SLS 15
+             tx:msu:total:          1 (0/s 0/m 0/h 0/d) Total number of MSU transmitted
+             tx:msu:sls:0:          1 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 0
+             tx:msu:sls:1:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 1
+             tx:msu:sls:2:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 2
+             tx:msu:sls:3:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 3
+             tx:msu:sls:4:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 4
+             tx:msu:sls:5:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 5
+             tx:msu:sls:6:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 6
+             tx:msu:sls:7:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 7
+             tx:msu:sls:8:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 8
+             tx:msu:sls:9:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 9
+            tx:msu:sls:10:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 10
+            tx:msu:sls:11:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 11
+            tx:msu:sls:12:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 12
+            tx:msu:sls:13:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 13
+            tx:msu:sls:14:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 14
+            tx:msu:sls:15:          0 (0/s 0/m 0/h 0/d) Number of MSU transmitted on SLS 15
+             tcap:decoded:          0 (0/s 0/m 0/h 0/d) Number of TCAP-messages decoded successfully (loadshare-tcap)
+              tcap:failed:          0 (0/s 0/m 0/h 0/d) Number of TCAP-messages that failed decoding (loadshare-tcap)
+        tcap:asp:selected:          0 (0/s 0/m 0/h 0/d) ASP selection successful for a TCAP-message (loadshare-tcap)
+        tcap:asp:fallback:          0 (0/s 0/m 0/h 0/d) Fallback ASP selected for a TCAP-message (loadshare-tcap)
+          tcap:asp:failed:          0 (0/s 0/m 0/h 0/d) ASP selection failed for a TCAP-message (loadshare-tcap)
+SS7 Instance 0:
+         rx:packets:total:         30 (0/s 4/m 0/h 0/d) Total number of packets received
+       rx:packets:unknown:          0 (0/s 0/m 0/h 0/d) Number of packets received for unknown PPID
+   rx:packets:ni_mismatch:          0 (0/s 0/m 0/h 0/d) Number of packets received and dropped due to Network Indicator mismatch
+         tx:packets:total:         28 (0/s 4/m 0/h 0/d) Total number of packets transmitted
+SMS queue 0:
+        delivery:attempts:          0 (0/s 0/m 0/h 0/d) Attempted MT SMS deliveries to subscriber
+              deliver:ack:          0 (0/s 0/m 0/h 0/d) Successful MT SMS delivery to subscriber
+            deliver:error:          0 (0/s 0/m 0/h 0/d) Erroneous MT SMS delivery
+        deliver:no_memory:          0 (0/s 0/m 0/h 0/d) Failed MT SMS delivery due to no memory on MS
+   deliver:paging_timeout:          0 (0/s 0/m 0/h 0/d) Failed MT SMS delivery due to paging timeout (MS gone?)
+visitor location register 0:
+     gsup:rx:unknown_imsi:          0 (0/s 0/m 0/h 0/d) Received GSUP messages for unknown IMSI
+  gsup:rx:purge_no_subscr:          0 (0/s 0/m 0/h 0/d) Received GSUP purge for unknown subscriber
+      gsup:rx:auth_tuples:          0 (0/s 0/m 0/h 0/d) Received GSUP authentication tuples
+      gsup:rx:upd_loc:res:          0 (0/s 0/m 0/h 0/d) Received GSUP Update Location Result messages
+      gsup:rx:upd_loc:err:          0 (0/s 0/m 0/h 0/d) Received GSUP Update Location Error messages
+gsup:rx:send_auth_info:res:          0 (0/s 0/m 0/h 0/d) Received GSUP Send Auth Info Result messages
+gsup:rx:send_auth_info:err:          0 (0/s 0/m 0/h 0/d) Received GSUP Send Auth Info Error messages
+ gsup:rx:ins_sub_data:req:          0 (0/s 0/m 0/h 0/d) Received GSUP Insert Subscriber Data Request messages
+       gsup:rx:cancel:req:          0 (0/s 0/m 0/h 0/d) Received GSUP Cancel Subscriber messages
+   gsup:rx:check_imei:res:          0 (0/s 0/m 0/h 0/d) Received GSUP Check IMEI Result messages
+   gsup:rx:check_imei:err:          0 (0/s 0/m 0/h 0/d) Received GSUP Check IMEI Error messages
+     gsup:rx:purge_ms:res:          0 (0/s 0/m 0/h 0/d) Received GSUP Purge MS Result messages
+     gsup:rx:purge_ms:err:          0 (0/s 0/m 0/h 0/d) Received GSUP Purge MS Error messages
+ gsup:rx:del_sub_data:req:          0 (0/s 0/m 0/h 0/d) Received GSUP Delete Subscriber Data Request messages
+  gsup:rx:unknown_msgtype:          0 (0/s 0/m 0/h 0/d) Received GSUP message of unknown type
+      gsup:tx:upd_loc:req:          0 (0/s 0/m 0/h 0/d) Transmitted GSUP Update Location Request messages
+ gsup:tx:ins_sub_data:res:          0 (0/s 0/m 0/h 0/d) Transmitted GSUP Insert Subscriber Data Result messages
+gsup:tx:send_auth_info:res:          0 (0/s 0/m 0/h 0/d) Transmitted GSUP Send Auth Info Request messages
+     gsup:tx:purge_ms:req:          0 (0/s 0/m 0/h 0/d) Transmitted GSUP Purge MS Request messages
+   gsup:tx:check_imei:req:          0 (0/s 0/m 0/h 0/d) Transmitted GSUP Check IMEI Request messages
+    gsup:tx:auth_fail:rep:          0 (0/s 0/m 0/h 0/d) Transmitted GSUP Auth Fail Report messages
+       gsup:tx:cancel:res:          0 (0/s 0/m 0/h 0/d) Transmitted GSUP Cancel Result messages
+      detach:imsi_det_req:          0 (0/s 0/m 0/h 0/d) VLR Subscriber Detach by IMSI DETACH REQ
+   detach:gsup_cancel_req:          0 (0/s 0/m 0/h 0/d) VLR Subscriber Detach by GSUP CANCEL REQ
+     detach:t3212_timeout:          0 (0/s 0/m 0/h 0/d) VLR Subscriber Detach by T3212 timeout
+mobile switching center 0:
+   loc_update_type:attach:          0 (0/s 0/m 0/h 0/d) Received Location Update (IMSI Attach) requests.
+   loc_update_type:normal:          0 (0/s 0/m 0/h 0/d) Received Location Update (LAC change) requests.
+ loc_update_type:periodic:          0 (0/s 0/m 0/h 0/d) Received (periodic) Location Update requests.
+   loc_update_type:detach:          0 (0/s 0/m 0/h 0/d) Received IMSI Detach indications.
+   loc_update_resp:failed:          0 (0/s 0/m 0/h 0/d) Rejected Location Update requests.
+loc_update_resp:completed:          0 (0/s 0/m 0/h 0/d) Successful Location Update procedures.
+cm_service_request:rejected:          0 (0/s 0/m 0/h 0/d) Rejected CM Service Requests.
+cm_service_request:accepted:          0 (0/s 0/m 0/h 0/d) Accepted CM Service Requests.
+     paging_resp:rejected:          0 (0/s 0/m 0/h 0/d) Rejected Paging Responses.
+     paging_resp:accepted:          0 (0/s 0/m 0/h 0/d) Accepted Paging Responses.
+cm_re_establish_request:rejected:          0 (0/s 0/m 0/h 0/d) Rejected CM Re-Establishing Requests.
+cm_re_establish_request:accepted:          0 (0/s 0/m 0/h 0/d) Accepted CM Re-Establishing Requests.
+            sms:submitted:          0 (0/s 0/m 0/h 0/d) Total MO SMS received from the MS.
+          sms:no_receiver:          0 (0/s 0/m 0/h 0/d) Failed MO SMS delivery attempts (no receiver found).
+            sms:delivered:          0 (0/s 0/m 0/h 0/d) Total MT SMS delivery attempts.
+           sms:rp_err_mem:          0 (0/s 0/m 0/h 0/d) Failed MT SMS delivery attempts (no memory).
+         sms:rp_err_other:          0 (0/s 0/m 0/h 0/d) Failed MT SMS delivery attempts (other reason).
+sms:deliver_unknown_error:          0 (0/s 0/m 0/h 0/d) Failed MO SMS delivery attempts (other reason).
+            call:mo_setup:          0 (0/s 0/m 0/h 0/d) Received MO SETUP messages (MO call establishment).
+      call:mo_connect_ack:          0 (0/s 0/m 0/h 0/d) Received MO CONNECT messages (MO call establishment).
+            call:mt_setup:          0 (0/s 0/m 0/h 0/d) Sent MT SETUP messages (MT call establishment).
+          call:mt_connect:          0 (0/s 0/m 0/h 0/d) Sent MT CONNECT messages (MT call establishment).
+              call:active:          0 (0/s 0/m 0/h 0/d) Calls that ever reached the active state.
+            call:complete:          0 (0/s 0/m 0/h 0/d) Calls terminated by DISCONNECT message after reaching the active state.
+          call:incomplete:          0 (0/s 0/m 0/h 0/d) Calls terminated by any other reason after reaching the active state.
+        nc_ss:mo_requests:          0 (0/s 0/m 0/h 0/d) Received MS-initiated call independent SS/USSD requests.
+     nc_ss:mo_established:          0 (0/s 0/m 0/h 0/d) Established MS-initiated call independent SS/USSD sessions.
+        nc_ss:mt_requests:          0 (0/s 0/m 0/h 0/d) Received network-initiated call independent SS/USSD requests.
+     nc_ss:mt_established:          0 (0/s 0/m 0/h 0/d) Established network-initiated call independent SS/USSD sessions.
+bssmap:cipher_mode_reject:          0 (0/s 0/m 0/h 0/d) Number of CIPHER MODE REJECT messages processed by BSSMAP layer
+bssmap:cipher_mode_complete:          0 (0/s 0/m 0/h 0/d) Number of CIPHER MODE COMPLETE messages processed by BSSMAP layer
+OsmoMSC> 
