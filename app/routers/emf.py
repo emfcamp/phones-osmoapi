@@ -162,11 +162,13 @@ class SimUpdate(BaseModel):
     aud2g: str = Field(min_length=32, max_length=32)
 
 
-@router.post("/sim", summary="")
+@router.post("/sim", summary="Create Subscriber")
 @handle_hlr_errors
 async def create_sim(body: SimCreate):
     aud2g_param = build_aud2g_param(body.aud2g)
-    return hlr_instance.easy_create(body.imsi, body.msisdn, aud2g_param, True, False)
+    subscriber = hlr_instance.easy_create(body.imsi, body.msisdn, True, False)
+    hlr_instance.set_aud2g_by_imsi(body.imsi, aud2g_param)
+    return subscriber
 
 
 @router.get("/sim/{imsi}", summary="")
