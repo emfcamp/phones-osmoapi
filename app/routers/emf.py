@@ -13,6 +13,7 @@ hlr_instance = OsmoHLR()
 router = APIRouter(
     dependencies=[Depends(bearer_scheme)],
     prefix="/emf",
+    tags=["EMF Core"],
     responses={
         500: {
             "description": "An unhandled error occurred.",
@@ -27,20 +28,20 @@ router = APIRouter(
     },
 )
 
-"""
-{
-  "event": "bind",
-  "service": "GSM",
-  "vanityNumber": 2002,
-  "tempNumber": 19050000,
-  "properties": {
-    "ps": true
-  }
-}
-"""
+
+class HlrProperties(BaseModel):
+    ps: bool = True
 
 
-def hlr_bind(body: dict):
+class CoreWebhookBody(BaseModel):
+    event: Literal["bind", "unbind", "properties"]
+    service: str
+    vanityNumber: int
+    tempNumber: int
+    properties: HlrProperties = Field(default_factory=HlrProperties)
+
+
+def hlr_bind(body: CoreWebhookBody):
     ## find tempNumber in db and replace with vanityNumber
     old_number = body.get("tempNumber")
     new_number = body.get("vanityNumber")
@@ -53,10 +54,11 @@ def hlr_bind(body: dict):
     print(result)
     if result == "OK":
         return Response(status_code=status.HTTP_204_NO_CONTENT)
-    return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response(status_code=status.HTTP_502_BAD_GATEWAY)
 
 
-def hlr_unbind(body: dict):
+def hlr_unbind(body: CoreWebhookBody):
     ## find vanityNumber in db and replace with tempNumber
     old_number = body.get("vanityNumber")
     new_number = body.get("tempNumber")
@@ -69,10 +71,11 @@ def hlr_unbind(body: dict):
     print(result)
     if result == "OK":
         return Response(status_code=status.HTTP_204_NO_CONTENT)
-    return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response(status_code=status.HTTP_502_BAD_GATEWAY)
 
 
-def hlr_props(body: dict):
+def hlr_props(body: CoreWebhookBody):
     DEFAULT_PROPS = {"ps": True}
 
     vanity_number = body.get("vanityNumber")
@@ -90,37 +93,39 @@ def hlr_props(body: dict):
     if result == "OK":
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+    return Response(status_code=status.HTTP_502_BAD_GATEWAY)
+
 
 @router.post(
     "/core-webhook",
     summary="",
     tags=["Core"],
 )
-async def core_webhook(body: dict, verified: bool = Depends(verify_bearer_token)):
+async def core_webhook(body: CoreWebhookBody, verified: bool = Depends(verify_bearer_token)):
+    if body.service.lower() != "gsm":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Unsupported service type",
+        )
+
+    handlers = {
+        "bind": hlr_bind,
+        "unbind": hlr_unbind,
+        "properties": hlr_props,
+    }
+    handler = handlers[body.event]
+
     try:
-        if body.get("service", "").lower() != "gsm":
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"wrong service type",
-            )
-
-        if body.get("event") == "bind":
-            return hlr_bind(body)
-        elif body.get("event") == "unbind":
-            return hlr_unbind(body)
-        elif body.get("event") == "properties":
-            return hlr_props(body)
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"wrong event type",
-            )
-
-        return "OK"
-    except Exception as e:
+        return handler(body)
+    except HTTPException:
+        # Already a well-formed client/upstream error — re-raise as-is.
+        raise
+    except Exception:
+        # Log full detail server-side, but never leak internals to the caller.
+        logger.exception("Unhandled error processing %s event", body.event)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
+            detail="An internal error occurred while processing the webhook",
         )
 
 
