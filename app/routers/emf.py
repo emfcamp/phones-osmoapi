@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Literal, Optional
 from functools import wraps
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
@@ -98,8 +98,7 @@ def hlr_props(body: CoreWebhookBody):
 
 @router.post(
     "/core-webhook",
-    summary="",
-    tags=["Core"],
+    summary="Webhook for binding/unbinding/properties",
 )
 async def core_webhook(body: CoreWebhookBody, verified: bool = Depends(verify_bearer_token)):
     if body.service.lower() != "gsm":
