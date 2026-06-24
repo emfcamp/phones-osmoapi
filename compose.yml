@@ -11,6 +11,7 @@ services:
       - DATA_DIR=/data
       - LOGS_DIR=/logs
     network_mode: "host"
+    restart: unless-stopped
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "/opt/osmoapi/data:/data:rw"
