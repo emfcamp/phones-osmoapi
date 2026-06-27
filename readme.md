@@ -34,7 +34,8 @@ Makes use of osmoapi from here: https://github.com/emfcamp/phones-osmoapi-py/rel
 `app/data/tokens.json` contains HTTP bearer tokens for interactions with core and other services.
 ```json
 {
-    "core": "I0qvYe73uLtqwCQqXgBqqJpQobGEq988"
+    "core": "I0qvYe73uLtqwCQqXgBqqJpQobGEq988",
+    "monitoring": "prometheus-#notmygod"
     ...
 }
 ```
@@ -57,3 +58,8 @@ IMSI,DefaultMSISDN
 `docker compose --profile prod up --force-recreate` - for prod profile
 
 `docker compose --profile dev up --force-recreate` - for dev profile
+
+
+### Notes
+
+Please run `uv tool run ruff format` before committing! :)

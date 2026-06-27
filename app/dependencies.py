@@ -54,10 +54,17 @@ def verification(creds: Annotated[HTTPBasicCredentials, Depends(security)]):
         )
 
 
-async def verify_bearer_token(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)) -> None:
-    if credentials.scheme != "Bearer" or credentials.credentials != tokens.get("core"):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or missing bearer token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+def make_bearer_verifier(token_key: str):
+    async def verify(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)) -> None:
+        if credentials.scheme != "Bearer" or credentials.credentials != tokens.get(token_key):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid or missing bearer token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+    return verify
+
+
+verify_core_token = make_bearer_verifier("core")
+verify_metrics_token = make_bearer_verifier("metrics")

@@ -4,7 +4,7 @@ from functools import wraps
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
 from pydantic import BaseModel, Field
 from ..config import settings
-from ..dependencies import bearer_scheme, verify_bearer_token
+from ..dependencies import bearer_scheme, verify_core_token
 from ..osmoctrl import OsmoHLR, OsmoSubscriberParam
 
 
@@ -100,7 +100,7 @@ def hlr_props(body: CoreWebhookBody):
     "/core-webhook",
     summary="Webhook for binding/unbinding/properties",
 )
-async def core_webhook(body: CoreWebhookBody, verified: bool = Depends(verify_bearer_token)):
+async def core_webhook(body: CoreWebhookBody, verified: bool = Depends(verify_core_token)):
     if body.service.lower() != "gsm":
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
