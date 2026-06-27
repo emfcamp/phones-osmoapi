@@ -4,36 +4,6 @@ from pprint import pprint
 from .osmo import osmo_hlr_run_single_elevated
 
 
-def get_msisdn_by_imsi(imsi: int):
-    """Get the MSISDN for a given IMSI"""
-    try:
-        re = osmo_hlr_run_single_elevated(f"subscriber imsi {imsi} show")
-        lines = re.splitlines()
-        for line in lines:
-            pprint(line)
-            if "Error" in line:
-                raise ValueError(line)
-            if "MSISDN: " in line:
-                return {"imsi": imsi, "msisdn": int(line.split(":")[1].strip())}
-    except Exception as e:
-        raise e
-
-
-def set_msisdn_by_imsi(imsi: int, new_msisdn: int):
-    """Set the MSISDN for a given IMSI"""
-    try:
-        re = osmo_hlr_run_single_elevated(f"subscriber imsi {imsi} update msisdn {new_msisdn}")
-        lines = re.splitlines()
-        for line in lines:
-            pprint(line)
-            if "Error" in line:
-                raise ValueError(line)
-            if "Updated " in line:
-                return {"imsi": imsi, "msisdn": new_msisdn}
-    except Exception as e:
-        raise e
-
-
 def get_all_default_msisdn():
     """Get all default MSISDNs"""
     try:
@@ -63,21 +33,6 @@ def get_default_msisdn_by_imsi(imsi: int):
             if row["imsi"] == imsi:
                 return int(row["default_msisdn"])
         raise ValueError("Unknown IMSI")
-    except Exception as e:
-        raise e
-
-
-def reset_msisdn_by_imsi_to_default(imsi: int):
-    """Resets the MSISDN for a given IMSI to the default MSISDN
-
-    Parameters
-    ----------
-    imsi : int, required
-        The IMSI of the SIM card
-    """
-    try:
-        default_msisdn = get_default_msisdn_by_imsi(imsi)
-        return set_msisdn_by_imsi(imsi, default_msisdn)
     except Exception as e:
         raise e
 
