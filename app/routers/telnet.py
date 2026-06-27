@@ -132,7 +132,7 @@ async def get_default(imsi: int, verified: bool = Depends(verification)):
         },
     },
     response_model=GetLocationResponse,
-)  # Add closing curly brace here
+)
 async def get_location(imsi: int, verified: bool = Depends(verification)):
     """Get the Location Information for a given IMSI
 
