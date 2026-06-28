@@ -27,16 +27,12 @@ router = APIRouter(
 )
 
 
-class HlrProperties(BaseModel):
-    ps: bool = True
-
-
 class CoreWebhookBody(BaseModel):
     event: Literal["bind", "unbind", "properties"]
     service: str
     vanityNumber: int
     tempNumber: int
-    properties: HlrProperties = Field(default_factory=HlrProperties)
+    properties: dict
 
 
 def hlr_bind(body: CoreWebhookBody):
@@ -156,39 +152,56 @@ def handle_hlr_errors(fn):
 class SimCreate(BaseModel):
     imsi: int
     msisdn: int
-    aud2g: str = Field(min_length=32, max_length=32)
+    ki: str = Field(min_length=32, max_length=32)
+    opc: str = Field(min_length=32, max_length=32)
+    gprs: bool
+    lte_enabled: bool
 
 
 class SimUpdate(BaseModel):
     msisdn: int
-    aud2g: str = Field(min_length=32, max_length=32)
+    ki: str = Field(min_length=32, max_length=32)
+    opc: str = Field(min_length=32, max_length=32)
+    gprs: bool
+    lte_enabled: bool
 
 
 @router.post("/sim", summary="Create Subscriber")
 @handle_hlr_errors
 async def create_sim(body: SimCreate):
-    aud2g_param = build_aud2g_param(body.aud2g)
-    subscriber = hlr_instance.easy_create(body.imsi, body.msisdn, True, False)
+    aud2g_param = build_aud2g_param(body.ki)
+    subscriber = hlr_instance.easy_create(body.imsi, body.msisdn, True, body.gprs)
     hlr_instance.set_aud2g_by_imsi(body.imsi, aud2g_param)
+
+    # TODO: If lte_enabled create SIM in open5gs database
+
     return subscriber
 
 
 @router.get("/sim/{imsi}", summary="")
 @handle_hlr_errors
 async def fetch_sim(imsi: int):
+    ## TODO: Check if SIM is in open5gs database
+
     return hlr_instance.get_subscriber_by_imsi(imsi)
 
 
 @router.patch("/sim/{imsi}", summary="")
 @handle_hlr_errors
 async def update_sim(imsi: int, body: SimUpdate):
-    aud2g_param = build_aud2g_param(body.aud2g)
+    aud2g_param = build_aud2g_param(body.ki)
     hlr_instance.set_aud2g_by_imsi(imsi, aud2g_param)
     hlr_instance.set_msisdn_by_imsi(imsi, body.msisdn)
-    return hlr_instance.get_subscriber_by_imsi(imsi)  # fixed: was self.get_subscriber_by_id(id)
+    hlr_instance.set_ps_by_imsi(imsi, body.gprs)
+
+    ## TODO: Check lte_enabled state against open5gs database
+
+    return hlr_instance.get_subscriber_by_imsi(imsi)
 
 
 @router.delete("/sim/{imsi}", summary="")
 @handle_hlr_errors
 async def delete_sim(imsi: int):
+    ## TODO: Delete from open5gs database
+
     return hlr_instance.delete_subscriber(imsi)
