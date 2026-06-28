@@ -154,26 +154,26 @@ class SimCreate(BaseModel):
     msisdn: int
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
-    gprs: bool
-    lte_enabled: bool
+    gprsEnabled: bool
+    lteEnabled: bool
 
 
 class SimUpdate(BaseModel):
     msisdn: int
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
-    gprs: bool
-    lte_enabled: bool
+    gprsEnabled: bool
+    lteEnabled: bool
 
 
 @router.post("/sim", summary="Create Subscriber")
 @handle_hlr_errors
 async def create_sim(body: SimCreate):
     aud2g_param = build_aud2g_param(body.ki)
-    subscriber = hlr_instance.easy_create(body.imsi, body.msisdn, True, body.gprs)
+    subscriber = hlr_instance.easy_create(body.imsi, body.msisdn, True, body.gprsEnabled)
     hlr_instance.set_aud2g_by_imsi(body.imsi, aud2g_param)
 
-    # TODO: If lte_enabled create SIM in open5gs database
+    # TODO: If lteEnabled create SIM in open5gs database
 
     return subscriber
 
@@ -192,9 +192,9 @@ async def update_sim(imsi: int, body: SimUpdate):
     aud2g_param = build_aud2g_param(body.ki)
     hlr_instance.set_aud2g_by_imsi(imsi, aud2g_param)
     hlr_instance.set_msisdn_by_imsi(imsi, body.msisdn)
-    hlr_instance.set_ps_by_imsi(imsi, body.gprs)
+    hlr_instance.set_ps_by_imsi(imsi, body.gprsEnabled)
 
-    ## TODO: Check lte_enabled state against open5gs database
+    ## TODO: Check lteEnabled state against open5gs database
 
     return hlr_instance.get_subscriber_by_imsi(imsi)
 
