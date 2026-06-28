@@ -1,4 +1,5 @@
 from .config import settings
+from .osmoctrl import OsmoHLR
 
 import json
 from pathlib import Path
@@ -68,3 +69,7 @@ def make_bearer_verifier(token_key: str):
 
 verify_core_token = make_bearer_verifier("core")
 verify_metrics_token = make_bearer_verifier("metrics")
+
+
+## Osmocom shared-hlr instance
+hlr_instance = OsmoHLR()

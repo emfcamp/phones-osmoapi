@@ -4,11 +4,9 @@ from functools import wraps
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
 from pydantic import BaseModel, Field
 from ..config import settings
-from ..dependencies import bearer_scheme, verify_core_token
-from ..osmoctrl import OsmoHLR, OsmoSubscriberParam
+from ..dependencies import bearer_scheme, hlr_instance, verify_core_token
+from ..osmoctrl import OsmoSubscriberParam
 
-
-hlr_instance = OsmoHLR()
 
 router = APIRouter(
     dependencies=[Depends(bearer_scheme)],

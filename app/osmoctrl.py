@@ -1,6 +1,7 @@
 from .config import settings
 
 import logging
+import socket
 from os import makedirs, environ
 from enum import IntEnum, StrEnum
 from ipaddress import IPv4Address, IPv6Address
@@ -89,6 +90,14 @@ class OsmoComponent:
             self.logger.error(f"[Exception]-> {e}")
 
         return ""
+
+    def _alive(self) -> bool:
+        host, port = self.addr.split(":")
+        try:
+            with socket.create_connection((host, port), timeout=5):
+                return True
+        except (socket.timeout, ConnectionRefusedError, OSError):
+            return False
 
 
 # https://downloads.osmocom.org/docs/osmo-bsc/master/osmobsc-usermanual.pdf

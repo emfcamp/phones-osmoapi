@@ -1,10 +1,10 @@
-from fastapi import FastAPI, Depends
+from fastapi import status, FastAPI, Depends
 from fastapi.responses import RedirectResponse, Response
 from prometheus_fastapi_instrumentator import Instrumentator, metrics
 from prometheus_client import REGISTRY, GC_COLLECTOR, PLATFORM_COLLECTOR, generate_latest, CONTENT_TYPE_LATEST
 
 from .config import settings
-from .dependencies import verify_metrics_token
+from .dependencies import hlr_instance, verify_metrics_token
 from .routers import bsc, emf, hlr, msc, telnet
 
 
@@ -12,7 +12,7 @@ app = FastAPI(
     title="EMF GSM API",
     description="A simple API for managing GSM services at EMF Camp.",
     contact={"name": "EMF GSM Team", "url": "https://gsm.emf.camp/", "email": settings.contact_email},
-    version="0.1.0",
+    version="1.0.0",
     terms_of_service="https://gsm.emf.camp/api/tos",
     license_info={"name": "Beerware", "url": "https://spdx.org/licenses/Beerware.html"},
 )
@@ -43,6 +43,19 @@ async def read_root():
 def metrics():
     data = generate_latest(REGISTRY)
     return Response(content=data, media_type=CONTENT_TYPE_LATEST)
+
+
+@app.get("/hlr-health", summary="Healtcheck to see if HLR is up", tags=["Healthchecks"])
+async def healthcheck():
+    if hlr_instance._alive():
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+    return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+
+@app.get("/health", summary="Basic API healthcheck", tags=["Healthchecks"])
+async def healthcheck():
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 if __name__ == "__main__":

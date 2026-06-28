@@ -2,11 +2,9 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from ..config import settings
-from ..dependencies import security, verification
-from ..osmoctrl import OsmoHLR, OsmoSubscriberParam
+from ..dependencies import hlr_instance, security, verification
+from ..osmoctrl import OsmoSubscriberParam
 
-
-hlr_instance = OsmoHLR()
 
 router = APIRouter(
     dependencies=[Depends(security)],
@@ -29,7 +27,7 @@ router = APIRouter(
 
 @router.get(
     "/subscriber/imsi/{imsi}",
-    summary="Get Subscriber Information by IMSI",
+    summary="Get Subscriber Info by IMSI",
     responses={
         200: {
             "description": "success",
