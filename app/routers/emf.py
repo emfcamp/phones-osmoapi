@@ -111,11 +111,11 @@ async def core_webhook(body: CoreWebhookBody, verified: bool = Depends(verify_co
     try:
         return handler(body)
     except HTTPException:
-        # Already a well-formed client/upstream error — re-raise as-is.
+        # Already a well-formed client/upstream error - re-raise as-is.
         raise
     except Exception:
         # Log full detail server-side, but never leak internals to the caller.
-        logger.exception("Unhandled error processing %s event", body.event)
+        print("Unhandled error processing %s event", body.event)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An internal error occurred while processing the webhook",
