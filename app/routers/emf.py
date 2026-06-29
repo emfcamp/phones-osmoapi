@@ -102,6 +102,7 @@ async def core_webhook(body: CoreWebhookBody, verified: bool = Depends(verify_co
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Unsupported service type",
         )
+    print(body)
 
     handlers = {
         "bind": hlr_bind,
