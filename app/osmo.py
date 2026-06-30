@@ -178,3 +178,11 @@ def osmo_msc_run_multiple_elevated(commands: list[str]) -> list[str]:
     response = osmomsc.run_multiple_commands(commands, elevated=True)
     osmomsc.disconnect()
     return response
+
+
+def send_sms(to_msisdn: int, from_msisdn: int, message: str):    
+    ### TODO: Test Send SMS
+    ### subscriber(msisdn|extension|imsi|tmsi|id)IDsmssender(msisdn|extension|imsi|tmsi|id) SENDER_IDsend.LINE
+    ### subscriber(msisdn|extension|imsi|tmsi|id)IDsilent-smssender(msisdn|extension|imsi|tmsi|id) SENDER_IDsend.LINE
+    cmd = f"subscriber msisdn {to_msisdn} sms sender msisdn {from_msisdn} send {message}"
+    return osmo_msc_run_single_elevated(cmd)
