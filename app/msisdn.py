@@ -66,10 +66,12 @@ ID     MSISDN        IMSI              IMEI              NAM
             imsi = row[2]
             imei = row[3]
             ## If msisdn hasn't been set, set it to -1
-            if msisdn == "none": msisdn = -1
+            if msisdn == "none":
+                msisdn = -1
             ## If imei hasn't been set set to -1
-            if "--------" in imei: imei = -1
-            msisdns.append({"id": int(sub_id) ,"imsi": int(imsi), "msisdn": int(msisdn), "imei": int(imei)})
+            if "--------" in imei:
+                imei = -1
+            msisdns.append({"id": int(sub_id), "imsi": int(imsi), "msisdn": int(msisdn), "imei": int(imei)})
         return msisdns
     except Exception as e:
         raise e

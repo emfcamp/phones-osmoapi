@@ -15,6 +15,7 @@ from ..osmo import (
     osmo_hlr_run_multiple_elevated,
     osmo_hlr_run_single,
     osmo_msc_run_single,
+    osmo_msc_run_single_elevated,
 )
 
 
@@ -193,25 +194,28 @@ class SubscriberId(BaseModel):
         return f"{self.kind} {self.value}"
 
 
-def send_sms(to: SubscriberId, from_: SubscriberId, message: str):
+def send_sms(recipient: SubscriberId, sender: SubscriberId, message: str):
     """
     ### subscriber(msisdn|extension|imsi|tmsi|id) ID sms sender(msisdn|extension|imsi|tmsi|id) SENDER_ID send LINE
     # % No subscriber found for msisdn 9990000
     """
-    cmd = f"subscriber {to} sms sender {from_} send {message}"
-    return osmo_msc_run_single(cmd)
+    cmd = f"subscriber {recipient} sms sender {sender} send {message}"
+    return osmo_msc_run_single_elevated(cmd)
 
 
 class SendSmsRequest(BaseModel):
-    to: SubscriberId
-    from_: SubscriberId
+    recipient: SubscriberId
+    sender: SubscriberId
     message: str
 
 
-@router.post("/sms/send")
+@router.post(
+    "/sms/send",
+    summary="Send SMS to subscriber, both sender and recipient must be connected to MSC.",
+)
 def api_send_sms(payload: SendSmsRequest):
-    raw = osmo_msc_run_single(f"show sms-queue")
+    raw = osmo_msc_run_single_elevated(f"show sms-queue")
     try:
-        return {"result": send_sms(payload.to, payload.from_, payload.message)}
+        return {"result": send_sms(payload.recipient, payload.sender, payload.message)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
