@@ -1,11 +1,13 @@
 import re
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from typing import Literal, Union
+from pydantic import BaseModel
 
 from ..dependencies import dks, security, verification
 from ..msisdn import (
     get_all_default_msisdn,
-    get_all_msisdn_from_hlr,
+    get_all_subscribers_from_hlr,
     get_default_msisdn_by_imsi,
 )
 from ..models import *
@@ -72,8 +74,8 @@ async def get_all_default_msisdns(verified: bool = Depends(verification)):
 async def get_all_hlr_msisdns(verified: bool = Depends(verification)):
     """Get all MSISDNs known to HLR"""
     try:
-        msisdns = get_all_msisdn_from_hlr()
-        return {"msisdns": [row["msisdn"] for row in msisdns]}
+        subsribers = get_all_subscribers_from_hlr()
+        return {"msisdns": [row["msisdn"] for row in subscribers]}
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -164,3 +166,52 @@ async def get_location(imsi: int, verified: bool = Depends(verification)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"An unhandled error occurred: {e}",
         )
+
+
+@router.get(
+    "/get-hlr-subscribers",
+    summary="Get all HLR subscriber information",
+)
+async def get_all_hlr_subscribers():
+    try:
+        return get_all_subscribers_from_hlr()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unhandled error occurred: {e}",
+        )
+
+
+IdentifierKind = Literal["msisdn", "extension", "imsi", "tmsi", "id"]
+
+
+class SubscriberId(BaseModel):
+    kind: IdentifierKind
+    value: str
+
+    def __str__(self):
+        return f"{self.kind} {self.value}"
+
+
+def send_sms(to: SubscriberId, from_: SubscriberId, message: str):
+    """
+    ### subscriber(msisdn|extension|imsi|tmsi|id) ID sms sender(msisdn|extension|imsi|tmsi|id) SENDER_ID send LINE
+    # % No subscriber found for msisdn 9990000
+    """
+    cmd = f"subscriber {to} sms sender {from_} send {message}"
+    return osmo_msc_run_single(cmd)
+
+
+class SendSmsRequest(BaseModel):
+    to: SubscriberId
+    from_: SubscriberId
+    message: str
+
+
+@router.post("/sms/send")
+def api_send_sms(payload: SendSmsRequest):
+    raw = osmo_msc_run_single(f"show sms-queue")
+    try:
+        return {"result": send_sms(payload.to, payload.from_, payload.message)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
