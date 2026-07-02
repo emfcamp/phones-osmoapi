@@ -11,8 +11,18 @@ SMSC_PORT = settings.smpp_port
 RETRY_DELAY = 15
 
 client = None
-client_lock = threading.Lock()  # guards use of `client` from other parts of your app
+client_lock = threading.Lock()
 
+
+def decode_message(pdu):
+    coding = getattr(pdu, 'data_coding', 0)
+    try:
+        if coding == 0x08:
+            return pdu.short_message.decode('utf-16-be')
+        else:
+            return pdu.short_message.decode('latin-1')
+    except Exception:
+        return repr(pdu.short_message)
 
 
 def handle_pdu(pdu):
@@ -22,13 +32,11 @@ def handle_pdu(pdu):
         return
 
     if isinstance(pdu, smpplib.command.DeliverSM):
-        try:
-            text = pdu.short_message.decode("utf-16-be")
-        except UnicodeDecodeError:
-            text = pdu.short_message.decode("latin-1")
+        text = decode_message(pdu)
 
         print(f"[SMS] From: {pdu.source_addr.decode()} -> To: {pdu.destination_addr.decode()}")
         print(f"      Text: {text}\n")
+        send_sms(f"{pdu.source_addr.decode()}", f"You sent: {text}")
         return
 
     print(f"[PDU] Unhandled: {pdu.command}")
@@ -44,7 +52,7 @@ def connect_and_listen():
             system_id=settings.smpp_systemid,
             password=settings.smpp_password,
         )
-        print(f"Connected to {SMSC_HOST}:{SMSC_PORT} — waiting for messages...\n")
+        print(f"Connected to {SMSC_HOST}:{SMSC_PORT} - waiting for messages...\n")
         client.listen()
     finally:
         try:
@@ -54,7 +62,7 @@ def connect_and_listen():
         client.disconnect()
 
 
-def send_sms(dest, text, source="12345"):
+def send_sms(dest, text, source="476"):
     with client_lock:
         if client is None or client.state != smpplib.consts.SMPP_CLIENT_STATE_BOUND_TRX:
             raise RuntimeError("SMPP client not connected/bound yet")
