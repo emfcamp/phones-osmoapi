@@ -37,8 +37,8 @@ class CoreWebhookBody(BaseModel):
 
 def hlr_bind(body: CoreWebhookBody):
     ## find tempNumber in db and replace with vanityNumber
-    old_number = body.get("tempNumber")
-    new_number = body.get("vanityNumber")
+    old_number = body.tempNumber
+    new_number = body.vanityNumber
     print("Updating number from {old_number} to {new_number}")
 
     subscriber_info = hlr_instance.get_subscriber_by_msisdn(old_number)
@@ -56,8 +56,8 @@ def hlr_bind(body: CoreWebhookBody):
 
 def hlr_unbind(body: CoreWebhookBody):
     ## find vanityNumber in db and replace with tempNumber
-    old_number = body.get("vanityNumber")
-    new_number = body.get("tempNumber")
+    old_number = body.vanityNumber
+    new_number = body.tempNumber
 
     subscriber_info = hlr_instance.get_subscriber_by_msisdn(old_number)
     imsi = subscriber_info.get("imsi")
@@ -72,11 +72,9 @@ def hlr_unbind(body: CoreWebhookBody):
 
 
 def hlr_props(body: CoreWebhookBody):
-    DEFAULT_PROPS = {"ps": True}
-
-    vanity_number = body.get("vanityNumber")
-    temp_number = body.get("tempNumber")
-    properties = body.get("properties", DEFAULT_PROPS)
+    vanity_number = body.vanityNumber
+    temp_number = body.tempNumber
+    properties = body.properties
 
     subscriber_info = hlr_instance.get_subscriber_by_msisdn(vanity_number)
     if not subscriber_info:
@@ -116,7 +114,8 @@ async def core_webhook(body: CoreWebhookBody, verified: bool = Depends(verify_co
     except HTTPException:
         # Already a well-formed client/upstream error - re-raise as-is.
         raise
-    except Exception:
+    except Exception as e:
+        print(e)
         print(f"Unhandled error processing {body.event} event")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
