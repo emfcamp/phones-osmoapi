@@ -1,8 +1,7 @@
 from config import settings
 
 import smpplib.client
-import smpplib.consts
-import smpplib.gsm
+import smpplib.command
 import time
 
 
@@ -12,20 +11,29 @@ RETRY_DELAY = 15
 
 
 def handle_pdu(pdu):
-    print(pdu)
-    # if isinstance(pdu, smpplib.client.smpplib.smpp.DeliverSM):
-    #     try:
-    #         Try UCS-2 first, fall back to Latin-1
-    #         text = pdu.short_message.decode('utf-16-be')
-    #     except UnicodeDecodeError:
-    #         text = pdu.short_message.decode('latin-1')
+    global client
+    # Handle AlertNotification
+    if isinstance(pdu, smpplib.command.AlertNotification):
+        imsi = pdu.source_addr
+        print(f"smpplib.command.AlertNotification from {imsi=}")
+        return
 
-    #     print(f"[SMS] From: {pdu.source_addr.decode()} -> To: {pdu.destination_addr.decode()}")
-    #     print(f"      Text: {text}")
-    #     print()
+    print(pdu)
+    print(pdu.params)
+    print(f"[DEBUG] client.state = {client.state}")
+
+    if isinstance(pdu, smpplib.command.DeliverSM):
+        try:
+            text = pdu.short_message.decode("utf-16-be")
+        except UnicodeDecodeError:
+            text = pdu.short_message.decode("latin-1")
+
+        print(f"[SMS] From: {pdu.source_addr.decode()} -> To: {pdu.destination_addr.decode()}")
+        print(f"      Text: {text}\n")
 
 
 def connect_and_listen():
+    global client
     client = smpplib.client.Client(SMSC_HOST, SMSC_PORT)
     client.set_message_received_handler(handle_pdu)
     try:
@@ -34,6 +42,10 @@ def connect_and_listen():
         print(f"Connected to {SMSC_HOST}:{SMSC_PORT} — waiting for messages...\n")
         client.listen()
     finally:
+        try:
+            client.unbind()
+        except Exception:
+            pass
         client.disconnect()
 
 
