@@ -1,5 +1,5 @@
 from .config import settings
-from .osmoctrl import OsmoHLR
+from .osmoctrl import OsmoBSC, OsmoHLR, OsmoMSC
 
 import json
 from pathlib import Path
@@ -71,5 +71,7 @@ verify_core_token = make_bearer_verifier("core")
 verify_metrics_token = make_bearer_verifier("metrics")
 
 
-## Osmocom shared-hlr instance
+## Osmocom shared instances
+bsc_instance = OsmoBSC()
 hlr_instance = OsmoHLR()
+msc_instance = OsmoHLR()

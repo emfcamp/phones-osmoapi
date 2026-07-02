@@ -1,9 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from ..dependencies import security, verification
-from ..osmoctrl import OsmoMSC
+from ..dependencies import msc_instance, security, verification
 
-
-msc_instance = OsmoMSC()
 
 router = APIRouter(
     dependencies=[Depends(security)],

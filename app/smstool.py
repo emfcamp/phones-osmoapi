@@ -15,12 +15,12 @@ client_lock = threading.Lock()
 
 
 def decode_message(pdu):
-    coding = getattr(pdu, 'data_coding', 0)
+    coding = getattr(pdu, "data_coding", 0)
     try:
         if coding == 0x08:
-            return pdu.short_message.decode('utf-16-be')
+            return pdu.short_message.decode("utf-16-be")
         else:
-            return pdu.short_message.decode('latin-1')
+            return pdu.short_message.decode("latin-1")
     except Exception:
         return repr(pdu.short_message)
 

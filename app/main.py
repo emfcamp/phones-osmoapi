@@ -4,7 +4,7 @@ from prometheus_fastapi_instrumentator import Instrumentator, metrics
 from prometheus_client import REGISTRY, GC_COLLECTOR, PLATFORM_COLLECTOR, generate_latest, CONTENT_TYPE_LATEST
 
 from .config import settings
-from .dependencies import hlr_instance, verify_metrics_token
+from .dependencies import bsc_instance, hlr_instance, msc_instance, verify_metrics_token
 from .routers import bsc, emf, hlr, msc, telnet
 
 
@@ -45,10 +45,13 @@ def metrics():
     return Response(content=data, media_type=CONTENT_TYPE_LATEST)
 
 
-@app.get("/hlr-health", summary="Healtcheck to see if HLR is up", tags=["Healthchecks"])
+@app.get("/osmocom-health", summary="Healtcheck to see if osmocom components are up", tags=["Healthchecks"])
 async def healthcheck():
-    if hlr_instance._alive():
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return {
+        "osmo-bsc": bsc_instance._alive(),
+        "osmo-hlr": hlr_instance._alive(),
+        "osmo-msc": msc_instance._alive(),
+    }
 
     return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE)
 
