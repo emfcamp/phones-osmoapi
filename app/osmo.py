@@ -2,6 +2,7 @@ import logging
 from ipaddress import IPv4Address, IPv6Address
 from telnetlib3 import Telnet
 from typing import Union
+from .models import SendSmsRequest, SubscriberId
 
 
 class OsmocomHLR:
@@ -178,3 +179,12 @@ def osmo_msc_run_multiple_elevated(commands: list[str]) -> list[str]:
     response = osmomsc.run_multiple_commands(commands, elevated=True)
     osmomsc.disconnect()
     return response
+
+
+def send_sms(recipient: SubscriberId, sender: SubscriberId, message: str):
+    """
+    ### subscriber(msisdn|extension|imsi|tmsi|id) ID sms sender(msisdn|extension|imsi|tmsi|id) SENDER_ID send LINE
+    # % No subscriber found for msisdn 9990000
+    """
+    cmd = f"subscriber {recipient} sms sender {sender} send {message}"
+    return osmo_msc_run_single_elevated(cmd)

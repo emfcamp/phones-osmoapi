@@ -46,6 +46,7 @@ def hlr_bind(body: CoreWebhookBody):
     imsi = subscriber_info.get("imsi")
     if not imsi:
         return Response(status_code=status.HTTP_404_NOT_FOUND)
+
     print(f"Updating subscriber with {imsi=} MSISDN from {old_number} to {new_number}")
 
     result = hlr_instance.set_msisdn_by_imsi(imsi, new_number)

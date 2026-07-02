@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Literal, Union
 
 
 class MSISDNResponse(BaseModel):
@@ -24,3 +25,20 @@ class GetLocationResponse(BaseModel):
     lac: int = 12345
     cell_id: int = 1800
     dk: str = "C4"
+
+
+IdentifierKind = Literal["msisdn", "extension", "imsi", "tmsi", "id"]
+
+
+class SubscriberId(BaseModel):
+    kind: IdentifierKind
+    value: str
+
+    def __str__(self):
+        return f"{self.kind} {self.value}"
+
+
+class SendSmsRequest(BaseModel):
+    recipient: SubscriberId
+    sender: SubscriberId
+    message: str
