@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import status, FastAPI, Depends
 from fastapi.responses import RedirectResponse, Response
 from prometheus_fastapi_instrumentator import Instrumentator, metrics
@@ -6,6 +8,33 @@ from prometheus_client import REGISTRY, GC_COLLECTOR, PLATFORM_COLLECTOR, genera
 from .config import settings
 from .dependencies import bsc_instance, hlr_instance, msc_instance, verify_metrics_token
 from .routers import bsc, emf, hlr, msc, telnet
+
+
+class EndpointFilter(logging.Filter):
+    """Suppress 2xx access logs for noisy healthcheck/metrics endpoints."""
+
+    def __init__(self, paths: tuple[str, ...] = ("/health", "/metrics")):
+        super().__init__()
+        self.paths = paths
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        # uvicorn access log records have args like:
+        # (client_addr, method, path, http_version, status_code)
+        try:
+            args = record.args
+            if not args or len(args) < 5:
+                return True
+            path = args[2]
+            status_code = int(args[4])
+        except (IndexError, ValueError, TypeError):
+            return True
+
+        if path in self.paths and 200 <= status_code < 300:
+            return False
+        return True
+
+
+logging.getLogger("uvicorn.access").addFilter(EndpointFilter())
 
 
 app = FastAPI(
@@ -47,13 +76,14 @@ def metrics():
 
 @app.get("/osmocom-health", summary="Healtcheck to see if osmocom components are up", tags=["Healthchecks"])
 async def healthcheck():
-    return {
-        "osmo-bsc": bsc_instance._alive(),
-        "osmo-hlr": hlr_instance._alive(),
-        "osmo-msc": msc_instance._alive(),
-    }
-
-    return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE)
+    try:
+        return {
+            "osmo-bsc": bsc_instance._alive(),
+            "osmo-hlr": hlr_instance._alive(),
+            "osmo-msc": msc_instance._alive(),
+        }
+    except Exception as e:
+        return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
 @app.get("/health", summary="Basic API healthcheck", tags=["Healthchecks"])
