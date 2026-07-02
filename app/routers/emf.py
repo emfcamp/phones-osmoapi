@@ -44,6 +44,8 @@ def hlr_bind(body: CoreWebhookBody):
     subscriber_info = hlr_instance.get_subscriber_by_msisdn(old_number)
     print(subscriber_info)
     imsi = subscriber_info.get("imsi")
+    if not imsi:
+        return Response(status_code=status.HTTP_404_NOT_FOUND)
     print(f"Updating subscriber with {imsi=} MSISDN from {old_number} to {new_number}")
 
     result = hlr_instance.set_msisdn_by_imsi(imsi, new_number)
@@ -61,6 +63,8 @@ def hlr_unbind(body: CoreWebhookBody):
 
     subscriber_info = hlr_instance.get_subscriber_by_msisdn(old_number)
     imsi = subscriber_info.get("imsi")
+    if not imsi:
+        return Response(status_code=status.HTTP_404_NOT_FOUND)
     print(f"Updating subscriber with {imsi=} MSISDN from {old_number} to {new_number}")
 
     result = hlr_instance.set_msisdn_by_imsi(imsi, new_number)
@@ -93,6 +97,12 @@ def hlr_props(body: CoreWebhookBody):
 @router.post(
     "/core-webhook",
     summary="Webhook for binding/unbinding/properties",
+    responses={
+        204: {"description": "Success (probably)"},
+        401: {"description": "Authentication token was not set"},
+        404: {"description": "Subscriber not found"},
+        502: {"description": "Request failed."},
+    },
 )
 async def core_webhook(body: CoreWebhookBody, verified: bool = Depends(verify_core_token)):
     if body.service.lower() != "gsm":
