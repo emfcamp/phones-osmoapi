@@ -9,6 +9,7 @@ dependencies = [
     "osmoapi",
     "prometheus-fastapi-instrumentator>=8.0.0",
     "pydantic-settings>=2.14.1",
+    "smpplib>=2.2.4",
     "telnetlib3>=4.0.2",
     "uvicorn>=0.46.0",
 ]
