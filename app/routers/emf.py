@@ -55,20 +55,28 @@ def hlr_bind(body: CoreWebhookBody):
     result = hlr_instance.set_msisdn_by_imsi(imsi, new_number)
     print(result)
     if result == "OK":
-        send_sms(
-            SubscriberId(kind="imsi", value=str(settings.gsm_system_imsi)),
-            SubscriberId(kind="imsi", value=imsi),
-            message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s."
-        )
+        try:
+            send_sms(
+                SubscriberId(kind="imsi", value=str(settings.gsm_system_imsi)),
+                SubscriberId(kind="imsi", value=imsi),
+                message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s."
+            )
+        except Exception as e:
+            print(e)
+        
         return Response(status_code=status.HTTP_204_NO_CONTENT)
     
     now = datetime.now()
     datetime_str = now.strftime("%Y-%m-%d %H:%M:%S")
-    send_sms(
-        SubscriberId(kind="imsi", value=str(settings.gsm_system_imsi)),
-        SubscriberId(kind="imsi", value=imsi),
-        message=f"There was an error with your request to 191 at {datetime_str} - EMF"
-    )
+    try:
+        send_sms(
+            SubscriberId(kind="imsi", value=str(settings.gsm_system_imsi)),
+            SubscriberId(kind="imsi", value=imsi),
+            message=f"There was an error with your request to 191 at {datetime_str} - EMF"
+        )
+    except Exception as e:
+        print(e)
+    
     return Response(status_code=status.HTTP_502_BAD_GATEWAY)
 
 
@@ -87,20 +95,28 @@ def hlr_unbind(body: CoreWebhookBody):
     result = hlr_instance.set_msisdn_by_imsi(imsi, new_number)
     print(result)
     if result == "OK":
-        send_sms(
-            SubscriberId(kind="imsi", value=str(settings.gsm_system_imsi)),
-            SubscriberId(kind="imsi", value=imsi),
-            message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s."
-        )
+        try:
+            send_sms(
+                SubscriberId(kind="imsi", value=str(settings.gsm_system_imsi)),
+                SubscriberId(kind="imsi", value=imsi),
+                message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s."
+            )
+        except Exception as e:
+            print(e)
+        
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     now = datetime.now()
     datetime_str = now.strftime("%Y-%m-%d %H:%M:%S")
-    send_sms(
-        SubscriberId(kind="imsi", value=str(settings.gsm_system_imsi)),
-        SubscriberId(kind="imsi", value=imsi),
-        message=f"There was an error with your request to 191 at {datetime_str} - EMF"
-    )
+    try:
+        send_sms(
+            SubscriberId(kind="imsi", value=str(settings.gsm_system_imsi)),
+            SubscriberId(kind="imsi", value=imsi),
+            message=f"There was an error with your request to 191 at {datetime_str} - EMF"
+        )
+    except Exception as e:
+        print(e)
+    
     return Response(status_code=status.HTTP_502_BAD_GATEWAY)
 
 
