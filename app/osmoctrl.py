@@ -151,8 +151,8 @@ class OsmoHLR(OsmoComponent):
     def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.HLR):
         super().__init__(host, port, "osmohlr.log")
 
-    def get_subscriber_by_id(self, id: int):
-        return self._get_kv(f"subscriber.by-id-{id}.info")
+    def get_subscriber_by_id(self, sub_id: int):
+        return self._get_kv(f"subscriber.by-id-{sub_id}.info")
 
     def get_subscriber_by_imsi(self, imsi: int):
         return self._get_kv(f"subscriber.by-imsi-{imsi}.info")
@@ -161,8 +161,8 @@ class OsmoHLR(OsmoComponent):
         return self._get_kv(f"subscriber.by-msisdn-{msisdn}.info")
 
     ## Get parameter value
-    def get_subscriber_param_by_id(self, id: int, param: OsmoSubscriberParam):
-        return self._get(f"subscriber.by-id-{id}.{param.value}")
+    def get_subscriber_param_by_id(self, sub_id: int, param: OsmoSubscriberParam):
+        return self._get(f"subscriber.by-id-{sub_id}.{param.value}")
 
     def get_subscriber_param_by_imsi(self, imsi: int, param: OsmoSubscriberParam):
         return self._get(f"subscriber.by-imsi-{imsi}.{param.value}")
@@ -177,39 +177,39 @@ class OsmoHLR(OsmoComponent):
         return self._set("subscriber.delete", imsi)
 
     ## MSISDN
-    def set_msisdn_by_id(self, id: int, msisdn: int):
-        return self._set(f"subscriber.by-id-{id}.msisdn", msisdn)
+    def set_msisdn_by_id(self, sub_id: int, msisdn: int):
+        return self._set(f"subscriber.by-id-{sub_id}.msisdn", msisdn)
 
     def set_msisdn_by_imsi(self, imsi: int, msisdn: int):
         return self._set(f"subscriber.by-imsi-{imsi}.msisdn", msisdn)
 
     ## aud2g: algo[,KI]
-    def set_aud2g_by_id(self, id: int, aud2g: str):
-        return self._set(f"subscriber.by-id-{id}.aud2g", aud2g)
+    def set_aud2g_by_id(self, sub_id: int, aud2g: str):
+        return self._set(f"subscriber.by-id-{sub_id}.aud2g", aud2g)
 
     def set_aud2g_by_imsi(self, imsi: int, aud2g: str):
         return self._set(f"subscriber.by-imsi-{imsi}.aud2g", aud2g)
 
     ## aud3g: algo[,KI,("op"|"opc"),OP_C[,ind_bitlen]]
-    def set_aud3g_by_id(self, id: int, aud3g: str):
-        return self._set(f"subscriber.by-id-{id}.aud3g", aud3g)
+    def set_aud3g_by_id(self, sub_id: int, aud3g: str):
+        return self._set(f"subscriber.by-id-{sub_id}.aud3g", aud3g)
 
     def set_aud3g_by_imsi(self, imsi: int, aud3g: str):
         return self._set(f"subscriber.by-imsi-{imsi}.aud3g", aud3g)
 
     ## CS
-    def set_cs_by_id(self, id: int, enabled: bool = True):
+    def set_cs_by_id(self, sub_id: int, enabled: bool = True):
         value = 1 if enabled else 0
-        return self._set(f"subscriber.by-id-{id}.cs-enabled", value)
+        return self._set(f"subscriber.by-id-{sub_id}.cs-enabled", value)
 
     def set_cs_by_imsi(self, imsi: int, enabled: bool = True):
         value = 1 if enabled else 0
         return self._set(f"subscriber.by-imsi-{imsi}.cs-enabled", value)
 
     ## PS
-    def set_ps_by_id(self, id: int, enabled: bool = True):
+    def set_ps_by_id(self, sub_id: int, enabled: bool = True):
         value = 1 if enabled else 0
-        return self._set(f"subscriber.by-id-{id}.ps-enabled", value)
+        return self._set(f"subscriber.by-id-{sub_id}.ps-enabled", value)
 
     def set_ps_by_imsi(self, imsi: int, enabled: bool = True):
         value = 1 if enabled else 0
