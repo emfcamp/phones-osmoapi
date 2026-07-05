@@ -75,7 +75,7 @@ async def get_all_default_msisdns(verified: bool = Depends(verification)):
 async def get_all_hlr_msisdns(verified: bool = Depends(verification)):
     """Get all MSISDNs known to HLR"""
     try:
-        subsribers = get_all_subscribers_from_hlr()
+        subscribers = get_all_subscribers_from_hlr()
         return {"msisdns": [row["msisdn"] for row in subscribers]}
     except Exception as e:
         raise HTTPException(
