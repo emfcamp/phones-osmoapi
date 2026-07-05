@@ -56,7 +56,7 @@ def hlr_bind(body: CoreWebhookBody):
     print(result)
     if result == "OK":
         send_sms(
-            SubscriberId(kind="imsi", value=settings.gsm_system_imsi),
+            SubscriberId(kind="imsi", value=str(settings.gsm_system_imsi)),
             SubscriberId(kind="imsi", value=imsi),
             message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s."
         )
@@ -65,7 +65,7 @@ def hlr_bind(body: CoreWebhookBody):
     now = datetime.now()
     datetime_str = now.strftime("%Y-%m-%d %H:%M:%S")
     send_sms(
-        SubscriberId(kind="imsi", value=settings.gsm_system_imsi),
+        SubscriberId(kind="imsi", value=str(settings.gsm_system_imsi)),
         SubscriberId(kind="imsi", value=imsi),
         message="There was an error with your request to 191 at {datetime_str} - EMF"
     )
@@ -87,7 +87,7 @@ def hlr_unbind(body: CoreWebhookBody):
     print(result)
     if result == "OK":
         send_sms(
-            SubscriberId(kind="imsi", value=settings.gsm_system_imsi),
+            SubscriberId(kind="imsi", value=str(settings.gsm_system_imsi)),
             SubscriberId(kind="imsi", value=imsi),
             message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s."
         )
