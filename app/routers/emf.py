@@ -5,6 +5,8 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
 from pydantic import BaseModel, Field
 from ..config import settings
 from ..dependencies import bearer_scheme, hlr_instance, verify_core_token
+from ..models import SubscriberId
+from ..osmo import send_sms
 from ..osmoctrl import OsmoSubscriberParam
 
 
@@ -52,8 +54,18 @@ def hlr_bind(body: CoreWebhookBody):
     result = hlr_instance.set_msisdn_by_imsi(imsi, new_number)
     print(result)
     if result == "OK":
+        send_sms(
+            SubscriberId(kind="imsi", value=imsi),
+            SubscriberId(kind="imsi", value=imsi),
+            message="Successfully updated your phone number. Please restart your device to take effect."
+        )
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+    send_sms(
+        SubscriberId(kind="imsi", value=imsi),
+        SubscriberId(kind="imsi", value=imsi),
+        message="Failed to bind your number!"
+    )
     return Response(status_code=status.HTTP_502_BAD_GATEWAY)
 
 
@@ -71,6 +83,11 @@ def hlr_unbind(body: CoreWebhookBody):
     result = hlr_instance.set_msisdn_by_imsi(imsi, new_number)
     print(result)
     if result == "OK":
+        send_sms(
+            SubscriberId(kind="imsi", value=imsi),
+            SubscriberId(kind="imsi", value=imsi),
+            message="Successfully updated your phone number. Please restart your device to take effect."
+        )
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     return Response(status_code=status.HTTP_502_BAD_GATEWAY)
