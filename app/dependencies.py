@@ -67,6 +67,19 @@ def make_bearer_verifier(token_key: str):
     return verify
 
 
+def hlr_register_emf_numbers():
+    print("Checking hlr for system number")
+    subscriber = hlr_instance.get_subscriber_by_msisdn(settings.gsm_system_number)
+    if not subscriber:
+        hlr_instance.easy_create(
+            imsi=settings.gsm_system_imsi,
+            msisdn=settings.gsm_system_number,
+            cs=False,
+            ps=False,
+        )
+        print(f"Created GSM user with number: {settings.gsm_system_number}")
+
+
 verify_core_token = make_bearer_verifier("core")
 verify_metrics_token = make_bearer_verifier("metrics")
 
@@ -75,3 +88,5 @@ verify_metrics_token = make_bearer_verifier("metrics")
 bsc_instance = OsmoBSC()
 hlr_instance = OsmoHLR()
 msc_instance = OsmoHLR()
+
+hlr_register_emf_numbers()

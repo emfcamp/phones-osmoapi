@@ -220,15 +220,15 @@ class OsmoHLR(OsmoComponent):
         """Single function to create subscriber with all params"""
         ## TODO: Check if msisdn already exists and throw a different error
 
-        id = self.create_subscriber(imsi)
-        if self.set_msisdn_by_id(id, msisdn) != "OK":
-            logging.error(f"Failed to set msisdn for newly created subscriber ID {id}")
-            return f"Failed to set msisdn for newly created subscriber ID {id}"
+        _id = self.create_subscriber(imsi)
+        if self.set_msisdn_by_id(_id, msisdn) != "OK":
+            logging.error(f"Failed to set msisdn for newly created subscriber ID {_id}")
+            return f"Failed to set msisdn for newly created subscriber ID {_id}"
 
-        self.set_cs_by_id(id, cs)
-        self.set_ps_by_id(id, ps)
+        self.set_cs_by_id(_id, cs)
+        self.set_ps_by_id(_id, ps)
 
-        return self.get_subscriber_by_id(id)
+        return self.get_subscriber_by_id(_id)
 
 
 class OsmoMSC(OsmoComponent):

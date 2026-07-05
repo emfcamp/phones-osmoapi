@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Annotated, Literal, Optional
 from functools import wraps
 
@@ -55,16 +56,18 @@ def hlr_bind(body: CoreWebhookBody):
     print(result)
     if result == "OK":
         send_sms(
+            SubscriberId(kind="imsi", value=settings.gsm_system_imsi),
             SubscriberId(kind="imsi", value=imsi),
-            SubscriberId(kind="imsi", value=imsi),
-            message=f"Sucessfully changed your number from {old_number} to {new_number}! For your phone to pick up the change you must now: turn your phone off and on again, or turn airplane mode on for at least 10 seconds."
+            message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s."
         )
         return Response(status_code=status.HTTP_204_NO_CONTENT)
-
+    
+    now = datetime.now()
+    datetime_str = now.strftime("%Y-%m-%d %H:%M:%S")
     send_sms(
+        SubscriberId(kind="imsi", value=settings.gsm_system_imsi),
         SubscriberId(kind="imsi", value=imsi),
-        SubscriberId(kind="imsi", value=imsi),
-        message="Failed to bind your number!"
+        message="There was an error with your request to 191 at {datetime_str} - EMF"
     )
     return Response(status_code=status.HTTP_502_BAD_GATEWAY)
 
@@ -84,9 +87,9 @@ def hlr_unbind(body: CoreWebhookBody):
     print(result)
     if result == "OK":
         send_sms(
+            SubscriberId(kind="imsi", value=settings.gsm_system_imsi),
             SubscriberId(kind="imsi", value=imsi),
-            SubscriberId(kind="imsi", value=imsi),
-            message=f"Sucessfully changed your number from {old_number} to {new_number}! For your phone to pick up the change you must now: turn your phone off and on again, or turn airplane mode on for at least 10 seconds."
+            message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s."
         )
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 

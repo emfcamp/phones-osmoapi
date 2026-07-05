@@ -12,5 +12,8 @@ class Settings(BaseSettings):
     smpp_password: str = environ.get("SMPP_PASSWORD", "El3cTR1k")
     smpp_port: int = environ.get("SMPP_PORT", 2775)
 
+    gsm_system_number: int = 476
+    gsm_system_imsi: int = 999001234599999
+
 
 settings = Settings()
