@@ -57,7 +57,7 @@ def hlr_bind(body: CoreWebhookBody):
         send_sms(
             SubscriberId(kind="imsi", value=imsi),
             SubscriberId(kind="imsi", value=imsi),
-            message="Successfully updated your phone number. Please restart your device to take effect."
+            message=f"Sucessfully changed your number from {old_number} to {new_number}! For your phone to pick up the change you must now: turn your phone off and on again, or turn airplane mode on for at least 10 seconds."
         )
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -86,7 +86,7 @@ def hlr_unbind(body: CoreWebhookBody):
         send_sms(
             SubscriberId(kind="imsi", value=imsi),
             SubscriberId(kind="imsi", value=imsi),
-            message="Successfully updated your phone number. Please restart your device to take effect."
+            message=f"Sucessfully changed your number from {old_number} to {new_number}! For your phone to pick up the change you must now: turn your phone off and on again, or turn airplane mode on for at least 10 seconds."
         )
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
