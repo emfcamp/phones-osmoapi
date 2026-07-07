@@ -59,24 +59,24 @@ def hlr_bind(body: CoreWebhookBody):
             send_sms(
                 SubscriberId(kind="imsi", value=imsi),
                 SubscriberId(kind="imsi", value=imsi),
-                message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s."
+                message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s.",
             )
         except Exception as e:
             print(e)
-        
+
         return Response(status_code=status.HTTP_204_NO_CONTENT)
-    
+
     now = datetime.now()
     datetime_str = now.strftime("%Y-%m-%d %H:%M:%S")
     try:
         send_sms(
             SubscriberId(kind="imsi", value=imsi),
             SubscriberId(kind="imsi", value=imsi),
-            message=f"There was an error with your request to 191 at {datetime_str} - EMF"
+            message=f"There was an error with your request to 191 at {datetime_str} - EMF",
         )
     except Exception as e:
         print(e)
-    
+
     return Response(status_code=status.HTTP_502_BAD_GATEWAY)
 
 
@@ -99,11 +99,11 @@ def hlr_unbind(body: CoreWebhookBody):
             send_sms(
                 SubscriberId(kind="imsi", value=imsi),
                 SubscriberId(kind="imsi", value=imsi),
-                message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s."
+                message=f"Your number will now change from {old_number} to {new_number} when you turn your phone off and on again, or turn airplane mode on for at least 10s.",
             )
         except Exception as e:
             print(e)
-        
+
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     now = datetime.now()
@@ -112,11 +112,11 @@ def hlr_unbind(body: CoreWebhookBody):
         send_sms(
             SubscriberId(kind="imsi", value=imsi),
             SubscriberId(kind="imsi", value=imsi),
-            message=f"There was an error with your request to 191 at {datetime_str} - EMF"
+            message=f"There was an error with your request to 191 at {datetime_str} - EMF",
         )
     except Exception as e:
         print(e)
-    
+
     return Response(status_code=status.HTTP_502_BAD_GATEWAY)
 
 

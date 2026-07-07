@@ -15,5 +15,7 @@ class Settings(BaseSettings):
     gsm_system_number: int = 476
     gsm_system_imsi: int = 999001234599999
 
+    pyhss_url: str = "http://vm-phones07.emf.camp:8080/"
+
 
 settings = Settings()
