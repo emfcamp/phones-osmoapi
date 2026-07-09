@@ -1,25 +1,5 @@
 """
 Thin async client for the pyHSS provisioning REST API.
-
-pyHSS replaces osmo-hlr as the subscriber database. It exposes a
-Swagger/OpenAPI RESTful API (see swagger.json) for CRUD operations on
-Subscriber, AuC (crypto/SIM), and APN objects, amongst others.
-
-Key differences vs. osmo-hlr's ctrl-interface wrapper that this file
-replaces:
-
-- pyHSS splits "subscriber" (routing/service data - MSISDN, APN list,
-  AMBR, enabled flag, etc.) from "auc" (the actual SIM crypto material -
-  Ki/OPc/AMF/SQN/2G algo). They're linked by subscriber.auc_id.
-- Lookups by IMSI/MSISDN return the full object *including* its numeric
-  id (subscriber_id / auc_id). Updates and deletes are then done by that
-  id, not by IMSI - so most "do something by IMSI" helpers below do a
-  GET-by-IMSI first to resolve the id, then act on it.
-- There's no combined "create subscriber + auc + apn" convenience call;
-  each object is created separately.
-- Optional auth: if the pyHSS instance has `lock_provisioning: true` in
-  its config.yaml, every request must carry a `Provisioning-Key` header
-  matching its configured `provisioning_key`.
 """
 
 from typing import Any, Optional
@@ -120,9 +100,6 @@ class PyHSSClient:
         return await self._request("PUT", "/apn/", json=payload)
 
 
-# Module-level singleton, configured from settings. Create once, reuse
-# everywhere (mirrors how `hlr_instance` was previously imported from
-# ..dependencies).
 pyhss_client = PyHSSClient(
     base_url=settings.pyhss_base_url,
     provisioning_key=getattr(settings, "pyhss_provisioning_key", None),

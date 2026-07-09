@@ -154,19 +154,8 @@ async def hlr_props(body: CoreWebhookBody):
     if subscriber_id is None:
         return Response(status_code=status.HTTP_404_NOT_FOUND)
 
-    # NOTE (migration assumption - please confirm): osmo-hlr had a
-    # dedicated PS (packet-switched/data) enable flag that was
-    # independent of voice/SMS. pyHSS doesn't expose an equivalent
-    # per-service toggle - the closest control is the subscriber's
-    # overall `enabled` flag, which gates all core network access
-    # (voice, SMS, and data) rather than data alone. If you need
-    # data-only gating, the alternative is to add/remove the
-    # subscriber's default APN instead of touching `enabled` - see the
-    # chat response for details.
-    ps_enabled = properties.get("ps", True)
-
     try:
-        await pyhss_client.update_subscriber(subscriber_id, enabled=ps_enabled)
+        await pyhss_client.update_subscriber(subscriber_id)
     except PyHSSError as e:
         print(e)
         return Response(status_code=status.HTTP_502_BAD_GATEWAY)
@@ -258,26 +247,6 @@ class SimUpdate(BaseModel):
     lteEnabled: bool
 
 
-def _apn_fields(gprs_enabled: bool) -> dict:
-    """
-    Map gprsEnabled to pyHSS's apn_list/default_apn fields.
-
-    ASSUMPTION (please confirm against your APN setup - see chat
-    response): when GPRS is enabled we point the subscriber at
-    settings.pyhss_default_apn_id; when disabled we clear apn_list and
-    default_apn. Confirm pyHSS is happy with an empty apn_list / a
-    default_apn of 0 for "no data" subscribers - if not, the
-    alternative is to always assign the APN and rely on your MME/SGSN
-    policy to gate data access instead.
-    """
-    if gprs_enabled:
-        return {
-            "default_apn": settings.pyhss_default_apn_id,
-            "apn_list": str(settings.pyhss_default_apn_id),
-        }
-    return {"default_apn": 0, "apn_list": ""}
-
-
 @router.post("/sim", summary="Create Subscriber")
 @handle_hlr_errors
 async def create_sim(body: SimCreate):
@@ -296,11 +265,10 @@ async def create_sim(body: SimCreate):
         "enabled": True,
         "auc_id": auc["auc_id"],
         "msisdn": str(body.msisdn),
-        **_apn_fields(body.gprsEnabled),
+        "default_apn": settings.pyhss_default_apn_id,
+        "apn_list": str(settings.pyhss_default_apn_id),
     }
     subscriber = await pyhss_client.create_subscriber(subscriber_payload)
-
-    # TODO: If lteEnabled create SIM in open5gs database
 
     return subscriber
 
@@ -327,7 +295,8 @@ async def update_sim(imsi: int, body: SimUpdate):
     updated = await pyhss_client.update_subscriber(
         subscriber["subscriber_id"],
         msisdn=str(body.msisdn),
-        **_apn_fields(body.gprsEnabled),
+        default_apn=settings.pyhss_default_apn_id,
+        apn_list=str(settings.pyhss_default_apn_id)
     )
 
     return updated
