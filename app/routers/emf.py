@@ -237,7 +237,7 @@ class SimCreate(BaseModel):
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
     gprsEnabled: bool
-    name: str
+    name: Optional[str]
 
 
 class SimUpdate(BaseModel):
@@ -248,7 +248,7 @@ class SimUpdate(BaseModel):
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
     gprsEnabled: bool
-    name: str
+    name: Optional[str]
 
 
 @router.post("/sim", summary="Create Subscriber")
