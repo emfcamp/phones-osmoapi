@@ -237,6 +237,7 @@ class SimCreate(BaseModel):
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
     gprsEnabled: bool
+    name: str
 
 
 class SimUpdate(BaseModel):
@@ -247,11 +248,13 @@ class SimUpdate(BaseModel):
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
     gprsEnabled: bool
+    name: str
 
 
 @router.post("/sim", summary="Create Subscriber")
 @handle_hlr_errors
 async def create_sim(body: SimCreate):
+    print(f"Creating SIM {body.iccid=} {body.name=}")
     auc = await pyhss_client.create_auc(
         {
             "imsi": str(body.imsi),
@@ -273,6 +276,16 @@ async def create_sim(body: SimCreate):
         "apn_list": str(settings.pyhss_default_apn_id),
     }
     subscriber = await pyhss_client.create_subscriber(subscriber_payload)
+
+    # Set name attribute
+    if body.name:
+        subscriber_name = await pyhss_client.create_subscriber_attribute(
+            {
+                "subscriber_id": subscriber["subscriber_id"],
+                "name": "name",
+                "value": str(body.name),
+            }
+        )
 
     return subscriber
 
@@ -313,6 +326,14 @@ async def update_sim_by_subscriberid(subscriber_id: int, body: SimUpdate):
         apn_list=str(settings.pyhss_default_apn_id),
     )
 
+    ## Subscriber attributes
+    attributes = await pyhss_client.get_subscriber_attributes(subscriber["subscriber_id"])
+    subscriber_attribute_id = next((item["subscriber_attributes_id"] for item in attributes if item["key"] == "name"), None)
+    if subscriber_attribute_id:
+        await pyhss_client.update_subscriber_attribute(subscriber["subscriber_id"], {"value": str(body.name)})
+    else:
+        await pyhss_client.create_subscriber_attribute({"subscriber_id": subscriber["subscriber_id"], "name": "name", "value": str(body.name)})
+
     return updated
 
 
@@ -322,6 +343,10 @@ async def delete_sim(subscriber_id: int):
     subscriber = await pyhss_client.get_subscriber(subscriber_id)
     if not subscriber:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subscriber not found")
+
+    attributes = await pyhss_client.get_subscriber_attributes(subscriber["subscriber_id"])
+    for attribute in attributes:
+        await pyhss_client.delete_subscriber_attribute(attribute["subscriber_attributes_id"])
 
     result = await pyhss_client.delete_subscriber(subscriber["subscriber_id"])
     auc_id = subscriber.get("auc_id")

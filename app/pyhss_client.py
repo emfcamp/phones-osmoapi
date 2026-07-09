@@ -74,6 +74,20 @@ class PyHSSClient:
     async def delete_subscriber(self, subscriber_id) -> Optional[dict]:
         return await self._request("DELETE", f"/subscriber/{subscriber_id}")
 
+    # ---- Subscriber Attributes -----------------------------------------
+
+    async def get_subscriber_attributes(self, subscriber_id) -> Optional[dict]:
+        return await self._request("GET", f"/subscriber_attributes/{subscriber_id}")
+
+    async def create_subscriber_attribute(self, payload: dict) -> dict:
+        return await self._request("PUT", "/subscriber_attributes/", json=payload)
+
+    async def update_subscriber_attribute(self, subscriber_id, **fields) -> Optional[dict]:
+        return await self._request("PATCH", f"/subscriber_attributes/{subscriber_attributes_id}", json=fields)
+
+    async def delete_subscriber_attribute(self, subscriber_id) -> Optional[dict]:
+        return await self._request("DELETE", f"/subscriber_attributes/{subscriber_attributes_id}")
+
     # ---- AuC (SIM crypto material) --------------------------------------
 
     async def get_auc_by_imsi(self, imsi) -> Optional[dict]:
