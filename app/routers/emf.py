@@ -310,7 +310,7 @@ async def update_sim_by_subscriberid(subscriber_id: int, body: SimUpdate):
         subscriber["subscriber_id"],
         msisdn=str(body.msisdn),
         default_apn=settings.pyhss_default_apn_id,
-        apn_list=str(settings.pyhss_default_apn_id)
+        apn_list=str(settings.pyhss_default_apn_id),
     )
 
     return updated
