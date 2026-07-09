@@ -241,7 +241,6 @@ class SimCreate(BaseModel):
 
 
 class SimUpdate(BaseModel):
-    subscriber_id: int
     imsi: str
     iccid: str
     msisdn: int
@@ -294,7 +293,7 @@ async def create_sim(body: SimCreate):
 @router.get("/sim/{subscriber_id}", summary="Fetch SIM information from pyHSS by subscriber_id")
 @handle_hlr_errors
 async def fetch_sim_by_subscriberid(subscriber_id: int):
-    subscriber = await pyhss_client.get_subscriber_by_id(subscriber_id)
+    subscriber = await pyhss_client.get_subscriber(subscriber_id)
     if not subscriber:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subscriber not found")
 
@@ -347,6 +346,7 @@ async def delete_sim(subscriber_id: int):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subscriber not found")
 
     attributes = await pyhss_client.get_subscriber_attributes(subscriber["subscriber_id"])
+    print(attributes)
     for attribute in attributes:
         await pyhss_client.delete_subscriber_attribute(attribute["subscriber_attributes_id"])
 
