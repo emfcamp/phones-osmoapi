@@ -359,7 +359,7 @@ async def delete_sim(subscriber_id: int):
     return resul
 
 
-@router.get("/sim/list", summary="Fetch SIM list")
+@router.get("/list-subscribers", summary="Fetch subscribers")
 @handle_hlr_errors
 async def fetch_subscriber_list():
     subscribers = await pyhss_client.get_subscribers()
