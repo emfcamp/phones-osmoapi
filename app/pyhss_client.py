@@ -55,7 +55,7 @@ class PyHSSClient:
 
     # ---- Subscriber -----------------------------------------------------
 
-    async def get_subscribers(self) -> Optional[dict]:
+    async def get_subscribers(self) -> Optional[list]:
         return await self._request("GET", f"/subscriber/list?page=0&page_size=500")
 
     async def get_subscriber_by_imsi(self, imsi) -> Optional[dict]:
