@@ -231,8 +231,8 @@ def handle_hlr_errors(fn):
 
 
 class SimCreate(BaseModel):
-    imsi: int
-    iccid: int
+    imsi: str
+    iccid: str
     msisdn: int
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
@@ -242,8 +242,8 @@ class SimCreate(BaseModel):
 
 class SimUpdate(BaseModel):
     subscriber_id: int
-    imsi: int
-    iccid: int
+    imsi: str
+    iccid: str
     msisdn: int
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
@@ -257,8 +257,8 @@ async def create_sim(body: SimCreate):
     print(f"Creating SIM {body.iccid=} {body.name=}")
     auc = await pyhss_client.create_auc(
         {
-            "imsi": str(body.imsi),
-            "iccid": str(body.iccid),
+            "imsi": body.imsi,
+            "iccid": body.iccid,
             "sqn": 0,
             "ki": body.ki,
             "opc": body.opc,
