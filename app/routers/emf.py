@@ -288,9 +288,7 @@ async def create_sim(body: SimCreate):
         )
     print(subscriber)
 
-    return {
-        "subscriber_id": subscriber["subscriber_id"]
-    }
+    return {"subscriber_id": subscriber["subscriber_id"]}
 
 
 @router.get("/sim/{subscriber_id}", summary="Fetch SIM information from pyHSS by subscriber_id")
@@ -336,11 +334,9 @@ async def update_sim_by_subscriberid(subscriber_id: int, body: SimUpdate):
         await pyhss_client.update_subscriber_attribute(subscriber["subscriber_id"], {"value": str(body.name)})
     else:
         await pyhss_client.create_subscriber_attribute({"subscriber_id": subscriber["subscriber_id"], "name": "name", "value": str(body.name)})
-    
+
     print(updated)
-    return {
-        "subscriber_id": updated["subscriber_id"]
-    }
+    return {"subscriber_id": updated["subscriber_id"]}
 
 
 @router.delete("/sim/{subscriber_id}", summary="Delete subscriber_id and AuC from pyHSS")
@@ -360,4 +356,16 @@ async def delete_sim(subscriber_id: int):
         await pyhss_client.delete_auc(auc_id)
 
     print(result)
-    return result
+    return resul
+
+
+@router.get("/sim/list", summary="Fetch SIM list")
+@handle_hlr_errors
+async def fetch_sim_by_subscriberid():
+    subscribers = await pyhss_client.get_subscribers()
+
+    output = []
+    for subscriber in subscribers:
+        output.append({"subscriber_id": subscriber["subscriber_id"], "msisdn": subscriber["msisdn"]})
+
+    return subscriber
