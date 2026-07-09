@@ -368,4 +368,4 @@ async def fetch_subscriber_list():
     for subscriber in subscribers:
         output.append({"subscriber_id": subscriber["subscriber_id"], "msisdn": subscriber["msisdn"]})
 
-    return subscriber
+    return output
