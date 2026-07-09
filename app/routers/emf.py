@@ -232,19 +232,21 @@ def handle_hlr_errors(fn):
 
 class SimCreate(BaseModel):
     imsi: int
+    iccid: int
     msisdn: int
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
     gprsEnabled: bool
-    lteEnabled: bool
 
 
 class SimUpdate(BaseModel):
+    subscriber_id: int
+    imsi: int
+    iccid: int
     msisdn: int
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
     gprsEnabled: bool
-    lteEnabled: bool
 
 
 @router.post("/sim", summary="Create Subscriber")
@@ -253,6 +255,8 @@ async def create_sim(body: SimCreate):
     auc = await pyhss_client.create_auc(
         {
             "imsi": str(body.imsi),
+            "iccid": str(body.iccid),
+            "sqn": 0,
             "ki": body.ki,
             "opc": body.opc,
             "amf": settings.pyhss_default_amf,
@@ -273,9 +277,19 @@ async def create_sim(body: SimCreate):
     return subscriber
 
 
-@router.get("/sim/{imsi}", summary="")
+@router.get("/sim/{subscriber_id}", summary="Fetch SIM information from pyHSS by subscriber_id")
 @handle_hlr_errors
-async def fetch_sim(imsi: int):
+async def fetch_sim_by_subscriberid(subscriber_id: int):
+    subscriber = await pyhss_client.get_subscriber_by_id(subscriber_id)
+    if not subscriber:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subscriber not found")
+
+    return subscriber
+
+
+@router.get("/sim/imsi/{imsi}", summary="Fetch SIM information from pyHSS by imsi")
+@handle_hlr_errors
+async def fetch_sim_by_imsi(imsi: int):
     subscriber = await pyhss_client.get_subscriber_by_imsi(imsi)
     if not subscriber:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subscriber not found")
@@ -283,14 +297,14 @@ async def fetch_sim(imsi: int):
     return subscriber
 
 
-@router.patch("/sim/{imsi}", summary="")
+@router.patch("/sim/{subscriber_id}", summary="Update SIM information from pyHSS by subscriber_id")
 @handle_hlr_errors
-async def update_sim(imsi: int, body: SimUpdate):
-    subscriber = await pyhss_client.get_subscriber_by_imsi(imsi)
+async def update_sim_by_subscriberid(subscriber_id: int, body: SimUpdate):
+    subscriber = await pyhss_client.get_subscriber(subscriber_id)
     if not subscriber:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subscriber not found")
 
-    await pyhss_client.update_auc(subscriber["auc_id"], ki=body.ki, opc=body.opc)
+    await pyhss_client.update_auc(subscriber["auc_id"], ki=body.ki, opc=body.opc, imsi=body.imsi, iccid=body.iccid)
 
     updated = await pyhss_client.update_subscriber(
         subscriber["subscriber_id"],
@@ -302,10 +316,10 @@ async def update_sim(imsi: int, body: SimUpdate):
     return updated
 
 
-@router.delete("/sim/{imsi}", summary="")
+@router.delete("/sim/{subscriber_id}", summary="Delete subscriber_id and AuC from pyHSS")
 @handle_hlr_errors
-async def delete_sim(imsi: int):
-    subscriber = await pyhss_client.get_subscriber_by_imsi(imsi)
+async def delete_sim(subscriber_id: int):
+    subscriber = await pyhss_client.get_subscriber(subscriber_id)
     if not subscriber:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subscriber not found")
 
