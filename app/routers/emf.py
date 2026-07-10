@@ -356,13 +356,13 @@ async def update_sim_by_subscriberid(subscriber_id: int, body: SimUpdate):
     attributes = await pyhss_client.get_subscriber_attributes(subscriber["subscriber_id"])
     subscriber_attribute_id = next((item["subscriber_attributes_id"] for item in attributes if item["key"] == "subscriberName"), None)
     if subscriber_attribute_id:
-        await pyhss_client.update_subscriber_attribute(subscriber["subscriber_id"], {"value": str(body.name)})
+        await pyhss_client.update_subscriber_attribute(subscriber_attribute_id, key="subscriberName", value=str(body.name))
     else:
         await pyhss_client.create_subscriber_attribute(
             {
                 "subscriber_id": subscriber["subscriber_id"],
                 "key": "subscriberName",
-                "value": str(body.name)
+                "value": str(body.name),
             }
         )
 
@@ -391,7 +391,7 @@ async def delete_sim(subscriber_id: int):
 
     if result["Result"] == "OK":
         return Response(status_code=status.HTTP_204_NO_CONTENT)
-    
+
     print(result)
     return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -404,12 +404,14 @@ async def fetch_subscriber_list():
     output = []
     for subscriber in subscribers:
         attributes = await pyhss_client.get_subscriber_attributes(subscriber["subscriber_id"])
-        output.append({
-            "attributes": attributes,
-            "auc_id": subscriber["auc_id"],
-            "subscriber_id": subscriber["subscriber_id"],
-            "imsi":  subscriber["imsi"],
-            "msisdn": subscriber["msisdn"]
-        })
+        output.append(
+            {
+                "attributes": attributes,
+                "auc_id": subscriber["auc_id"],
+                "subscriber_id": subscriber["subscriber_id"],
+                "imsi": subscriber["imsi"],
+                "msisdn": subscriber["msisdn"],
+            }
+        )
 
     return output

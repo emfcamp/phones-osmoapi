@@ -64,6 +64,7 @@ class PyHSSClient:
         if resp.status_code == 404:
             return None
         if resp.status_code >= 400:
+            self.logger.error(f"HTTP {resp.status_code}: {resp.text}")
             raise PyHSSError(
                 f"pyHSS API error {resp.status_code} on {method} {path}: {resp.text}",
                 status_code=resp.status_code,
