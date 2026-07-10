@@ -281,7 +281,7 @@ async def create_sim(body: SimCreate):
         subscriber_name = await pyhss_client.create_subscriber_attribute(
             {
                 "subscriber_id": subscriber["subscriber_id"],
-                "name": "name",
+                "name": "subscriberName",
                 "value": str(body.name),
             }
         )
@@ -332,7 +332,7 @@ async def update_sim_by_subscriberid(subscriber_id: int, body: SimUpdate):
     if subscriber_attribute_id:
         await pyhss_client.update_subscriber_attribute(subscriber["subscriber_id"], {"value": str(body.name)})
     else:
-        await pyhss_client.create_subscriber_attribute({"subscriber_id": subscriber["subscriber_id"], "name": "name", "value": str(body.name)})
+        await pyhss_client.create_subscriber_attribute({"subscriber_id": subscriber["subscriber_id"], "name": "subscriberName", "value": str(body.name)})
 
     print(updated)
     return {"subscriber_id": updated["subscriber_id"]}
