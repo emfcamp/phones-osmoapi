@@ -346,7 +346,6 @@ async def delete_sim(subscriber_id: int):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subscriber not found")
 
     attributes = await pyhss_client.get_subscriber_attributes(subscriber["subscriber_id"])
-    print(attributes)
     for attribute in attributes:
         await pyhss_client.delete_subscriber_attribute(attribute["subscriber_attributes_id"])
 

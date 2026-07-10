@@ -85,10 +85,10 @@ class PyHSSClient:
     async def create_subscriber_attribute(self, payload: dict) -> dict:
         return await self._request("PUT", "/subscriber_attributes/", json=payload)
 
-    async def update_subscriber_attribute(self, subscriber_id, **fields) -> Optional[dict]:
+    async def update_subscriber_attribute(self, subscriber_attributes_id, **fields) -> Optional[dict]:
         return await self._request("PATCH", f"/subscriber_attributes/{subscriber_attributes_id}", json=fields)
 
-    async def delete_subscriber_attribute(self, subscriber_id) -> Optional[dict]:
+    async def delete_subscriber_attribute(self, subscriber_attributes_id) -> Optional[dict]:
         return await self._request("DELETE", f"/subscriber_attributes/{subscriber_attributes_id}")
 
     # ---- AuC (SIM crypto material) --------------------------------------
