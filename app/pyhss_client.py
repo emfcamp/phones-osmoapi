@@ -93,6 +93,9 @@ class PyHSSClient:
 
     # ---- AuC (SIM crypto material) --------------------------------------
 
+    async def get_auc_by_iccid(self, iccid) -> Optional[dict]:
+        return await self._request("GET", f"/auc/iccid/{iccid}")
+
     async def get_auc_by_imsi(self, imsi) -> Optional[dict]:
         return await self._request("GET", f"/auc/imsi/{imsi}")
 

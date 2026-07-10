@@ -254,6 +254,21 @@ class SimUpdate(BaseModel):
 @handle_hlr_errors
 async def create_sim(body: SimCreate):
     print(f"Creating SIM {body.iccid=} {body.name=}")
+    auc_imsi_lookup = await pyhss_client.get_auc_by_imsi(body.imsi)
+    auc_iccid_lookup = await pyhss_client.get_auc_by_iccid(body.iccid)
+    sub_imsi_lookup = await pyhss_client.get_subscriber_by_imsi(body.imsi)
+
+    if sub_imsi_lookup != "null":
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="IMSI already exists in subscriber database!")
+
+    imsi_iccid_auc_match = auc_imsi_lookup != "null" and auc_iccid_lookup != "null"
+    if not imsi_iccid_auc_match:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="IMSI or ICCID already exist in database.")
+
+    if auc_imsi_lookup["auc_id"] != auc_iccid_lookup["auc_id"]:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="IMSI and ICCID already exist in database but for different subscribers!")
+
+    print(f"Creating AuC for subscriber...")
     auc = await pyhss_client.create_auc(
         {
             "imsi": body.imsi,
@@ -274,17 +289,27 @@ async def create_sim(body: SimCreate):
         "default_apn": settings.pyhss_default_apn_id,
         "apn_list": str(settings.pyhss_default_apn_id),
     }
-    subscriber = await pyhss_client.create_subscriber(subscriber_payload)
+    try:
+        print(f"Creating subscriber...")
+        subscriber = await pyhss_client.create_subscriber(subscriber_payload)
+    except:
+        ## Failed to create subscriber so delete auc so we are not left with un-associated key information
+        pyhss_client.delete_auc(auc["auc_id"])
 
     # Set name attribute
     if body.name:
-        subscriber_name = await pyhss_client.create_subscriber_attribute(
-            {
-                "subscriber_id": subscriber["subscriber_id"],
-                "name": "subscriberName",
-                "value": str(body.name),
-            }
-        )
+        try:
+            print(f"Assigning subscriber name...")
+            subscriber_name = await pyhss_client.create_subscriber_attribute(
+                {
+                    "subscriber_id": subscriber["subscriber_id"],
+                    "name": "subscriberName",
+                    "value": str(body.name),
+                }
+            )
+        except Exception as e:
+            print("Failed to assign subscriber name, ignoring...")
+
     print(subscriber)
 
     return {"subscriber_id": subscriber["subscriber_id"]}
@@ -332,7 +357,9 @@ async def update_sim_by_subscriberid(subscriber_id: int, body: SimUpdate):
     if subscriber_attribute_id:
         await pyhss_client.update_subscriber_attribute(subscriber["subscriber_id"], {"value": str(body.name)})
     else:
-        await pyhss_client.create_subscriber_attribute({"subscriber_id": subscriber["subscriber_id"], "name": "subscriberName", "value": str(body.name)})
+        await pyhss_client.create_subscriber_attribute(
+            {"subscriber_id": subscriber["subscriber_id"], "name": "subscriberName", "value": str(body.name)}
+        )
 
     print(updated)
     return {"subscriber_id": updated["subscriber_id"]}
