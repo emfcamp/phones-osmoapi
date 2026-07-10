@@ -251,8 +251,8 @@ class SimUpdate(BaseModel):
 
 
 @router.post("/sim", summary="Create Subscriber")
-@handle_hlr_errors
 async def create_sim(body: SimCreate):
+    print(body)
     print(f"Creating SIM {body.iccid=} {body.name=}")
     auc_imsi_lookup = await pyhss_client.get_auc_by_imsi(body.imsi)
     auc_iccid_lookup = await pyhss_client.get_auc_by_iccid(body.iccid)
