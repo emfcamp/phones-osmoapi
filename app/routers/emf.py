@@ -300,7 +300,7 @@ async def create_sim(body: SimCreate):
             subscriber_name = await pyhss_client.create_subscriber_attribute(
                 {
                     "subscriber_id": subscriber["subscriber_id"],
-                    "name": "subscriberName",
+                    "key": "subscriberName",
                     "value": str(body.name),
                 }
             )
@@ -338,6 +338,7 @@ async def fetch_sim_by_imsi(imsi: int):
 @router.patch("/sim/{subscriber_id}", summary="Update SIM information from pyHSS by subscriber_id")
 @handle_hlr_errors
 async def update_sim_by_subscriberid(subscriber_id: int, body: SimUpdate):
+    print(body)
     subscriber = await pyhss_client.get_subscriber(subscriber_id)
     if not subscriber:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subscriber not found")
@@ -353,12 +354,16 @@ async def update_sim_by_subscriberid(subscriber_id: int, body: SimUpdate):
 
     ## Subscriber attributes
     attributes = await pyhss_client.get_subscriber_attributes(subscriber["subscriber_id"])
-    subscriber_attribute_id = next((item["subscriber_attributes_id"] for item in attributes if item["key"] == "name"), None)
+    subscriber_attribute_id = next((item["subscriber_attributes_id"] for item in attributes if item["key"] == "subscriberName"), None)
     if subscriber_attribute_id:
         await pyhss_client.update_subscriber_attribute(subscriber["subscriber_id"], {"value": str(body.name)})
     else:
         await pyhss_client.create_subscriber_attribute(
-            {"subscriber_id": subscriber["subscriber_id"], "name": "subscriberName", "value": str(body.name)}
+            {
+                "subscriber_id": subscriber["subscriber_id"],
+                "key": "subscriberName",
+                "value": str(body.name)
+            }
         )
 
     print(updated)
@@ -403,6 +408,7 @@ async def fetch_subscriber_list():
             "attributes": attributes,
             "auc_id": subscriber["auc_id"],
             "subscriber_id": subscriber["subscriber_id"],
+            "imsi":  subscriber["imsi"],
             "msisdn": subscriber["msisdn"]
         })
 
