@@ -2,7 +2,10 @@
 Thin async client for the pyHSS provisioning REST API.
 """
 
+import logging
+
 from typing import Any, Optional
+from os import makedirs
 
 import httpx
 
@@ -27,6 +30,20 @@ class PyHSSClient:
         self.base_url = base_url.rstrip("/")
         self.provisioning_key = provisioning_key
         self.timeout = timeout
+        self._setup_logging()
+
+    def _setup_logging(self, log_filename: str = "pyhss_client.log"):
+        makedirs(f"{settings.logs_dir}/", exist_ok=True)
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.logger.setLevel(logging.INFO)
+
+        formatter = logging.Formatter(fmt="%(asctime)s [%(classname)s] %(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+        handler = logging.FileHandler(f"{settings.logs_dir}/{log_filename}")
+        handler.setFormatter(formatter)
+        handler.setLevel(logging.INFO)
+
+        self.logger.addHandler(handler)
+        self.logger = logging.LoggerAdapter(self.logger, {"classname": self.__class__.__name__})
 
     def _headers(self) -> dict:
         headers = {"Content-Type": "application/json", "accept": "application/json"}
@@ -36,11 +53,13 @@ class PyHSSClient:
 
     async def _request(self, method: str, path: str, **kwargs) -> Optional[Any]:
         url = f"{self.base_url}{path}"
+        self.logger.info(f"{method} {path}")
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
                 resp = await client.request(method, url, headers=self._headers(), **kwargs)
         except httpx.RequestError as e:
             raise PyHSSError(f"Could not reach pyHSS at {url}: {e}") from e
+        self.logger.info(f"{resp.text}")
 
         if resp.status_code == 404:
             return None
