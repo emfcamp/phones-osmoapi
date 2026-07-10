@@ -258,15 +258,12 @@ async def create_sim(body: SimCreate):
     auc_iccid_lookup = await pyhss_client.get_auc_by_iccid(body.iccid)
     sub_imsi_lookup = await pyhss_client.get_subscriber_by_imsi(body.imsi)
 
-    if sub_imsi_lookup != "null":
+    if sub_imsi_lookup or auc_imsi_lookup:
+        print(f"Tried to create subscriber with IMSI {body.imsi} but they're already in the database")
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="IMSI already exists in subscriber database!")
 
-    imsi_iccid_auc_match = auc_imsi_lookup != "null" and auc_iccid_lookup != "null"
-    if not imsi_iccid_auc_match:
+    if auc_iccid_lookup:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="IMSI or ICCID already exist in database.")
-
-    if auc_imsi_lookup["auc_id"] != auc_iccid_lookup["auc_id"]:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="IMSI and ICCID already exist in database but for different subscribers!")
 
     print(f"Creating AuC for subscriber...")
     auc = await pyhss_client.create_auc(
@@ -312,7 +309,10 @@ async def create_sim(body: SimCreate):
 
     print(subscriber)
 
-    return {"subscriber_id": subscriber["subscriber_id"]}
+    return {
+        "auc_id": subscriber["auc_id"],
+        "subscriber_id": subscriber["subscriber_id"],
+    }
 
 
 @router.get("/sim/{subscriber_id}", summary="Fetch SIM information from pyHSS by subscriber_id")
@@ -362,7 +362,10 @@ async def update_sim_by_subscriberid(subscriber_id: int, body: SimUpdate):
         )
 
     print(updated)
-    return {"subscriber_id": updated["subscriber_id"]}
+    return {
+        "auc_id": subscriber["auc_id"],
+        "subscriber_id": subscriber["subscriber_id"],
+    }
 
 
 @router.delete("/sim/{subscriber_id}", summary="Delete subscriber_id and AuC from pyHSS")
@@ -381,8 +384,11 @@ async def delete_sim(subscriber_id: int):
     if auc_id is not None:
         await pyhss_client.delete_auc(auc_id)
 
+    if result["Result"] == "OK":
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
+    
     print(result)
-    return resul
+    return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.get("/list-subscribers", summary="Fetch subscribers")
@@ -392,6 +398,12 @@ async def fetch_subscriber_list():
 
     output = []
     for subscriber in subscribers:
-        output.append({"subscriber_id": subscriber["subscriber_id"], "msisdn": subscriber["msisdn"]})
+        attributes = await pyhss_client.get_subscriber_attributes(subscriber["subscriber_id"])
+        output.append({
+            "attributes": attributes,
+            "auc_id": subscriber["auc_id"],
+            "subscriber_id": subscriber["subscriber_id"],
+            "msisdn": subscriber["msisdn"]
+        })
 
     return output
