@@ -403,10 +403,8 @@ async def fetch_subscriber_list():
 
     output = []
     for subscriber in subscribers:
-        attributes = await pyhss_client.get_subscriber_attributes(subscriber["subscriber_id"])
         output.append(
             {
-                "attributes": attributes,
                 "auc_id": subscriber["auc_id"],
                 "subscriber_id": subscriber["subscriber_id"],
                 "imsi": subscriber["imsi"],
