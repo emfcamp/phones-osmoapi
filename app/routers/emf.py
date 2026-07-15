@@ -232,7 +232,7 @@ def handle_hlr_errors(fn):
 
 class SimCreate(BaseModel):
     imsi: str
-    iccid: str
+    iccid: Optional[str] = None
     msisdn: int
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
@@ -242,7 +242,7 @@ class SimCreate(BaseModel):
 
 class SimUpdate(BaseModel):
     imsi: str
-    iccid: str
+    iccid: Optional[str] = None
     msisdn: int
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
@@ -255,7 +255,7 @@ async def create_sim(body: SimCreate):
     print(body)
     print(f"Creating SIM {body.iccid=} {body.name=}")
     auc_imsi_lookup = await pyhss_client.get_auc_by_imsi(body.imsi)
-    auc_iccid_lookup = await pyhss_client.get_auc_by_iccid(body.iccid)
+    auc_iccid_lookup = await pyhss_client.get_auc_by_iccid(body.iccid) if body.iccid else None
     sub_imsi_lookup = await pyhss_client.get_subscriber_by_imsi(body.imsi)
 
     if sub_imsi_lookup or auc_imsi_lookup:
@@ -266,17 +266,18 @@ async def create_sim(body: SimCreate):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="IMSI or ICCID already exist in database.")
 
     print(f"Creating AuC for subscriber...")
-    auc = await pyhss_client.create_auc(
-        {
-            "imsi": body.imsi,
-            "iccid": body.iccid,
-            "sqn": 0,
-            "ki": body.ki,
-            "opc": body.opc,
-            "amf": settings.pyhss_default_amf,
-            "algo": settings.pyhss_2g_algo,
-        }
-    )
+    auc_payload = {
+        "imsi": body.imsi,
+        "sqn": 0,
+        "ki": body.ki,
+        "opc": body.opc,
+        "amf": settings.pyhss_default_amf,
+        "algo": settings.pyhss_2g_algo,
+    }
+    if body.iccid:
+        auc_payload["iccid"] = body.iccid
+
+    auc = await pyhss_client.create_auc(auc_payload)
 
     subscriber_payload = {
         "imsi": str(body.imsi),
@@ -291,7 +292,7 @@ async def create_sim(body: SimCreate):
         subscriber = await pyhss_client.create_subscriber(subscriber_payload)
     except:
         ## Failed to create subscriber so delete auc so we are not left with un-associated key information
-        pyhss_client.delete_auc(auc["auc_id"])
+        await pyhss_client.delete_auc(auc["auc_id"])
 
     # Set name attribute
     if body.name:
@@ -343,7 +344,10 @@ async def update_sim_by_subscriberid(subscriber_id: int, body: SimUpdate):
     if not subscriber:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subscriber not found")
 
-    await pyhss_client.update_auc(subscriber["auc_id"], ki=body.ki, opc=body.opc, imsi=body.imsi, iccid=body.iccid)
+    auc_fields = {"ki": body.ki, "opc": body.opc, "imsi": body.imsi}
+    if body.iccid:
+        auc_fields["iccid"] = body.iccid
+    await pyhss_client.update_auc(subscriber["auc_id"], **auc_fields)
 
     updated = await pyhss_client.update_subscriber(
         subscriber["subscriber_id"],
