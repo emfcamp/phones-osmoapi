@@ -216,7 +216,7 @@ class OsmoHLR(OsmoComponent):
         return self._set(f"subscriber.by-imsi-{imsi}.ps-enabled", value)
 
     ## Easy operations
-    def easy_create(self, imsi: int, msisdn: int, cs: bool, ps: bool) -> dict:
+    def easy_create(self, imsi: int, msisdn: int, aud2g_param: str, cs: bool, ps: bool) -> dict:
         """Single function to create subscriber with all params"""
         ## TODO: Check if msisdn already exists and throw a different error
 
@@ -225,6 +225,8 @@ class OsmoHLR(OsmoComponent):
             logging.error(f"Failed to set msisdn for newly created subscriber ID {_id}")
             return f"Failed to set msisdn for newly created subscriber ID {_id}"
 
+        self.set_aud2g_by_id(_id, aud2g_param)
+        
         self.set_cs_by_id(_id, cs)
         self.set_ps_by_id(_id, ps)
 

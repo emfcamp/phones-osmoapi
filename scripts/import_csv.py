@@ -19,7 +19,7 @@ with open("list.csv", newline="") as f:
             "iccid": row["ICCID"],
             "ki": row["KI"],
             "opc": row["OPC"],
-            "name": "",
+            "name": None,
             "gprsEnabled": "false"
         })
 
