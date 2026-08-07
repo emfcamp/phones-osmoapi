@@ -1,15 +1,15 @@
 from datetime import datetime
-from typing import Annotated, Literal, Optional
 from functools import wraps
+from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from pydantic import BaseModel, Field
+
 from ..config import settings
 from ..dependencies import bearer_scheme, verify_core_token
 from ..models import SubscriberId
 from ..osmo import send_sms
-from ..pyhss_client import pyhss_client, PyHSSError
-
+from ..pyhss_client import PyHSSError, pyhss_client
 
 router = APIRouter(
     dependencies=[Depends(bearer_scheme)],
@@ -232,22 +232,22 @@ def handle_hlr_errors(fn):
 
 class SimCreate(BaseModel):
     imsi: str
-    iccid: Optional[str] = None
+    iccid: str | None = None
     msisdn: int
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
     gprsEnabled: bool
-    name: Optional[str]
+    name: str | None
 
 
 class SimUpdate(BaseModel):
     imsi: str
-    iccid: Optional[str] = None
+    iccid: str | None = None
     msisdn: int
     ki: str = Field(min_length=32, max_length=32)
     opc: str = Field(min_length=32, max_length=32)
     gprsEnabled: bool
-    name: Optional[str]
+    name: str | None
 
 
 @router.post("/sim", summary="Create Subscriber")
@@ -265,7 +265,7 @@ async def create_sim(body: SimCreate):
     if auc_iccid_lookup:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="IMSI or ICCID already exist in database.")
 
-    print(f"Creating AuC for subscriber...")
+    print("Creating AuC for subscriber...")
     auc_payload = {
         "imsi": body.imsi,
         "sqn": 0,
@@ -288,7 +288,7 @@ async def create_sim(body: SimCreate):
         "apn_list": str(settings.pyhss_default_apn_id),
     }
     try:
-        print(f"Creating subscriber...")
+        print("Creating subscriber...")
         subscriber = await pyhss_client.create_subscriber(subscriber_payload)
     except:
         ## Failed to create subscriber so delete auc so we are not left with un-associated key information
@@ -297,7 +297,7 @@ async def create_sim(body: SimCreate):
     # Set name attribute
     if body.name:
         try:
-            print(f"Assigning subscriber name...")
+            print("Assigning subscriber name...")
             subscriber_name = await pyhss_client.create_subscriber_attribute(
                 {
                     "subscriber_id": subscriber["subscriber_id"],
@@ -305,7 +305,7 @@ async def create_sim(body: SimCreate):
                     "value": str(body.name),
                 }
             )
-        except Exception as e:
+        except Exception:
             print("Failed to assign subscriber name, ignoring...")
 
     print(subscriber)

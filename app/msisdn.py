@@ -1,5 +1,4 @@
 from csv import DictReader
-from pprint import pprint
 
 from .osmo import osmo_hlr_run_single_elevated
 

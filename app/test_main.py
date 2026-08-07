@@ -1,10 +1,9 @@
 import httpx
-import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 
-from .main import app
 from .dependencies import users
+from .main import app
 
 client = TestClient(app)
 

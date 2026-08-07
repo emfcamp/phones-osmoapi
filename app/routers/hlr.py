@@ -1,10 +1,10 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+
 from ..config import settings
 from ..dependencies import hlr_instance, security, verification
 from ..osmoctrl import OsmoSubscriberParam
-
 
 router = APIRouter(
     dependencies=[Depends(security)],
@@ -44,7 +44,7 @@ async def hlr_get_imsi_sub(imsi: int, verified: bool = Depends(verification)):
     """Get the subscriber info for a given IMSI"""
     try:
         return {"data": hlr_instance.get_subscriber_by_imsi(imsi)}
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Info not found for IMSI.",
@@ -75,7 +75,7 @@ async def hlr_get_id_sub(id: int, verified: bool = Depends(verification)):
     """Get the subscriber info for a given ID"""
     try:
         return {"data": hlr_instance.get_subscriber_by_id(id)}
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Info not found for ID.",
@@ -106,7 +106,7 @@ async def hlr_get_msisdn_sub(msisdn: int, verified: bool = Depends(verification)
     """Get the subscriber info for a given MSISDN"""
     try:
         return {"data": hlr_instance.get_subscriber_by_msisdn(msisdn)}
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Info not found for MSISDN.",
@@ -137,7 +137,7 @@ async def hlr_get_imsi_msisdn(imsi: int, verified: bool = Depends(verification))
     """Get the subscriber MSISDN for a given IMSI"""
     try:
         return {"data": hlr_instance.get_subscriber_param_by_imsi(imsi, OsmoSubscriberParam.MSISDN)}
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Info not found for MSISDN.",
@@ -168,7 +168,7 @@ async def hlr_update_msisdn(imsi: int, msisdn: int, verified: bool = Depends(ver
     """Set a new MSISDN for a given IMSI"""
     try:
         return hlr_instance.set_msisdn_by_imsi(imsi, msisdn)
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Number already in use. Please try a different number.",
@@ -229,7 +229,7 @@ async def hlr_create_new_sub(
     try:
         aud2g_param = f"{settings.aud2g_algo},{aud2g}"
         return hlr_instance.easy_create(imsi, msisdn, aud2g_param, cs, ps)
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Number already in use. Please try a different number.",

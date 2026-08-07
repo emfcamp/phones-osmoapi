@@ -1,12 +1,13 @@
 import logging
 from ipaddress import IPv4Address, IPv6Address
+
 from telnetlib3 import Telnet
-from typing import Union
-from .models import SendSmsRequest, SubscriberId
+
+from .models import SubscriberId
 
 
 class OsmocomHLR:
-    def __init__(self, host: Union[IPv4Address, IPv6Address, str], port: int):
+    def __init__(self, host: IPv4Address | IPv6Address | str, port: int):
         self.host = host
         self.port = port
         self.session = None
@@ -94,7 +95,7 @@ def osmo_hlr_run_multiple_elevated(commands: list[str]) -> list[str]:
 
 
 class OsmocomMSC:
-    def __init__(self, host: Union[IPv4Address, IPv6Address, str], port: int):
+    def __init__(self, host: IPv4Address | IPv6Address | str, port: int):
         self.host = host
         self.port = port
         self.session = None

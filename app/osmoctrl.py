@@ -1,12 +1,12 @@
-from .config import settings
-
 import logging
 import socket
-from os import makedirs, environ
 from enum import IntEnum, StrEnum
 from ipaddress import IPv4Address, IPv6Address
+from os import environ, makedirs
+
 from osmoapi import OsmocomController
-from typing import Union
+
+from .config import settings
 
 
 # https://osmocom.org/projects/cellular-infrastructure/wiki/Port_Numbers
@@ -36,7 +36,7 @@ def jsonify_response(resp: str):
 class OsmoComponent:
     """Base class handling shared Osmocom controller initialization and logging."""
 
-    def __init__(self, host: Union[IPv4Address, IPv6Address, str], port: int, log_filename: str):
+    def __init__(self, host: IPv4Address | IPv6Address | str, port: int, log_filename: str):
         self.addr = f"{host}:{port}"
         self.controller = OsmocomController(self.addr)
         self.logger = None
@@ -96,13 +96,13 @@ class OsmoComponent:
         try:
             with socket.create_connection((host, port), timeout=5):
                 return True
-        except (socket.timeout, ConnectionRefusedError, OSError):
+        except (TimeoutError, ConnectionRefusedError, OSError):
             return False
 
 
 # https://downloads.osmocom.org/docs/osmo-bsc/master/osmobsc-usermanual.pdf
 class OsmoBSC(OsmoComponent):
-    def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.BSC):
+    def __init__(self, host: IPv4Address | IPv6Address | str = OSMO_HOST, port: int = OsmoControlInterface.BSC):
         super().__init__(host, port, "osmobsc.log")
 
     def get_param(self, param):
@@ -148,7 +148,7 @@ class OsmoSubscriberParam(StrEnum):
 
 
 class OsmoHLR(OsmoComponent):
-    def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.HLR):
+    def __init__(self, host: IPv4Address | IPv6Address | str = OSMO_HOST, port: int = OsmoControlInterface.HLR):
         super().__init__(host, port, "osmohlr.log")
 
     def get_subscriber_by_id(self, sub_id: int):
@@ -234,7 +234,7 @@ class OsmoHLR(OsmoComponent):
 
 
 class OsmoMSC(OsmoComponent):
-    def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.MSC):
+    def __init__(self, host: IPv4Address | IPv6Address | str = OSMO_HOST, port: int = OsmoControlInterface.MSC):
         super().__init__(host, port, "osmomsc.log")
 
     def list_active_subscribers(self):
@@ -243,5 +243,5 @@ class OsmoMSC(OsmoComponent):
 
 ## TODO: use to get rate-counters
 class OsmoMGW(OsmoComponent):
-    def __init__(self, host: Union[IPv4Address, IPv6Address, str] = OSMO_HOST, port: int = OsmoControlInterface.MGW):
+    def __init__(self, host: IPv4Address | IPv6Address | str = OSMO_HOST, port: int = OsmoControlInterface.MGW):
         super().__init__(host, port, "osmomgw.log")

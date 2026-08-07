@@ -1,10 +1,10 @@
-from config import settings
-
-import time
 import threading
+import time
+
 import smpplib.client
 import smpplib.consts
 import smpplib.exceptions
+from config import settings
 
 SMSC_HOST = "127.0.0.1"
 SMSC_PORT = settings.smpp_port

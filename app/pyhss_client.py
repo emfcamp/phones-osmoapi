@@ -3,9 +3,8 @@ Thin async client for the pyHSS provisioning REST API.
 """
 
 import logging
-
-from typing import Any, Optional
 from os import makedirs
+from typing import Any
 
 import httpx
 
@@ -15,7 +14,7 @@ from .config import settings
 class PyHSSError(Exception):
     """Raised for any non-2xx/404 response from the pyHSS API."""
 
-    def __init__(self, message: str, status_code: Optional[int] = None):
+    def __init__(self, message: str, status_code: int | None = None):
         super().__init__(message)
         self.status_code = status_code
 
@@ -24,7 +23,7 @@ class PyHSSClient:
     def __init__(
         self,
         base_url: str,
-        provisioning_key: Optional[str] = None,
+        provisioning_key: str | None = None,
         timeout: float = 10.0,
     ):
         self.base_url = base_url.rstrip("/")
@@ -51,7 +50,7 @@ class PyHSSClient:
             headers["Provisioning-Key"] = self.provisioning_key
         return headers
 
-    async def _request(self, method: str, path: str, **kwargs) -> Optional[Any]:
+    async def _request(self, method: str, path: str, **kwargs) -> Any | None:
         url = f"{self.base_url}{path}"
         self.logger.info(f"{method} {path}")
         try:
@@ -75,16 +74,16 @@ class PyHSSClient:
 
     # ---- Subscriber -----------------------------------------------------
 
-    async def get_subscribers(self) -> Optional[list]:
-        return await self._request("GET", f"/subscriber/list?page=0&page_size=500")
+    async def get_subscribers(self) -> list | None:
+        return await self._request("GET", "/subscriber/list?page=0&page_size=500")
 
-    async def get_subscriber_by_imsi(self, imsi) -> Optional[dict]:
+    async def get_subscriber_by_imsi(self, imsi) -> dict | None:
         return await self._request("GET", f"/subscriber/imsi/{imsi}")
 
-    async def get_subscriber_by_msisdn(self, msisdn) -> Optional[dict]:
+    async def get_subscriber_by_msisdn(self, msisdn) -> dict | None:
         return await self._request("GET", f"/subscriber/msisdn/{msisdn}")
 
-    async def get_subscriber(self, subscriber_id) -> Optional[dict]:
+    async def get_subscriber(self, subscriber_id) -> dict | None:
         return await self._request("GET", f"/subscriber/{subscriber_id}")
 
     async def create_subscriber(self, payload: dict) -> dict:
@@ -94,32 +93,32 @@ class PyHSSClient:
         """PATCH only the given fields on an existing subscriber."""
         return await self._request("PATCH", f"/subscriber/{subscriber_id}", json=fields)
 
-    async def delete_subscriber(self, subscriber_id) -> Optional[dict]:
+    async def delete_subscriber(self, subscriber_id) -> dict | None:
         return await self._request("DELETE", f"/subscriber/{subscriber_id}")
 
     # ---- Subscriber Attributes -----------------------------------------
 
-    async def get_subscriber_attributes(self, subscriber_id) -> Optional[dict]:
+    async def get_subscriber_attributes(self, subscriber_id) -> dict | None:
         return await self._request("GET", f"/subscriber_attributes/{subscriber_id}")
 
     async def create_subscriber_attribute(self, payload: dict) -> dict:
         return await self._request("PUT", "/subscriber_attributes/", json=payload)
 
-    async def update_subscriber_attribute(self, subscriber_attributes_id, **fields) -> Optional[dict]:
+    async def update_subscriber_attribute(self, subscriber_attributes_id, **fields) -> dict | None:
         return await self._request("PATCH", f"/subscriber_attributes/{subscriber_attributes_id}", json=fields)
 
-    async def delete_subscriber_attribute(self, subscriber_attributes_id) -> Optional[dict]:
+    async def delete_subscriber_attribute(self, subscriber_attributes_id) -> dict | None:
         return await self._request("DELETE", f"/subscriber_attributes/{subscriber_attributes_id}")
 
     # ---- AuC (SIM crypto material) --------------------------------------
 
-    async def get_auc_by_iccid(self, iccid) -> Optional[dict]:
+    async def get_auc_by_iccid(self, iccid) -> dict | None:
         return await self._request("GET", f"/auc/iccid/{iccid}")
 
-    async def get_auc_by_imsi(self, imsi) -> Optional[dict]:
+    async def get_auc_by_imsi(self, imsi) -> dict | None:
         return await self._request("GET", f"/auc/imsi/{imsi}")
 
-    async def get_auc(self, auc_id) -> Optional[dict]:
+    async def get_auc(self, auc_id) -> dict | None:
         return await self._request("GET", f"/auc/{auc_id}")
 
     async def create_auc(self, payload: dict) -> dict:
@@ -128,7 +127,7 @@ class PyHSSClient:
     async def update_auc(self, auc_id, **fields) -> dict:
         return await self._request("PATCH", f"/auc/{auc_id}", json=fields)
 
-    async def delete_auc(self, auc_id) -> Optional[dict]:
+    async def delete_auc(self, auc_id) -> dict | None:
         return await self._request("DELETE", f"/auc/{auc_id}")
 
     # ---- APN --------------------------------------------------------------

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from ..dependencies import msc_instance, security, verification
 
+from ..dependencies import msc_instance, security, verification
 
 router = APIRouter(
     dependencies=[Depends(security)],

@@ -1,5 +1,6 @@
+from typing import Literal
+
 from pydantic import BaseModel
-from typing import Literal, Union
 
 
 class MSISDNResponse(BaseModel):

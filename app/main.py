@@ -1,9 +1,9 @@
 import logging
 
-from fastapi import status, FastAPI, Depends
+from fastapi import Depends, FastAPI, status
 from fastapi.responses import RedirectResponse, Response
+from prometheus_client import CONTENT_TYPE_LATEST, GC_COLLECTOR, PLATFORM_COLLECTOR, REGISTRY, generate_latest
 from prometheus_fastapi_instrumentator import Instrumentator, metrics
-from prometheus_client import REGISTRY, GC_COLLECTOR, PLATFORM_COLLECTOR, generate_latest, CONTENT_TYPE_LATEST
 
 from .config import settings
 from .dependencies import bsc_instance, hlr_instance, msc_instance, verify_metrics_token
@@ -82,7 +82,7 @@ async def healthcheck():
             "osmo-hlr": hlr_instance._alive(),
             "osmo-msc": msc_instance._alive(),
         }
-    except Exception as e:
+    except Exception:
         return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE)
 
 

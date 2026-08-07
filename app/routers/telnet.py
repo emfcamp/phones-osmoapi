@@ -1,23 +1,19 @@
 import re
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
 
-from ..dependencies import dks, security, verification
+from ..dependencies import dks, verification
+from ..models import *
 from ..msisdn import (
     get_all_default_msisdn,
     get_all_subscribers_from_hlr,
     get_default_msisdn_by_imsi,
 )
-from ..models import *
 from ..osmo import (
-    osmo_hlr_run_multiple_elevated,
-    osmo_hlr_run_single,
     osmo_msc_run_single,
     osmo_msc_run_single_elevated,
     send_sms,
 )
-
 
 router = APIRouter(
     # dependencies=[Depends(security)],
@@ -103,7 +99,7 @@ async def get_default(imsi: int, verified: bool = Depends(verification)):
     """Get the Default MSISDN for a given IMSI"""
     try:
         return {"imsi": imsi, "default_msisdn": get_default_msisdn_by_imsi(imsi)}
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Default MSISDN not found for this IMSI.",
@@ -188,7 +184,7 @@ async def get_all_hlr_subscribers():
     summary="Send SMS to subscriber, both sender and recipient must be connected to MSC.",
 )
 def api_send_sms(payload: SendSmsRequest):
-    raw = osmo_msc_run_single_elevated(f"show sms-queue")
+    raw = osmo_msc_run_single_elevated("show sms-queue")
     try:
         return {"result": send_sms(payload.recipient, payload.sender, payload.message)}
     except Exception as e:
