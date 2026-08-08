@@ -1,6 +1,7 @@
 [project]
 name = "phones-osmoapi"
 version = "1.0.0"
+license = "AGPL-3.0-or-later"
 description = "HTTP API for osmocom"
 readme = "README.md"
 requires-python = ">=3.13.0, <3.14"

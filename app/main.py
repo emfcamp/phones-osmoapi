@@ -43,7 +43,7 @@ app = FastAPI(
     contact={"name": "EMF GSM Team", "url": "https://gsm.emf.camp/", "email": settings.contact_email},
     version="1.0.0",
     terms_of_service="https://gsm.emf.camp/api/tos",
-    license_info={"name": "Beerware", "url": "https://spdx.org/licenses/Beerware.html"},
+    license_info={"name": "AGPL-3.0-or-later", "url": "https://spdx.org/licenses/AGPL-3.0-or-later.html"},
 )
 
 
