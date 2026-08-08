@@ -48,23 +48,3 @@ jobs:
           push: true
           tags: ghcr.io/emfcamp/phones-osmoapi:latest
           target: prod
-      
-  deploy:
-    name: "Deploy API"
-    runs-on: [ self-hosted ]
-    needs: [ build ]
-    timeout-minutes: 10
-
-    steps:
-      - name: Checkout compose.yml
-        uses: actions/checkout@v6
-        with:
-          sparse-checkout: .
-      
-      - name: Re-deploy API
-        shell: bash
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker pull ghcr.io/emfcamp/phones-osmoapi:latest
-          docker compose --profile prod up --force-recreate -d
-          docker logout
