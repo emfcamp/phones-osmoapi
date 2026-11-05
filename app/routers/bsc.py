@@ -31,7 +31,7 @@ router = APIRouter(
         },
     },
 )
-async def bsc_get_params(param: str, verified: bool = Depends(verification)):
+def bsc_get_params(param: str, verified: bool = Depends(verification)):
     try:
         return {"data": bsc_instance.get_param(param)}
     except Exception as e:
@@ -51,7 +51,7 @@ async def bsc_get_params(param: str, verified: bool = Depends(verification)):
         },
     },
 )
-async def bsc_get_status(verified: bool = Depends(verification)):
+def bsc_get_status(verified: bool = Depends(verification)):
     try:
         return {"data": bsc_instance.easy_get_status()}
     except Exception as e:
@@ -69,9 +69,10 @@ async def bsc_get_status(verified: bool = Depends(verification)):
             "description": "success",
             "content": {"application/json": {}},
         },
+        404: {"description": "No BTS with that number"},
     },
 )
-async def bts_get_info(bts_n: int, verified: bool = Depends(verification)):
+def bts_get_info(bts_n: int, verified: bool = Depends(verification)):
     try:
         return {"data": bsc_instance.easy_get_bts_info(bts_n)}
     except Exception as e:
@@ -91,7 +92,7 @@ async def bts_get_info(bts_n: int, verified: bool = Depends(verification)):
         },
     },
 )
-async def bsc_restart_bts(verified: bool = Depends(verification)):
+def bsc_restart_bts(verified: bool = Depends(verification)):
     try:
         return {"data": bsc_instance.restart_bts()}
     except Exception as e:
