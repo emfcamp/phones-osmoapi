@@ -3,6 +3,9 @@ from typing import Annotated, Literal
 
 from pydantic import AfterValidator, BaseModel, Field
 
+# A 128-bit key (Ki / OPc) as 32 hex characters.
+Hex128 = Annotated[str, Field(pattern=r"^[0-9a-fA-F]{32}$")]
+
 
 class MSISDNResponse(BaseModel):
     imsi: int = 999430000001234
