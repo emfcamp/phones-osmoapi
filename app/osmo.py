@@ -3,7 +3,7 @@ from ipaddress import IPv4Address, IPv6Address
 
 from telnetlib3 import Telnet
 
-from .models import SubscriberId
+from .models import SendSmsRequest, SubscriberId
 
 
 class OsmocomHLR:
@@ -187,5 +187,6 @@ def send_sms(recipient: SubscriberId, sender: SubscriberId, message: str):
     ### subscriber(msisdn|extension|imsi|tmsi|id) ID sms sender(msisdn|extension|imsi|tmsi|id) SENDER_ID send LINE
     # % No subscriber found for msisdn 9990000
     """
-    cmd = f"subscriber {recipient} sms sender {sender} send {message}"
+    req = SendSmsRequest(recipient=recipient, sender=sender, message=message)
+    cmd = f"subscriber {req.recipient} sms sender {req.sender} send {req.message}"
     return osmo_msc_run_single_elevated(cmd)
