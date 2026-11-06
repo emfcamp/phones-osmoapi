@@ -6,7 +6,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBasic, HTTPBasicCredentials, HTTPBearer
 
 from .config import settings
-from .osmoctrl import OsmoBSC, OsmoHLR
+from .osmoctrl import OsmoBSC, OsmoHLR, OsmoMSC
 
 DATA_DIR = Path(settings.data_dir).resolve().parent / "data"
 
@@ -87,6 +87,6 @@ verify_metrics_token = make_bearer_verifier("metrics")
 ## Osmocom shared instances
 bsc_instance = OsmoBSC()
 hlr_instance = OsmoHLR()
-msc_instance = OsmoHLR()
+msc_instance = OsmoMSC()
 
 hlr_register_emf_numbers()

@@ -216,19 +216,21 @@ class OsmoHLR(OsmoComponent):
         return self._set(f"subscriber.by-imsi-{imsi}.ps-enabled", value)
 
     ## Easy operations
-    def easy_create(self, imsi: int, msisdn: int, aud2g_param: str, cs: bool, ps: bool) -> dict:
-        """Single function to create subscriber with all params"""
-        ## TODO: Check if msisdn already exists and throw a different error
-
+    def easy_create(self, imsi: int, msisdn: int, cs: bool, ps: bool, aud2g_param: str | None = None) -> dict:
+        """Create a subscriber with all params, deleting it again if any step after creation fails."""
         _id = self.create_subscriber(imsi)
-        if self.set_msisdn_by_id(_id, msisdn) != "OK":
-            logging.error(f"Failed to set msisdn for newly created subscriber ID {_id}")
-            return f"Failed to set msisdn for newly created subscriber ID {_id}"
-
-        self.set_aud2g_by_id(_id, aud2g_param)
-        
-        self.set_cs_by_id(_id, cs)
-        self.set_ps_by_id(_id, ps)
+        try:
+            self.set_msisdn_by_id(_id, msisdn)
+            if aud2g_param:
+                self.set_aud2g_by_id(_id, aud2g_param)
+            self.set_cs_by_id(_id, cs)
+            self.set_ps_by_id(_id, ps)
+        except Exception:
+            try:
+                self.delete_subscriber(imsi)
+            except Exception:
+                self.logger.exception(f"Rollback failed: subscriber IMSI {imsi} (ID {_id}) left half-created")
+            raise
 
         return self.get_subscriber_by_id(_id)
 

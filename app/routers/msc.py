@@ -32,7 +32,7 @@ router = APIRouter(
     },
     tags=["MSC Control Interface"],
 )
-async def msc_get_active_subs(verified: bool = Depends(verification)):
+def msc_get_active_subs(verified: bool = Depends(verification)):
     try:
         return {"data": msc_instance.list_active_subscribers()}
     except Exception as e:
