@@ -1,4 +1,3 @@
-import httpx
 from fastapi import status
 from fastapi.testclient import TestClient
 
@@ -8,7 +7,8 @@ from .main import app
 client = TestClient(app)
 
 auth_user = list(users)[0]
-auth = httpx.BasicAuth(username=auth_user, password=users[auth_user]["password"])
+auth = (auth_user, users[auth_user]["password"])
+BAD_AUTH = ("wrong", "wrong")
 
 
 def test_read_main():
@@ -23,11 +23,11 @@ def test_read_main():
 
 def test_auth():
     """Test basic auth works for endpoint in each router"""
-    response = client.get("/bsc/param/some_config_key", auth=httpx.BasicAuth(username="WRONG", password="WRONG"))
+    response = client.get("/bsc/param/some_config_key", auth=BAD_AUTH)
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    response = client.get("/msc/active", auth=httpx.BasicAuth(username="WRONG", password="WRONG"))
+    response = client.get("/msc/active", auth=BAD_AUTH)
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    response = client.post("/hlr/subscriber/create", auth=httpx.BasicAuth(username="WRONG", password="WRONG"))
+    response = client.post("/hlr/subscriber/create", auth=BAD_AUTH)
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
