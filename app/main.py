@@ -29,9 +29,7 @@ class EndpointFilter(logging.Filter):
         except (IndexError, ValueError, TypeError):
             return True
 
-        if path in self.paths and 200 <= status_code < 300:
-            return False
-        return True
+        return not (path in self.paths and 200 <= status_code < 300)
 
 
 logging.getLogger("uvicorn.access").addFilter(EndpointFilter())

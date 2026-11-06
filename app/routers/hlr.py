@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from pydantic import BaseModel
 
+from .. import hlrdb
 from ..config import settings
 from ..dependencies import hlr_instance, security, verification
 from ..models import Hex128
@@ -42,6 +43,49 @@ def _unhandled(e: Exception) -> HTTPException:
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         detail=f"An unhandled error occurred: {e}",
     )
+
+@router.get(
+    "/db/subscribers",
+    summary="List all HLR subscribers from the HLR database",
+    responses={
+        200: {
+            "description": "All subscribers, read directly from osmo-hlr's SQLite DB (read-only). Unset fields are null. "
+            "Secret keys are only included with `include_keys=true`.",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "data": [
+                            {
+                                "id": 1,
+                                "imsi": "999420000002263",
+                                "msisdn": "90422263",
+                                "imei": None,
+                                "cs_enabled": True,
+                                "ps_enabled": True,
+                                "purged_cs": False,
+                                "purged_ps": False,
+                                "vlr_number": None,
+                                "sgsn_number": None,
+                                "last_lu_seen_cs": "2026-11-06 18:01:22",
+                                "last_lu_seen_ps": None,
+                                "auth_2g": "comp128v3",
+                                "auth_3g": None,
+                                "sqn": None,
+                            }
+                        ]
+                    }
+                }
+            },
+        },
+        503: {"description": "The HLR database is missing or can't be read."},
+    },
+)
+def hlr_db_list_subscribers(response: Response, include_keys: bool = False, verified: bool = Depends(verification)):
+    response.headers["Cache-Control"] = "no-store"
+    try:
+        return {"data": hlrdb.list_subscribers(include_keys=include_keys)}
+    except hlrdb.HlrDbUnavailable as e:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(e))
 
 
 @router.get(
