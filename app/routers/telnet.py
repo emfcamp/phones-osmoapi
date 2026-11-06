@@ -45,7 +45,7 @@ router = APIRouter(
     },
     response_model=AllDefaultMSISDNResponse,
 )
-async def get_all_default_msisdns(verified: bool = Depends(verification)):
+def get_all_default_msisdns(verified: bool = Depends(verification)):
     """Get all Default MSISDNs"""
     try:
         msisdns = get_all_default_msisdn()
@@ -68,7 +68,7 @@ async def get_all_default_msisdns(verified: bool = Depends(verification)):
     },
     response_model=AllMSISDNResponse,
 )
-async def get_all_hlr_msisdns(verified: bool = Depends(verification)):
+def get_all_hlr_msisdns(verified: bool = Depends(verification)):
     """Get all MSISDNs known to HLR"""
     try:
         subscribers = get_all_subscribers_from_hlr()
@@ -95,7 +95,7 @@ async def get_all_hlr_msisdns(verified: bool = Depends(verification)):
     },
     response_model=DefaultMSISDNResponse,
 )
-async def get_default(imsi: int, verified: bool = Depends(verification)):
+def get_default(imsi: int, verified: bool = Depends(verification)):
     """Get the Default MSISDN for a given IMSI"""
     try:
         return {"imsi": imsi, "default_msisdn": get_default_msisdn_by_imsi(imsi)}
@@ -132,7 +132,7 @@ async def get_default(imsi: int, verified: bool = Depends(verification)):
     },
     response_model=GetLocationResponse,
 )
-async def get_location(imsi: int, verified: bool = Depends(verification)):
+def get_location(imsi: int, verified: bool = Depends(verification)):
     """Get the Location Information for a given IMSI
 
     This will return the LAC / cell ID for the given IMSI, which can be used to determine the location of the device.
@@ -169,7 +169,7 @@ async def get_location(imsi: int, verified: bool = Depends(verification)):
     "/get-hlr-subscribers",
     summary="Get all HLR subscriber information",
 )
-async def get_all_hlr_subscribers():
+def get_all_hlr_subscribers():
     try:
         return get_all_subscribers_from_hlr()
     except Exception as e:
