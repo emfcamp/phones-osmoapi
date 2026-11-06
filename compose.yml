@@ -16,7 +16,6 @@ services:
       - "/etc/timezone:/etc/timezone:ro"
       - "/opt/osmoapi/data:/data:rw"
       - "/opt/osmoapi/logs:/logs:rw"
-      # osmo-hlr's DB, for the read-only /hlr/db/* endpoints (path: HLR_DB_PATH)
       - "/var/lib/osmocom:/var/lib/osmocom:ro"
   caddy:
     image: caddy:2-alpine

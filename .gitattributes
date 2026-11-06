@@ -1,7 +1,5 @@
-# Normalise line endings in the repo; let Git pick the right ones on checkout.
 * text=auto
 
-# Shell scripts run inside Linux containers and break with CRLF ("no such file or directory").
 *.sh text eol=lf
 Dockerfile text eol=lf
 Caddyfile text eol=lf
