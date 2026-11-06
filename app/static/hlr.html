@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HLR Subscribers</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+  <style>
+    .dialog { width: min(40rem, calc(100vw - 2rem)); }
+  </style>
+</head>
+<body>
+<main class="container py-4">
+  <h1 class="h3 mb-3">osmo-hlr subscribers</h1>
+
+  <input id="filter" type="search" class="form-control mb-3"
+         placeholder="Filter by IMSI, MSISDN, IMEI or ID" aria-label="Filter subscribers">
+
+  <div id="list-alert" class="alert theme-danger" role="alert" hidden><p id="list-alert-text"></p></div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover table-sm align-middle">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">IMSI</th>
+          <th scope="col">MSISDN</th>
+          <th scope="col">IMEI</th>
+          <th scope="col">CS</th>
+          <th scope="col">PS</th>
+          <th scope="col">Last seen (CS)</th>
+          <th scope="col">2G auth</th>
+          <th scope="col"><span class="visually-hidden">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody id="rows" class="font-monospace"></tbody>
+    </table>
+  </div>
+  <p id="count" class="small fg-2"></p>
+</main>
+
+<dialog class="dialog" id="editor" aria-labelledby="ed-title">
+  <div class="dialog-header">
+    <h2 class="dialog-title h5" id="ed-title">Subscriber <span id="ed-imsi" class="font-monospace"></span></h2>
+    <button type="button" class="btn-close" data-close aria-label="Close"></button>
+  </div>
+
+  <div class="dialog-body vstack gap-4">
+    <div id="ed-alert" class="alert" role="alert" hidden><p id="ed-alert-text"></p></div>
+
+    <form id="msisdn-form" class="vstack gap-2">
+      <div class="form-field">
+        <label for="msisdn" class="form-label">MSISDN</label>
+        <input id="msisdn" class="form-control font-monospace" inputmode="numeric" pattern="\d{1,15}" required>
+        <div class="form-text">Up to 15 digits.</div>
+      </div>
+      <div><button class="btn-solid theme-primary">Update MSISDN</button></div>
+    </form>
+
+    <form id="ki-form" class="vstack gap-2">
+      <div class="form-field">
+        <label for="ki" class="form-label">Ki (2G)</label>
+        <input id="ki" class="form-control font-monospace" pattern="[0-9a-fA-F]{32}" required autocomplete="off"
+               placeholder="32 hex characters">
+        <div class="form-text">Replaces the existing Ki.</div>
+      </div>
+      <div><button class="btn-solid theme-primary">Update Ki</button></div>
+    </form>
+  </div>
+
+  <div class="dialog-footer">
+    <button type="button" class="btn-solid theme-secondary" data-close>Close</button>
+  </div>
+</dialog>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const dialog = $("editor");
+let subscribers = [];
+let current = null; // IMSI being edited
+
+function showAlert(name, text, theme = "danger") {
+  const box = $(name);
+  if (!text) { box.hidden = true; return; }
+  box.className = `alert theme-${theme}`;
+  $(name + "-text").textContent = text;
+  box.hidden = false;
+}
+
+async function api(path, options = {}) {
+  const res = await fetch(path, { credentials: "same-origin", ...options });
+  let body = null;
+  try { body = await res.json(); } catch { /* no JSON body */ }
+  if (!res.ok) {
+    let detail = body && body.detail;
+    if (Array.isArray(detail)) detail = detail.map((d) => d.msg).join("; ");
+    throw new Error(detail || `${res.status} ${res.statusText}`);
+  }
+  return body;
+}
+
+const shown = (v) => (v === null || v === undefined ? "unset" : String(v));
+
+function cell(content) {
+  const td = document.createElement("td");
+  if (content instanceof Node) td.append(content); else td.textContent = shown(content);
+  return td;
+}
+
+function render() {
+  const q = $("filter").value.trim();
+  const rows = q
+    ? subscribers.filter((s) => [s.id, s.imsi, s.msisdn, s.imei].some((v) => v != null && String(v).includes(q)))
+    : subscribers;
+
+  const tbody = $("rows");
+  tbody.replaceChildren();
+  for (const s of rows) {
+    const tr = document.createElement("tr");
+    const imsi = String(s.imsi);
+    if (imsi === current) tr.className = "table-active";
+    tr.append(
+      cell(s.id), cell(s.imsi), cell(s.msisdn), cell(s.imei),
+      cell(s.cs_enabled), cell(s.ps_enabled),
+      cell(s.last_lu_seen_cs), cell(s.auth_2g),
+    );
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn-subtle theme-primary btn-sm";
+    btn.textContent = "Edit";
+    btn.onclick = () => openEditor(imsi);
+    tr.append(cell(btn));
+    tbody.append(tr);
+  }
+  $("count").textContent = `${rows.length} of ${subscribers.length} subscribers`;
+}
+
+async function loadList() {
+  showAlert("list-alert", "");
+  try {
+    subscribers = (await api("/hlr/db/subscribers")).data;
+    render();
+  } catch (e) {
+    showAlert("list-alert", "Couldn't load subscribers: " + e.message);
+  }
+}
+
+async function loadInfo(imsi) {
+  return (await api(`/hlr/subscriber/imsi/${imsi}`)).data || {};
+}
+
+function openEditor(imsi) {
+  current = imsi;
+  render();
+  $("ed-imsi").textContent = imsi;
+  $("ki").value = "";
+  const s = subscribers.find((x) => String(x.imsi) === imsi);
+  $("msisdn").value = s?.msisdn ?? "";
+  showAlert("ed-alert", "");
+  if (!dialog.open) dialog.showModal();
+}
+
+async function submit(form, label, request, verify) {
+  const button = form.querySelector("button");
+  const buttons = [...dialog.querySelectorAll("button")];
+  const original = button.textContent;
+  buttons.forEach((b) => (b.disabled = true));
+  button.innerHTML = '<span class="spinner-border spinner-sm" aria-hidden="true"></span> <span role="status">Saving…</span>';
+  showAlert("ed-alert", "");
+  const imsi = current;
+  try {
+    const result = await request(imsi);
+    // The control helpers return "" instead of raising when the HLR rejects a change,
+    // so an empty result means it failed.
+    if (result === "" || result === null) throw new Error("the HLR rejected the change or is unreachable");
+    const info = await loadInfo(imsi);
+    if (verify && !verify(info)) throw new Error("the HLR accepted the request but the value didn't change");
+    showAlert("ed-alert", `${label} updated.`, "success");
+    loadList();
+    return true;
+  } catch (e) {
+    showAlert("ed-alert", `Couldn't update ${label}: ${e.message}`);
+    return false;
+  } finally {
+    button.textContent = original;
+    buttons.forEach((b) => (b.disabled = false));
+  }
+}
+
+$("msisdn-form").onsubmit = (ev) => {
+  ev.preventDefault();
+  const msisdn = $("msisdn").value.trim();
+  submit(
+    ev.target, "MSISDN",
+    (imsi) => api(`/hlr/subscriber/imsi/${imsi}/update-msisdn/${encodeURIComponent(msisdn)}`, { method: "POST" }),
+    (info) => !("msisdn" in info) || String(info.msisdn) === msisdn,
+  );
+};
+
+$("ki-form").onsubmit = (ev) => {
+  ev.preventDefault();
+  const aud2g = $("ki").value.trim();
+  submit(
+    ev.target, "Ki",
+    (imsi) => api(`/hlr/subscriber/imsi/${imsi}/update-aud2g`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ aud2g }),
+    }),
+  ).then((ok) => { if (ok) $("ki").value = ""; });
+};
+
+dialog.querySelectorAll("[data-close]").forEach((b) => (b.onclick = () => dialog.close()));
+dialog.addEventListener("close", () => { current = null; render(); });
+$("filter").oninput = render;
+loadList();
+</script>
+</body>
+</html>

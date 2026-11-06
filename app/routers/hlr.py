@@ -1,4 +1,7 @@
+from pathlib import Path
+
 from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from .. import hlrdb
@@ -43,6 +46,18 @@ def _unhandled(e: Exception) -> HTTPException:
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         detail=f"An unhandled error occurred: {e}",
     )
+
+
+UI_PAGE = Path(__file__).resolve().parent.parent / "static" / "hlr.html"
+
+
+@router.get("/ui", include_in_schema=False, response_class=FileResponse)
+def hlr_ui(verified: bool = Depends(verification)):
+    """Simple HLR UI served when `hlr_ui_enabled` is set."""
+    if not settings.hlr_ui_enabled:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
+    return FileResponse(UI_PAGE, headers={"Cache-Control": "no-store"})
+
 
 @router.get(
     "/db/subscribers",
