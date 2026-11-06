@@ -37,6 +37,13 @@ class HlrSubscriberCreate(BaseModel):
     ps: bool
 
 
+def _unhandled(e: Exception) -> HTTPException:
+    return HTTPException(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        detail=f"An unhandled error occurred: {e}",
+    )
+
+
 @router.get(
     "/subscriber/imsi/{imsi}",
     summary="Get Subscriber Info by IMSI",
@@ -62,10 +69,7 @@ def hlr_get_imsi_sub(imsi: int, verified: bool = Depends(verification)):
             detail="Info not found for IMSI.",
         )
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
-        )
+        raise _unhandled(e)
 
 
 @router.get(
@@ -93,10 +97,7 @@ def hlr_get_id_sub(id: int, verified: bool = Depends(verification)):
             detail="Info not found for ID.",
         )
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
-        )
+        raise _unhandled(e)
 
 
 @router.get(
@@ -124,10 +125,7 @@ def hlr_get_msisdn_sub(msisdn: int, verified: bool = Depends(verification)):
             detail="Info not found for MSISDN.",
         )
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
-        )
+        raise _unhandled(e)
 
 
 @router.get(
@@ -155,10 +153,7 @@ def hlr_get_imsi_msisdn(imsi: int, verified: bool = Depends(verification)):
             detail="Info not found for MSISDN.",
         )
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
-        )
+        raise _unhandled(e)
 
 
 @router.post(
@@ -186,10 +181,7 @@ def hlr_update_msisdn(imsi: int, msisdn: int, verified: bool = Depends(verificat
             detail="Number already in use. Please try a different number.",
         )
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
-        )
+        raise _unhandled(e)
 
 
 @router.post(
@@ -200,6 +192,7 @@ def hlr_update_msisdn(imsi: int, msisdn: int, verified: bool = Depends(verificat
             "description": "Set aud2g successfully.",
             "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
         },
+        404: {"description": "No subscriber with that IMSI."},
     },
     tags=["HLR Control Interface"],
 )
@@ -209,10 +202,7 @@ def hlr_update_aud2g(imsi: int, body: Aud2gUpdate, verified: bool = Depends(veri
         aud2g_param = f"{settings.aud2g_algo},{body.aud2g}"
         return hlr_instance.set_aud2g_by_imsi(imsi, aud2g_param)
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
-        )
+        raise _unhandled(e)
 
 
 @router.post(
@@ -224,8 +214,8 @@ def hlr_update_aud2g(imsi: int, body: Aud2gUpdate, verified: bool = Depends(veri
             "content": {"application/json": {"example": {"imsi": 999430000001234, "msisdn": 4242}}},
         },
         409: {
-            "description": "...",
-            "content": {"application/json": {"example": {"detail": "Number already in use. Please try a different number."}}},
+            "description": "IMSI or MSISDN already in use.",
+            "content": {"application/json": {"example": {"detail": "Subscriber already exists."}}},
         },
     },
     tags=["HLR Control Interface"],
@@ -235,7 +225,4 @@ def hlr_create_new_sub(body: HlrSubscriberCreate, verified: bool = Depends(verif
         aud2g_param = f"{settings.aud2g_algo},{body.aud2g}"
         return hlr_instance.easy_create(body.imsi, body.msisdn, body.cs, body.ps, aud2g_param=aud2g_param)
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unhandled error occurred: {e}",
-        )
+        raise _unhandled(e)
